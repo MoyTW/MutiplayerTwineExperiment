@@ -10,3 +10,6 @@ Antony And Cleopatra (Working Title)
 
 :: Start
 Test, test.
+<<script>>
+setup.testGet()
+<</script>>
