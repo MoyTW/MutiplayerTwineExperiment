@@ -9,7 +9,17 @@ Antony And Cleopatra (Working Title)
 
 
 :: Start
-Test, test.
+<<set $responseText to ''>>
 <<script>>
-setup.testGet()
+// And, every time we call, we need to also handle failures! WHAT FUN.
+var oReq = new XMLHttpRequest();
+oReq.addEventListener("load", (ev) => { State.variables.responseText = oReq.responseText; });
+oReq.open("GET", "https://raw.githubusercontent.com/MoyTW/TwineExperiment/master/run.sh");
+oReq.send();
 <</script>>
+
+Test, test.
+
+Here is some data from GitHub:
+<span id="data">(data fetching)</span>
+<<timed 1s t8n>><<replace "#data">>$responseText<</replace>><</timed>>
