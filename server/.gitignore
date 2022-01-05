@@ -1,0 +1,11 @@
+# venv
+.venv
+venv/
+ENV/
+
+# Distribution / packaging
+bin/
+lib/
+lib64
+lib64/
+share/
