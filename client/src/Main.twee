@@ -21,6 +21,6 @@ oReq.send();
 <</script>>\
 Test, test.
 
-Here is some data from GitHub:
+Here is some data from the server:
 <span id="data">(data fetching)</span>
 <<timed 1s t8n>><<replace "#data">>$responseText<</replace>><</timed>>
