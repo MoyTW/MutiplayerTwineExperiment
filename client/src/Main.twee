@@ -9,15 +9,16 @@ Antony And Cleopatra (Working Title)
 
 
 :: Start
-<<set $responseText to ''>>
+<<set $clientId to '30620262-6c52-462b-9fc2-384369ade0a9'>>\
+<<set $sessionId to 'b416b45a-7fb7-4761-a173-0bdec11de841'>>\
+<<set $responseText to ''>>\
 <<script>>
 // And, every time we call, we need to also handle failures! WHAT FUN.
 var oReq = new XMLHttpRequest();
 oReq.addEventListener("load", (ev) => { State.variables.responseText = oReq.responseText; });
-oReq.open("GET", "https://raw.githubusercontent.com/MoyTW/TwineExperiment/master/run.sh");
+oReq.open("GET", "http://localhost:8000/gameserver/session/b416b45a-7fb7-4761-a173-0bdec11de841/30620262-6c52-462b-9fc2-384369ade0a9");
 oReq.send();
-<</script>>
-
+<</script>>\
 Test, test.
 
 Here is some data from GitHub:
