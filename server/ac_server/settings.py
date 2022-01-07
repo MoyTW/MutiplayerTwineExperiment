@@ -53,8 +53,10 @@ MIDDLEWARE = [
   'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# TODO: Danger! Don't do this in prod, this is just 'cuz I'm tooling 'round on localhost using file://!
-CORS_ALLOW_ALL_ORIGINS = True
+# TODO: Depending on how you host this, you may not need any of this (if you put it all under the same domain)
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8080',
+]
 
 ROOT_URLCONF = 'ac_server.urls'
 
