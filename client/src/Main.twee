@@ -8,19 +8,78 @@ Antony And Cleopatra (Working Title)
 }
 
 
-:: Start
-<<set $clientId to '30620262-6c52-462b-9fc2-384369ade0a9'>>\
-<<set $sessionId to 'b416b45a-7fb7-4761-a173-0bdec11de841'>>\
-<<set $responseText to ''>>\
+:: IdentifyClient
 <<script>>
-// And, every time we call, we need to also handle failures! WHAT FUN.
-var oReq = new XMLHttpRequest();
-oReq.addEventListener("load", (ev) => { State.variables.responseText = oReq.responseText; });
-oReq.open("GET", "http://localhost:8000/gameserver/session/b416b45a-7fb7-4761-a173-0bdec11de841/30620262-6c52-462b-9fc2-384369ade0a9");
-oReq.send();
-<</script>>\
-Test, test.
+const storage = window.localStorage;
+const clientId = storage.getItem('multiplayerClientId');
 
-Here is some data from the server:
-<span id="data">(data fetching)</span>
-<<timed 1s t8n>><<replace "#data">>$responseText<</replace>><</timed>>
+if (clientId && setup.isUUID(clientId)) {
+  State.variables.clientId = clientId;
+  console.log('Retrieved clientId from localstorage as ' + clientId)
+} else {
+  const newClientId = setup.uuidv4();
+  storage.setItem('multiplayerClientId', newClientId);
+  State.variables.clientId = newClientId;
+  console.log('Generated new clientId as ' + newClientId)
+}
+<</script>>\
+
+
+:: Start
+<<include [[IdentifyClient]]>>\
+/* TODO: test sessionId & clientId */\
+<<set $clientId to '30620262-6c52-462b-9fc2-384369ade0a9'>>\
+<h1>Introduction</h1>\
+The year is 2021. Neo America is prospering under the stern yet wise direction of President for Life, Gaius Julius Ceasar. 330 million souls live, love, and laugh, all working tirelessly for the glory of the American people!
+
+But with light, comes darkness. With prosperity, comes misery. And with law comes crime. Heinous crimes! Shocking crimes! Cunning crimes! And sometimes, very rarely, crimes so devious, so secret, so smart that even the indomitable police of America cannot solve them.
+
+For these crimes, the very worst of crimes, America has a special team. Two individuals, both alike in dignity, in fair DC, where we lay our scene. Their names: <strong>Antony and Cleopatra.</strong>
+
+He's the <strong>Vice President.</strong>
+She's the <strong>Queen of Egypt.</strong>
+Together, <strong>they fight crime!</strong>
+<h2>Instructions</h2>\
+Hello, and welcome to this very silly 2 player interactive fiction experiment. If you're here, it's hopefully because I asked you to test. If you're not, uh, well, I can't stop you, but really, please get in contact and tell me that I accidentally made this public (email's at moytravis@gmail.com).
+
+Anyways, this experiment is meant to be played with 2 players, who are expected to be in communication throughout the game. A call is the intended way of playing, but you could try using text if you like.
+
+This game is <strong>fully cooperative.</strong> You are working together to solve a mystery, so talking to the other player is encouraged.
+
+If I'm not lurking on the call with you, please email your feedback to moytravis@gmail.com. Thanks muchly.
+
+An important note - in the interest of putting up a MVP, I've stolen the scenario is wholesale from Sherlock Holmes, Consulting Detective, (specifically Case One).
+
+Now, would you like to:
+<<button [[Host a new game|HostGame]]>><</button>>
+<<button [[Join a game that somebody else has hosted|JoinGame]]>><</button>>
+/* TODO: continue a game (functionally equivalent to join) */\
+
+
+:: HostGame
+/* TODO: call out to the server & start a new session */
+<<set $sessionId to 'b416b45a-7fb7-4761-a173-0bdec11de841'>>\
+Your session identifier is <strong>$sessionId</strong> - either copy and paste it to your partner or read it out loud to them. They will need to enter this code to join your game.
+
+<<disable>><<button 'Waiting for partner to join...'>><</button>><</disable>>
+
+
+:: JoinGame
+<<set $input>>\
+Please enter the session identifier you'd like to join.
+@@#session-input;<<textbox '$input' '' autofocus>>@@
+@@#join-button;<<disable>><<button 'Session identifier is invalid.'>>
+  /* TODO: call server & confirm */
+<</button>><</disable>>@@
+<<done>><<script>>
+  const button = $('#join-button button')
+  $('#session-input input').on('input', function(ev) {
+    if (setup.isUUID(ev.target.value)) {
+      button.html('Join game.')
+      button.prop('disabled', false)
+    } else {
+      button.html('Session identifier is invalid.')
+      button.prop('disabled', true)
+    }
+  })
+<</script>><</done>>\

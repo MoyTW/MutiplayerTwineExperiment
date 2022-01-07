@@ -1,0 +1,25 @@
+:: CallResponseStuff
+<<set $responseText to ''>>\
+<<script>>
+// And, every time we call, we need to also handle failures! WHAT FUN.
+var request = new XMLHttpRequest();
+request.addEventListener("load", (ev) => { State.variables.responseText = request.responseText; });
+request.open("GET", "http://localhost:8000/gameserver/session/b416b45a-7fb7-4761-a173-0bdec11de841/30620262-6c52-462b-9fc2-384369ade0a9");
+request.send();
+<</script>>\
+Test, test.
+
+Here is some data from the server:
+<span id="data">(data fetching)</span>
+<<timed 1s t8n>><<replace "#data">>$responseText<</replace>><</timed>>
+
+:: Text
+
+Now, who are you?
+*fake_choice
+  #Mark Antony, Vice President of Neo America.
+    *set player_is_antony true
+    *set player_idx 1
+  #Cleopatra VII Philopator, Queen of Egypt.
+    *set player_is_cleopatra true
+    *set player_idx 2
