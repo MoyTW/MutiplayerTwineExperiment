@@ -1,0 +1,54 @@
+:: IntroductionSnippet
+"Marlon Brando was found dead on Tuesday, March 15, in an alley near the Raytheon complex at 7:29 by a passerby, who immediately called 911. DC Police cordoned off the area and handled it as usual. He was shot twice at close range through the chest. They determined it a likely robbery. Evidence given is that his wallet was empty and his phone, wristwatch, and gold wedding band were all taken. Before you ask, no, we haven't been able to track the phone. Consider that line of questioning dead. As of now, DC police have effectively shelved the case, even if they won't admit it." She pauses, glancing over at Jocelyn.
+
+Jocelyn smiles wanly. "Please," she says, "continue."
+
+"Brando was the CEO and President of Raytheon before his death, and that's why this is a matter of national security. A brief primer on Raytheon, though I'm sure you both know this already. Raytheon is a weapons manufacturer, heavily involved in US military procurement, among other things. It is very profitable, with a healthy amount of debt, and traded publicly."
+
+@{player_idx You clear your | Antony clears his} throat. "What was the line of succession?"
+
+"Audrey Hepburn is now CEO. She was formerly the CMO."
+
+"Not James Dean?"
+
+"No. Brando had designated Hepburn as his heir, and Dean apparently had little interest in the position, preferring a more technical role."
+
+@{player_idx You shrug. | Antony shrugs. } "Yeah, I could see that."
+
+"We have various pieces of evidence from the scene here to examine," she says. "But before that, I'd like to give Jocelyn a chance to speak. You were telling us about the last time you saw Marlon?"
+
+"Yes," replies Jocelyn. "We were on good terms, and I lived quite close. I saw him the night before the murder. We had dinner together, and then he left."
+
+@{player_idx Cleopatra smiles. | You smile. } "Do you know where he went?"
+
+Jocelyn's lips compress. "Well." She takes a deep breath, then chuckles. "Well. He was having an affair. Yes, he's married. Was married? Serially, actually. This is - was - his third wife." She glances up at Hortensia, who nods. "Tarita Brando," she says, "The wife, I mean. I have no idea who his latest mistress was."
+
+"Thank you for being forthcoming."
+
+"Well," laughs Jocelyn, "you know, he never really tried very hard to hide it. Besides. He's not around to be mad anyways."
+
+"Do you know who the beneficiaries of his will are?"
+
+"His current wife and her son. He has eleven children." At that, @{player_idx you whistle, and Cleopatra's eyebrows shoot up. | Antony whistles, and your eyebrows shoot up.} "Had, I mean. Only one by the current wife, and he's nine years old."
+
+"Is there anything else you think relevant?"
+
+"No," sighs Jocelyn, "nothing else."
+
+All eyes are back on Hortensia. She gestures to the table, on which are several pieces of evidence. The largest is a secure briefcase with a thumbprint lock. Next to it are his glasses, a keychain with keys, an empty wallet, a paper note, and a small notebook.
+
+"The briefcase was closed at the time it was found," says Hortensia, pressing a thumb strip to the reader. "The DC police found no foreign prints, and submitted it to evidence unopened." It clicks open. Inside are a three manila folders with hard copies of documents on them. The first is filled with parts invoices, the second with records of airplane sales to the Russian government, and the third, labeled SP-STORM, is empty.
+
+@{player_idx You frown. | Antony frowns.} "SP-STORM? And it was empty when it was found?"
+
+"As far as we could tell," confirms Hortensia.
+
+@{player_idx Cleopatra reaches | You reach} over and take the notebook, paging through it. "Itinerary. Looks pretty sparse. There are two notes on the day of the murder. 'Skunkworks - 8:00 am - surprise!' and 'Gen. Labienus - 8:30 pm!!!' On the previous day is 'Gary Danko - 8:30 pm' and 'Horace's mother's birthday.'"
+
+Jocelyn clears her throat. "Horace was his executive assistant," she adds.
+
+"Thank you," @{player_idx says Cleopatra, | you say,} taking the note from the table. "The note reads 'Meet me at First Connection, 10 pm - G.R.' Oh, First Connection, that gloomy bar." @{player_idx Cleopatra hands you the note, and you swap the notebook with her. | You proffer the note to Antony, and he swaps it with the notebook.} "The handwriting's identical," you say.
+
+"That's all I have for you," says Hortensia.
+
+@{player_idx You nod. | Antony nods.} "Thank you. I think we've got enough to get started."
