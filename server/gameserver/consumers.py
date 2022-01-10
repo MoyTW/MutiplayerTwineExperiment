@@ -12,7 +12,7 @@ class ChatConsumer(WebsocketConsumer):
       self.channel_name
     )
 
-    self.accept
+    self.accept()
   
   def disconnect(self, code):
     print(code)
