@@ -61,10 +61,29 @@ Now, would you like to:
 :: HostGame
 /* TODO: call out to the server & start a new session */\
 <<set $sessionId to 'b416b45a-7fb7-4761-a173-0bdec11de841'>>\
+<<script>>
+// TODO: wss
+const sessionId = 'somesession';
+setup.chatSocket = new WebSocket('ws://127.0.0.1:8000/ws/' + sessionId + '/');
+
+setup.chatSocket.onmessage = function(e) {
+  const data = JSON.parse(e.data);
+  console.log(data);
+};
+
+setup.chatSocket.onclose = function(e) {
+  console.error('TODO: Handle appropriately');
+};
+<</script>>\
 Your session identifier is <strong>$sessionId</strong> - either copy and paste it to your partner or read it out loud to them. They will need to enter this code to join your game.
 
 <<disable>><<button 'Waiting for partner to join...'>><</button>><</disable>>
 <<button [[Continue|SelectCharacter]]>><</button>>
+<<done>><<script>>
+  console.log(JSON.stringify({'message': 'test'}));
+  console.log(setup.chatSocket);
+  // setup.chatSocket.send(JSON.stringify({'message': 'test message lol'}));
+<</script>><</done>>
 
 
 :: JoinGame
