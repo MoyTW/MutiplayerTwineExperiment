@@ -1,0 +1,37 @@
+:: Ch1_CaseIntro1
+TODO: make a macro for "if antony, print else"
+<h1>CASE ONE</h1>\
+<h2>The Case of the Raytheon CEO.</h2>\
+<strong>March 26, 2021</strong>
+
+You and @{player_idx Cleopatra | Antony} are lounging around on your gigantic pleasure barge, soaking up the sun and watching the Potomac go by, when both your phones light up at once.
+
+You check the number. It's the FBI hotline. You take the call. "A murder!" cries the officer on the other side. "A murder most foul! Marlon Brando, CEO of Raytheon, was found dead eleven days ago. This is now a matter of," and his voice drops to a whisper, "[i]national security![/i]"
+
+@{player_idx "We'll be there in fifteen," | "Finally, some excitement,"} you say, and hang up. You look over at @{player_idx Cleopatra. | Antony.}
+
+"Time…" you say in unison, "to fight crime!"
+
+<<link [[But first: Clothes!|Ch1_CaseIntro2]]>><</link>>
+
+
+:: Ch1_CaseIntro2
+Your helicopter buzzes over the FBI headquarters, trailed by the larger, more spacious Secret Service bird. Your pilot touches down on the helipad, and the two of you waste no time disembarking. Your FBI liaison meets you on the tarmac as your Secret Service escorts disembark, and you are lead through the maze at Langley to an unassuming briefing room.
+
+There are three people at the table, a stern looking woman with a FBI nametag, a devastated looking businesswoman on the verge of tears, and Sejanus, head of the FBI, at his customary spot at the head of the table. "Vice President," he says, nodding to @{player_idx you. | Antony.} "My Queen." He bows curtly to @{player_idx Cleopatra. | you.} "I'm not here to brief you. I'm just here to impress the importance of the situation to you. And, as you can guess, it's very important. From the President's mouth to your ears. [b]Two days.[/b]" He cracks a grin and then gestures to the agent sitting beside him, a tall, stern-looking woman. "Hortensia will take it from here."
+
+With that, he sweeps out of the room.
+
+"Good to see you, Hortensia," @{player_idx Cleopatra says. She shoots | you say, and shoot } a significant glance over at the businesswoman. "I don't believe we've been introduced."
+
+"Jocelyn Brando," she says, standing. She takes in a deep breath as the two of you walk over. "A pleasure to meet you." After the introductions are done, you all take seats at the table.
+
+<<link [[Now, to business.|Ch1_CaseIntro3]]>><</link>>
+
+
+:: Ch1_CaseIntro3
+<<set $ch1_intro_seen to true>>\
+<<include IntroductionSnippet>>
+
+<em><strong>[ You can review the introduction at any point by going to the Show Stats button in the upper-left corner. ]</em></strong>
+<<link [[Start your investigation!|Ch2_HowToPlay]]>><</link>>

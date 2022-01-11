@@ -52,3 +52,29 @@ Jocelyn clears her throat. "Horace was his executive assistant," she adds.
 "That's all I have for you," says Hortensia.
 
 @{player_idx You nod. | Antony nods.} "Thank you. I think we've got enough to get started."
+
+
+:: HowToPlaySnippet
+[b]How To Play[/b]
+
+The goal of the game is to gather enough evidence to solve the case and answer a quiz at the end of the game.
+
+/* TODO: Set this as a variable! */
+The game takes place over [b]7 turns.[/b]
+
+[b]Every turn[/b], each player can choose one of the following:
+*line_break
+[b]1) Interview a person[/b]
+*line_break
+[b]2) Investigate a location[/b]
+
+The possible people or locations are listed in the Stats page, accessible using the [b]Show Stats[/b] button in the upper-left hand corner. As you interview people and investigate locations, new people and locations may unlock. After doing an interview of investigation, option for that character to revisit the location will be locked, but you can review the text of the result in the [b]Show Stats[/b] page by selecting the [b]Review Interviews & Investigations[/b] option.
+
+Mechanically, every turn, Antony and Cleopatra must agree on what interview or investigation they're each doing. The game then asks [b]"What is Antony doing?[/b]" and [b]"What is Cleopatra doing?"[/b] and each player must enter identical options, so that their games stay in sync. [b]There is no advantage to both going to the same location![/b] The text is the same for both players (an obvious avenue for improvement if the format pans out).
+
+If the players feel they have sufficient data, they can also choose to skip straight to the quiz. Otherwise, once the 7 turns are over, you must present your case before Sejanus and answer a quiz, with each question being worth a certain number of points. Then the points are added to give a final score. The questions are as follows:
+
+*gosub_scene ch3_conclusion questions_snippet
+
+/* TODO: Figure out where the instructions should live */\
+You can review these instructions by going to the [b]Show Stats[/b] page and selecting [b]How To Play.[/b]
