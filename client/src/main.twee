@@ -27,7 +27,7 @@ if (clientId && setup.isUUID(clientId)) {
 <</script>>\
 
 
-:: InitializeVariables
+:: InitializeGameVariables
 <<nobr>>
 /* Global */
 <<set $turnsRemaining to 7>>
@@ -37,11 +37,16 @@ if (clientId && setup.isUUID(clientId)) {
 <<set $partnerCharacterName to ''>>
 <<set $selectCharacterPlayerConfirmed to false>>
 <<set $selectCharacterPartnerConfirmed to false>>
+
+/* Ch2_SelectNextCluePoint */
+<<set $nextCluePointPlayerSelection to ''>>\
+<<set $nextCluePointPartnerSelection to ''>>\
+<<set $nextCluePointPlayerConfirmed to false>>\
+<<set $nextCluePointPartnerConfirmed to false>>\
 <</nobr>>\
 
 :: Start
 <<include [[IdentifyClient]]>>\
-<<include [[InitializeVariables]]>>\
 /* TODO: test sessionId & clientId */\
 /* <<set $clientId to '30620262-6c52-462b-9fc2-384369ade0a9'>>\ */\
 <h1>Introduction</h1>\
@@ -125,27 +130,23 @@ Please enter the session identifier you'd like to join.
 <</script>><</done>>\
 
 :: SelectCharacter
+/* We initialize the variables here because it's the first screen on a new game */\
+<<include [[InitializeGameVariables]]>>\
+<<script>>
+setup.initializeCluePoints();
+<</script>>\
 /* TODO: Make this resilient */\
 <h1>Select your character:</h1>\
 <<button 'Mark Antony, Vice President of Neo America.'>>
-  <<script>>
-    setup.sendCharacterSelected('Antony');
-  <</script>>
+  <<script>>setup.sendCharacterSelected('Antony');<</script>>
 <</button>>
 <<button 'Cleopatra VII Philopator, Queen of Egypt.'>>
-  <<script>>
-    setup.sendCharacterSelected('Cleopatra');
-  <</script>>
+  <<script>>setup.sendCharacterSelected('Cleopatra');<</script>>
 <</button>>
 
-@@#player-selection;You have not yet selected a character.@@
-@@#partner-selection;Your partner has not yet selected a character.@@
+@@#select-character-player-selection;You have not yet selected a character.@@
+@@#select-character-partner-selection;Your partner has not yet selected a character.@@
 
-@@#confirm;<<disable>><<button 'Confirm selection.'>>
-  <<script>>
-    setup.sendCharacterConfirmed()
-    const button = $('#confirm button');
-    button.html('Waiting for partner to confirm...');
-    button.prop('disabled', true);
-  <</script>>
+@@#select-character-confirm;<<disable>><<button 'Confirm selection.'>>
+  <<script>>setup.sendCharacterConfirmed()<</script>>
 <</button>><</disable>>@@

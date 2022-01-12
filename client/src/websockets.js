@@ -23,10 +23,14 @@ setup.websocketConnect = function(sessionId) {
   }
 }
 
+// ##################################################
 // #################### HANDLERS ####################
+// ##################################################
 setup.MessageTypes = {
   CharacterSelect: 'CHARACTER_SELECT',
   CharacterConfirm: 'CHARACTER_CONFIRM',
+  NextCluePointSelected: 'NEXT_CLUE_POINT_SELECTED',
+  NextCluePointConfirmed: 'NEXT_CLUE_POINT_CONFIRMED',
 }
 
 // ==================== SelectCharacter ====================
@@ -46,18 +50,18 @@ setup.sendCharacterSelected = function(character) {
 setup.registerHandler(setup.MessageTypes.CharacterSelect, function(data) {
   if (data.clientId === State.variables.clientId) {
     State.variables.playerCharacterName = data.character;
-    $('#player-selection').text('Your have selected ' + data.character + '.')
+    $('#select-character-player-selection').text('Your have selected ' + data.character + '.')
   } else {
     State.variables.partnerCharacterName = data.character;
-    $('#partner-selection').text('Your partner has selected ' + data.character + '.')
+    $('#select-character-partner-selection').text('Your partner has selected ' + data.character + '.')
   }
   // TODO: Synchronize the states
   const playerCN = State.variables.playerCharacterName;
   const partnerCN = State.variables.partnerCharacterName;
   if (playerCN !== '' && partnerCN !== '' && playerCN != partnerCN) {
-    $('#confirm button').prop('disabled', false)
+    $('#select-character-confirm button').prop('disabled', false)
   } else {
-    $('#confirm button').prop('disabled', true)
+    $('#select-character-confirm button').prop('disabled', true)
   }
 })
 
@@ -73,10 +77,73 @@ setup.sendCharacterConfirmed = function() {
 setup.registerHandler(setup.MessageTypes.CharacterConfirm, function(data) {
   if (data.clientId === State.variables.clientId) {
     State.variables.selectCharacterPlayerConfirmed = true
+    const button = $('#select-character-confirm button');
+    button.html('Waiting for partner to confirm...');
+    button.prop('disabled', true);
   } else {
     State.variables.selectCharacterPartnerConfirmed = true
   }
   if (State.variables.selectCharacterPlayerConfirmed && State.variables.selectCharacterPartnerConfirmed) {
     Engine.play('Ch1_CaseIntro1');
+  }
+})
+
+// ==================== Ch2_SelectNextCluePoint ====================
+// -------------------- NextCluePointSelected --------------------
+setup.sendNextCluePointSelected = function(selectedKey) {
+  setup.chatSocket.send(JSON.stringify({
+    'type': setup.MessageTypes.NextCluePointSelected,
+    'clientId': State.variables.clientId,
+    'cluePointKey': selectedKey
+  }));
+}
+
+setup.registerHandler(setup.MessageTypes.NextCluePointSelected, function(data) {
+  if (data.clientId === State.variables.clientId) {
+    State.variables.nextCluePointPlayerSelection = data.cluePointKey;
+    const selectionSpan = $('#next-clue-point-player-selection');
+    if (selectionSpan) {
+      selectionSpan.text('You have selected ' + State.getVar('$cluePoints').get(data.cluePointKey).name + '.')
+    }
+  } else {
+    State.variables.nextCluePointPartnerSelection = data.cluePointKey;
+    const selectionSpan = $('#next-clue-point-partner-selection')
+    if (selectionSpan) {
+      selectionSpan.text('Your partner has selected ' + State.getVar('$cluePoints').get(data.cluePointKey).name + '.')
+    }
+  }
+  // TODO: Synchronize the states
+  const playerSelection = State.variables.nextCluePointPlayerSelection;
+  const partnerSelection = State.variables.nextCluePointPartnerSelection;
+  if (playerSelection !== '' && partnerSelection !== '' && playerSelection != partnerSelection) {
+    $('#next-clue-point-confirm button').prop('disabled', false);
+  } else {
+    $('#next-clue-point-confirm button').prop('disabled', true);
+  }
+});
+
+// -------------------- NextCluePointConfirmed --------------------
+setup.sendNextCluePointConfirmed = function() {
+  setup.chatSocket.send(JSON.stringify({
+    'type': setup.MessageTypes.NextCluePointConfirmed,
+    'clientId': State.variables.clientId
+  }));
+  const button = $('#next-clue-point-confirm button');
+  button.html('Waiting for partner to confirm...');
+  button.prop('disabled', true);
+}
+
+setup.registerHandler(setup.MessageTypes.NextCluePointConfirmed, function(data) {
+  if (data.clientId === State.variables.clientId) {
+    State.variables.nextCluePointPlayerConfirmed = true;
+  } else {
+    State.variables.nextCluePointPartnerConfirmed = true;
+  }
+  if (State.variables.nextCluePointPlayerConfirmed && State.variables.nextCluePointPartnerConfirmed) {
+    // TODO: handle more nicely
+    State.variables.turnsRemaining -= 1;
+    const playerSelection = State.variables.nextCluePointPlayerSelection;
+    const nextPassage = State.variables.cluePoints.get(playerSelection).passage;
+    Engine.play(nextPassage);
   }
 })

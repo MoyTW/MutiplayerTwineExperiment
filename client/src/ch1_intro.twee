@@ -31,9 +31,6 @@ With that, he sweeps out of the room.
 
 :: Ch1_CaseIntro3
 <<set $ch1_intro_seen to true>>\
-<<script>>
-setup.initializeCluePoints();
-<</script>>\
 <<include IntroductionSnippet>>
 
 <em><strong>[ TODO: You can review the introduction at any point by going to the Show Stats button in the upper-left corner. ]</em></strong>
