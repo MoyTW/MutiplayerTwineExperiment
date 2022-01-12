@@ -56,3 +56,327 @@ You make a noncommital answer.
 "Well," she says, "I was in the office until 7:30 that evening. I can tell security to turn over the security camera footage and badge records, if you like."
 
 You tell her to get in touch with Hortensia. Soon after you leave, Hortensia texts you a confirmation.
+
+
+:: CluePoint_GeneralLabienus
+You meet Labienus in his office at the Pentagon, where he greets you with a crisp salute and gigantic smile. The two of you spend some time catching up, but eventually get down to business.
+
+"So. Marlon. He sent me a message on the morning of his murder, concerning the security of the STORM project. It's an anti-missile interception system. Revolutionary, if they could get it to work. Here," he says, handing you a printout.
+
+You read the note. "Meet tonight 8:30, your office - take armed guards - will explain in person. Deadline 10 PM."
+
+"I'd assume that whoever he was suspicious of got wind and killed him for it. Tough luck, isn't it?" He shrugs. "I've had my own men do some digging, and it's been mostly inconclusive. We found a potential security risk, an engineer named [b]Vitruvius Pollio,[/b] who was often bringing packages to the French ambassador, [b]Napoleon Bonaparte.[/b] However, [b]James Dean[/b] assured me that Pollio wasn't a risk, and we can't investigate officially, so we dropped that. He still took him off the project."
+
+You ask if he's still investigating.
+
+"As much as I can, which isn't much. I have suspicions about all the foreign ambassadors - [b]Bonaparte, Bismarck,[/b] and [b]Rasputin.[/b] However, I have no evidence."
+
+You chat for a little while longer, then leave.
+
+
+:: CluePoint_Horace
+You call Horace's personal line at Raytheon, but you're informed by his messaging machine that he's out sick today. Undaunted, you phone up Hortensia, who gives you Horace's personal cell number. You don't ask how she got it.
+
+He sounds only slightly ill over the phone, and agrees to meet you at his house. You give your driver the address.
+
+You meet him at his home. He's young, mid-20s, and thin and stylish. After introductions are made and you're both seated, you ask him to recount the events of the evening.
+
+"Marlon went to the [b]Skunkworks[/b] facility in the morning, went out for a business lunch, came back to the [b]Raytheon offices.[/b] He left the offices at around 7:25, and I stayed back around to take care of some affairs. I saw the sirens at around 7:30, and went down to see what happened, at which point I learned of the murder." He pauses. "It was a very surreal evening."
+
+You ask what he was doing in the alley.
+
+"He customarily drove himself, and liked to park in Memorial Park. He had several friends who'd died in the service, and every day he'd pass by the memorial. With the alley, the walk is only about four minutes. Without it, it's maybe nine."
+
+You note that anybody doing even a minimal level of surveillance on Brando would have noted this habit.
+
+"Yes," he says, "it is kind of sketchy, in hindsight. But nobody had ever gotten shot in the alley before." He shrugs. "Bad luck? Enemy action? No idea."
+
+You ask for more details regarding Brando's 8:30 meeting with [b]General Labienus.[/b]
+
+"He was going to a meeting with the General?" Horace pauses. "Well it wasn't on his itinerary, and all his meetings have been during the day. I've no additional context on this exact meeting, although I know he did have concerns about the security of Project STORM."
+
+You follow up on the security concerns.
+
+"Well, he had some concerns, but I wasn't sure what they were. He did assign additional security resources to be assigned to the Skunkworks facility, where all of the technical data and prototypes are stored, but security at the main office was normal. It's just that we don't carry any technical data here, just administrative data." He pauses. "To be clear, administrative data is almost as valuable as technical data, in security terms. But we still keep the blueprints and test data off our network at this facility."
+
+You tactfully ask about [b]Jocelyn's[/b] assertion that Brando was having an affair.
+
+"Yes. He was. I didn't ask for details, but it was an open secret at the office."
+
+You ask what his position is now.
+
+"Well," he laughs, "I'm in limbo at the moment, since Hepburn already has her own EA. But we'll see where I end up, once this head cold's done with."
+
+You thank him for his time.
+
+
+:: CluePoint_HoracesMother
+From Hortensia you get the name of Horace's mother, Liberta, and her number. You call ahead and meet her at her apartment. Unfortunately, all you learn is that she's very fond of [b]Horace,[/b] she met Brando precisely once at a company party three years ago, and that Brando sent her a nice bottle of wine as a birthday gift.
+
+
+:: CluePoint_VitruviusPollio
+You meet Vitruvius in his one-bedroom apartment. He's a slim man with an impetuous gaze, about 30 years old. He greets you wearing a surgical mask. "Apologies. There's a cold going around," he says in a strained voice.
+
+You assure him it's no problem. He leads you into the main room and sits down at the table, on which is a pack of cigarettes with a golden lotus logo, a tall blue glass decanter, and some tissues. You ask him about his knowledge of the STORM.
+
+He laughs. "Been removed. Officially, it's because the IDAHO project is behind schedule and needs more resources, and I make a good fit. Unofficially it's because I keep visiting the French Embassy in my off time and that's apparently a bad look. Like I need an excuse." He pauses. "They're not wrong. It is kind of a bad look."
+
+You ask why he's visiting the French Embassy so much.
+
+"So, [b]Napoleon[/b] has mistresses, right?"
+
+You agree that that is something you've heard said.
+
+"Well, one of his mistresses has a daughter, and for various reasons she's living in DC, and blah blah blah. Short version is that we want to marry, and part of that involves making nice with dad."
+
+You ask if Marlon Brando and [b]James Dean[/b] were aware of this.
+
+"Yes. Obviously."
+
+You ask if he ever discussed Project STORM with Napoleon.
+
+"Ha! What, am I going to talk missile interception with Napoleon? The man might be a geopolitical genius but the details of missile defense aren't his duty. He has men for that. No, mostly I give gifts and make nice." He snatches the pack of cigarettes from the table and brandishes them. "Like these things. Expensive as hell and custom made, from a place called [b]Golden Lotus.[/b] He loves gifts, the more exclusive the better - he views them kind of like a vow of allegiance, or something. Very old fashioned."
+
+You ask if the cigarettes are any good.
+
+"No idea," he laughs, "I don't smoke. But they have a reputation for being exclusive. So, probably?"
+
+You ask what he was doing on the 15th of March.
+
+"Dinner with Helene." You raise an eyebrow. "The woman I want to marry. Look, you don't have to take my word for it, I'm sure you can have your people track down my location data."
+
+You thank him for his time, and give him best wishes with his cold. As you're leaving, you prompt Hortensia to look up Vitrivius' phone data. She tells you that both him and Helene were present at Atlantic Catch on the evening of the 15th.
+
+
+:: CluePoint_NapoleonBonaparte
+Napoleon is all to happy to talk. After the two of you spend some time chatting, you move to a smoking lounge and take seats. He pulls out a cigarette decorated with a golden lotus logo.
+
+You raise an eyebrow.
+
+"My embassy," he says, "my realm, and my rules. Your smoking laws have no power here." He laughs and lights up, then offers you one. "Custom-made, I understand. From a shop called [b]Golden Lotus.[/b]"
+
+You politely decline.
+
+He smiles. "For form's sake," he says, "I was at a state dinner on the evening of the 15th, which was well-attested to. Of course," he laughs, "if I had wanted the unfortunate victim murdered, I need not sully my own hands with it."
+
+You laugh politely, then ask if he knows [b]Vitruvius Pollio.[/b]
+
+He pauses and looks you straight in the eyes. "Why is it you ask?"
+
+You mention that certain people have had suspicions about Pollio's frequent visits.
+
+"Of course," he says, leaning back. "He is pursing a romance with one of my embassy staff. He visits often to see her, and many times brings gifts." You smiles. "You know how it is, do you not?"
+
+You agree politely.
+
+"To put your mind at ease, neither me nor my people have engaged in any espionage regarding the STORM project."
+
+You thank him and say your goodbyes.
+
+
+:: CluePoint_OttoVonBismarck
+You are told by his people that Otto von Bismarck is very busy and you find you cannot manage to escalate to him. Finally, you get an email from his office.
+
+"I apologize for the difficulty," it begins, "but I have many duties that cannot be delayed. Regarding the murder of Marlon Brando, neither me nor any of my staff had any involvement whatsoever. We are longstanding political and military allies with America, and we do not stoop to assassinations. I suggest you exercise your minds and examine more logical targets."
+
+
+:: CluePoint_GrigoriRasputin
+Rasptuin is a little hard to get a hold of, since his staff either aren't certain where he is, or are stonewalling you. Eventually they agree to a meeting in half an hour, at his residence. When you arrive it becomes clear that yesterday he had thrown a very extravagant party and is still nursing a hangover. He greets you politely, but seems somewhat subdued.
+
+"It is always a pleasure," he says. "Would you like something to drink?" He gestures over to an expansive glass-faced liquor cabinet.
+
+You decline, and ask him about the evening of March 15th.
+
+"I…one moment," he says. "Anna, will you bring me my ledger?"
+
+His maid brings out a small, leather-bound book. He opens it and pages through it. "March 15, March 15," he mutters. "Ah. March 15. I was drinking."
+
+You ask him to clarify.
+
+"Well," he says, "I said what I meant." He frowns. "Anna," he says, "did you save the receipts?"
+
+His maid, with a long-suffering roll of the eyes, fetches a binder and lays out six receipts.
+
+"You see," he says, examining them, "I started at…3:30 in the afternoon and continued until…2:30 the next day." He laughs. "Alibi enough?" He pushes the pile of receipts over to you.
+
+You take a picture and send them to Hortensia for verification. Then you ask him if he has any knowledge of the STORM project.
+
+"Of course," he says, "it is our business to keep track of all your weapons systems. But we didn't murder your man. I don't know who did, but it wasn't us." He chuckles.
+
+You thank him for his help and leave him to his hangover.
+
+As you're leaving, Hortensia informs you that she's checked the bars in question and all of them have matching records.
+
+
+:: CluePoint_GeorgeRandolphHearst
+You call ahead and meet in George Randolph Heart's office. He is very rotund and reasonably elderly, but moves quickly and easily. You ask him about his actions on the evening of March 15th.
+
+"March 15?" he asks, surprised. "Is this about Marlon Brando?"
+
+You confirm. He raises an eyebrow.
+
+"Look, I've never met the guy, even professionally. I work in media, not defense. I don't have anything to do with his family. What in the world does this have to do with me?"
+
+You ask him to recount his actions on the March of 15th anyways.
+
+"Let me check my calendar." He pulls something up on his phone. "I had a business dinner at Atlantic Catch at 6:00 pm, and after that I met a friend for drinks at [b]First Connection.[/b] I stayed there until around 10:30 in the evening, then went home."
+
+You ask if he remembered anything noteworthy about his visit to [b]First Connection.[/b]
+
+"How am I supposed to know? Nothing very dramatic happened. Look, what does any of this have to do with Marlon Brando's murder?"
+
+You thank him for his help and leave without further explanation. Later, Hortensia confirms that he was present at Atlantic Catch that evening.
+
+
+:: CluePoint_GaiusMarius
+You make a social call to Senator Gaius Marius at his offices. You verify his whereabouts on the evening of March 15 (a fundraising dinner) ask him about his knowledge of Project STORM (none at all) and his fondness for Golden Lotus cigarettes (incidental to the case).
+
+
+:: CluePoint_LiviaDrusilla
+If there's anybody who's above suspicion, it should be the President's daughter-in-law, especially given that there's nothing linking her directly to the case except a cigarette brand. Nonetheless, you ask her to talk with you, and she agrees.
+
+Unfortunately, while she is an extremely astute mind, she has no relevant information to the case, and she has a rock-solid alibi - the two Secret Service agents who accompany her everywhere.
+
+After a pleasant chat, you move on.
+
+
+:: CluePoint_MarieDeChampagne
+You have Hortensia track down her number, and call ahead. She appears unsurprised by the request to talk, and invites you to her house, which turns out to be a mansion.
+
+As soon as your introductions are done and you're both seated, she leans forward. "How did you know?" she asks.
+
+You ask what it is she thinks you know.
+
+She hesitates. "Are you playing coy?"
+
+You demur.
+
+"Fine," she says, "yes, I was…[i]seeing[/i] Marlon. And I'm very distressed by his death, as you can imagine. However, I had nothing to do with it, and I don't think I know anything that could help you. He didn't talk much about his work."
+
+You ask her about any knowledge of Project STORM.
+
+"Well, I know what anybody else knows. It's some sort of big Pentagon contract or project or something. Again, his work wasn't the focus of our meetings."
+
+You ask her what she was doing the night of the murder.
+
+"Dinner with a friend, at the Field of the Cloth of Gold. You can verify with them the time and location."
+
+You ask if she has anything else she'd like to say.
+
+"Only that I hope you find whoever did this," she says.
+
+You say your goodbyes, and remind her that she has a ring waiting for her at [b]Gary Danko[/b] before you depart.
+
+
+:: CluePoint_TheMurderScene
+One of the police who responded to the call meets you in the alley where Marlon Brando was killed.
+
+"He was here when I got here," he says, pointing to a spot in the middle of the alley. "He was still warm, but clearly dead. He was face down, with his briefcase near his right hand, and the contents of his pockets tossed on top of his body." He walks over to an alcove on the side of the alley. "Whoever did it probably waited in here. You can't see it coming from the direction he did. Then he jumped out, shot him, and that was it."
+
+You thank the policeman for his efforts, then take a look around the alcove.
+
+"Yeah, well," he says, "we already checked it out. No prints or anything."
+
+You thank him for his help, and he leaves. Once he's out of the picture, you walk about the alley. It seems wholly unremarkable, until you check the alcove carefully. On the floor is the remains of a cigarette, with a gold lotus logo on its end. You don't recognize the brand.
+
+It's entirely possible that this was left here in the nearly two weeks after the murder, but you wonder how many people loiter in this alcove. You snap a picture and send it to Hortensia, with a request to identify it. About fifteen minutes later, she calls back.
+
+"The cigarette is apparently made to order, from a tobaccanist called [b]Golden Lotus Tobacco.[/b] I'll give you the address."
+
+
+:: CluePoint_TheRaytheonMainOffices
+You visit Raytheon main offices and meet with the head of security. You request all the relevant security camera footage and badge logs. Unfortunately, there's no camera coverage of the alley.
+
+You learn that on the night of the murder, Marlon Brando badged out at 7:27 pm, and that he had a habit of passing through the alley to visit Memorial Park before driving home.
+
+You ask to see his office, but it's already been reassigned to the new CEO, [b]Audry Hepburn,[/b] and all of Brando's personal effects have been sent home to his wife, [b]Tarita.[/b]
+
+You thank him for his help and leave.
+
+
+:: CluePoint_TheRaytheonSkunkworks
+You call ahead to the Skunkworks, and meet the head of Project STORM in his office. He's about fifty, average height, thin and kind of nerdy in an old-fashioned way. He greets you with ill-disguised awe.
+
+You ask him about the meeting that Brando had with [b]James Dean[/b] the morning of his death.
+
+"Oh," he says, "James said he was having some sort of stomach trouble that morning, so he left to run down to the CVS to get some pills. Brando came in and waited in the office, but when James didn't come back he gave me a note to give to James and told me to give it to him."
+
+You ask if he read it.
+
+"Absolutely not. I gave it to James when he came back, maybe an fifty minutes later. He left for the main office at maybe three in the afternoon."
+
+You ask if he can share any details about Project STORM.
+
+"Well, I could talk up a storm, but I don't know how it'd be relevant."
+
+You ask where the blueprints, test results, prototypes, and other technical data is stored.
+
+"Oh, well, they're on a local network, airgapped of course. That means it's not connected to the internet, so it's harder to hack. If you need to take data in or out, you have to physically connect to a computer here." He pauses. "Look, I have some stuff to do, but you can talk to [b]Vitruvius[/b] if you like, he was the technical lead on the project, at least until Brando got shot."
+
+You agree, and he leads you to Vitruvius' office. Unfortunately, it seems Vitruvius is not present. You stride into his office anyways. On his desk, in a prominent position, is a picture of a young man and woman in front of the burnt-out husk of Notre Dame.
+
+"Look," says the head of Project STORM, "I appreciate that you're, well, I mean. You are trying to solve a murder, and I'm sure you're legally allowed to go through his stuff, but it seems a bit - look, I'll give you his cell, how's that sound?"
+
+You agree and exit the office.
+
+
+:: CluePoint_GaryDanko
+You call ahead, and arrive at Gary Danko, where you're greeted by Gary Danko, owner of the one-star Michelin star restaurant Gary Danko.
+
+You ask about Marlon Brando's March 14 reservation. He hesitates, then goes and calls the majordomo, hovering anxiously in the background as the two of you converse.
+
+"Yes," says the majordomo, "Brando visited fairly frequently over the last three months. Ten times in total. For each visit, he booked a private room and dined with a tall woman wearing a mask and cloak. White, with dark hair." He pauses. "At some point, I do believe she left a ring, which I put in the lost and found and, unfortunately, had slipped my mind. She never asked after it."
+
+You ask if he ever heard a name. The majordomo shakes his head. "My apologies. I can show you the ring, perhaps?"
+
+You agree. He returns in a couple of minutes with an emerald ring. You examine the jeweler's mark, take a picture of it with your phone, and send it to Hortensia for identification. Then you thank the majordomo and Gary Danko.
+
+Fifteen minutes later, as you're riding back to the headquarters, Hortensia replies with the source - [b]Blood Diamond.[/b] An interesting name for a jewelry store.
+
+
+:: CluePoint_FirstConnection
+The bartender recognizes you and her eyes go wide. When you explain the reason for you're visit, she's exceptionally eager to help. You ask if anybody with the initials G.R. came into the bar on March 15th and her face falls.
+
+"Sorry," she says, "I can't quite - oh! I can check the receipts, maybe?"
+
+You assent, and she spends a few minutes in the system. "[b]Grigori Rasputin[/b] and [b]George Randolph Hearst.[/b] I guess he signs like G.W.? Both of them were here between 8 and 10-ish."
+
+You ask if there was anything interesting about the visit that she can remember.
+
+"Well, let me think." She tabs idly on the bar. "Grigori looked kind of sketchy, I think? And he was carrying a briefcase. Another guy, American, mid-30s probably, met him and they talked for a bit." A frown appears on her face. "I hope they weren't doing a drug drop or something."
+
+You ask if there was anything exceptional about George Randolph Hearst.
+
+"Uh. He had a suit on, and came in with a gang of businesspeople. He paid for their tabs." She checks her receipts. "It was pretty busy, I don't remember their names. Sorry."
+
+You thank her for the information and agree to sign an autograph as you depart.
+
+
+:: CluePoint_GoldenLotus
+You visit the shop and describe the cigarette to them. The proprietor nods. "Yes," he says, "that's one of our store brands. The newest, in fact. Made to order. Only a few people on the list."
+
+You ask to see the list. He considers for a moment. "No," he says, "I'm sorry. That would be private information."
+
+You describe how it related to the murder investigation.
+
+"Very well," he says, "I suppose. However, I'd ask that you only use this for the purposes of investigation."
+
+You wonder what other purposes you could turn it to, but agree. He hands you the list.
+
+* [b]James Dean[/b]
+*line_break
+* [b]Napoleon Bonaparte[/b]
+*line_break
+* [b]Gaius Marius[/b]
+*line_break
+* [b]Vitruvius Pollio[/b]
+*line_break
+* [b]Livia Drusilla[/b]
+*line_break
+* [b]Otto von Bismarck[/b]
+
+
+:: CluePoint_BloodDiamond
+You visit Blood Diamond and greet the salesperson, whose eyes light up when they recognize you. You politely inform them that you are here as part of a murder investigation. Their excitement transforms into that of a different kind, and they prove very eager to help.
+
+You show them a picture of the ring that was left in the restaurant, and they quickly check it against their records. They return a name, [b]Marie de Champagne.[/b]
