@@ -27,9 +27,16 @@ You have $turnsRemaining turns remaining.
   <</if>>\
 <</capture>><</for>>\
 
-/* TODO: Print your partner's action if it's set and you enter the screen */
-@@#next-clue-point-player-selection;You have not yet selected an action.@@
-@@#next-clue-point-partner-selection;Your partner has not yet selected an action.@@
+@@#next-clue-point-player-selection;<<if $nextCluePointPlayerSelection is ''>>\
+  You have not yet selected an action.\
+<<else>>\
+  You have selected $nextCluePointPlayerSelection.\
+<</if>>@@
+@@#next-clue-point-partner-selection;<<if $nextCluePointPartnerSelection is ''>>\
+  Your partner has not yet selected an action.\
+<<else>>\
+  Your partner has selected $nextCluePointPartnerSelection.\
+<</if>>@@
 
 @@#next-clue-point-confirm;<<disable>><<button 'Confirm selection.'>>
   <<script>>setup.sendNextCluePointConfirmed();<</script>>
