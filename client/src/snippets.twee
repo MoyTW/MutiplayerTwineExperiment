@@ -57,7 +57,7 @@ Jocelyn clears her throat. "Horace was his executive assistant," she adds.
 :: QuestionsSnippet
 <strong>\
 1) Who killed Marlon Brando? (9 points)
-2) Why was Marlon Brando killed? (5 points)[/b]
+2) Why was Marlon Brando killed? (5 points)
 3) Was there a security breach in Project STORM? If so, what was its nature, and who was involved? (5 points)
 4) What was Brando's note about First Connection about? (3 points)
 5) Was General Labienus involved, and if so, how? (3 points)
@@ -65,12 +65,10 @@ Jocelyn clears her throat. "Horace was his executive assistant," she adds.
 
 
 :: HowToPlaySnippet
-[b]How To Play[/b]
-
+/* TODO: text */\
 The goal of the game is to gather enough evidence to solve the case and answer a quiz at the end of the game.
 
-/* TODO: Set this as a variable! */
-The game takes place over [b]7 turns.[/b]
+The game takes place over <strong>$startTurns turns.</strong>
 
 [b]Every turn[/b], each player can choose one of the following:
 *line_break
@@ -84,7 +82,7 @@ Mechanically, every turn, Antony and Cleopatra must agree on what interview or i
 
 If the players feel they have sufficient data, they can also choose to skip straight to the quiz. Otherwise, once the 7 turns are over, you must present your case before Sejanus and answer a quiz, with each question being worth a certain number of points. Then the points are added to give a final score. The questions are as follows:
 
-*gosub_scene ch3_conclusion questions_snippet
+<<include [[QuestionsSnippet]]>>
 
-/* TODO: Figure out where the instructions should live */\
-You can review these instructions by going to the [b]Show Stats[/b] page and selecting [b]How To Play.[/b]
+
+:: PeopleAndPlacesSnippet

@@ -12,3 +12,9 @@ setup.uuidv4 = function() {
     (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
   );
 }
+
+setup.showDialogWithPassage = function(title, passageName) {
+  Dialog.setup(title);
+  Dialog.wiki(Story.get(passageName).processText());
+  Dialog.open();
+}

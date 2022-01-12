@@ -31,7 +31,8 @@ if (clientId && setup.isUUID(clientId)) {
 <<nobr>>
 /* Global */
 /* <<set $turnsRemaining to 7>> */
-<<set $turnsRemaining to 1>>
+<<set $startTurns to 1>>
+<<set $turnsRemaining to $startTurns>>
 
 /* SelectCharacter */
 <<set $playerCharacterName to ''>>
@@ -51,8 +52,54 @@ if (clientId && setup.isUUID(clientId)) {
 <<set $viewTheAnswersPartnerConfirmed to false>>
 <</nobr>>\
 
+:: StoryRightSidebar
+<h2>Case Notes</h2>\
+<<if hasVisited('Ch1_CaseIntro3')>>\
+  <<button 'Review Introduction'>>
+    <<script>>setup.showDialogWithPassage('Introduction', 'IntroductionSnippet');<</script>>
+  <</button>>
+  <<button 'People & Places'>>
+    <<script>>setup.showDialogWithPassage('Introduction', 'PeopleAndPlacesSnippet');<</script>>
+  <</button>>
+<</if>>\
+<<if hasVisited('Ch2_HowToPlay')>>\
+  <<button 'How To Play'>>
+    <<script>>setup.showDialogWithPassage('How To Play', 'HowToPlaySnippet');<</script>>
+  <</button>>
+<</if>>\
+
+
 :: Start
 <<include [[IdentifyClient]]>>\
+<<script>>
+//const rightUiBar = $('<div id="right-ui-bar"></div>').insertAfter("#ui-bar");
+const rightUiBar = $('<div id="right-ui-bar"></div>').insertAfter("#ui-bar");
+rightUiBar.append('<div id="right-ui-bar-tray"><button id="right-ui-bar-toggle" tabindex="0" title="Toggle the Right UI bar" aria-label="Toggle the Right UI bar" type="button"></button></div>');
+rightUiBar.append('<div id="right-ui-bar-body"></div>');
+
+/* Attach the toggle button click. */
+rightUiBar.find('#right-ui-bar-toggle').ariaClick({
+		label : "Toggle the Right UI bar"
+	}, function () {
+		rightUiBar.toggleClass('stowed');
+    // $('#passage-start').toggleClass('passage-fullscreen');
+	});
+
+/* Automatically show the contents of the StoryRightSidebar passage in the right-ui-bar-body element. */
+postrender["Display Right Sidebar Contents"] = function (content, taskName) {
+	setPageElement('right-ui-bar-body', 'StoryRightSidebar');
+};
+
+/*
+	To have your code stow the bar use:
+	<<addclass "#right-ui-bar" "stowed">>
+	
+	To unstow the bar use:
+	<<removeclass "#right-ui-bar" "stowed">>
+*/
+$('#ui-bar').remove();
+$(document.head).find('#style-ui-bar').remove();
+<</script>>\
 /* TODO: test sessionId & clientId */\
 /* <<set $clientId to '30620262-6c52-462b-9fc2-384369ade0a9'>>\ */\
 <h1>Introduction</h1>\

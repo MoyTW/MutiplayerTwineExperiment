@@ -223,6 +223,10 @@ setup.markCluePointVisited = function(cluePointKey, visitedBy) {
   }
 }
 
+setup.knowsAboutCluePoint = function(cluePointKey) {
+  return State.variables.cluePoints.get(cluePointKey).known;
+}
+
 setup.getCluePointPassage = function(cluePointKey) {
   return setup.CluePointData.get(cluePointKey).passage;
 }
