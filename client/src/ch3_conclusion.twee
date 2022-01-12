@@ -1,0 +1,57 @@
+:: Ch3_Quiz
+<h1>Time's up!</h1>\
+You reconvene with @{player_idx Cleopatra | Antony} at the FBI headquarters. Hortensia meets you at the door and leads you back to the briefing room, where Sejanus is waiting.
+
+"Right," he says, "who killed Marlon Brando? Was there a security breach on Project STORM, and if so, who was involved? And what did his note about First Connection mean?"
+
+<strong>[i][ Scoring works like this. Each of the following questions has a points score. The two players should agree on the answers, and on the next page, it will show the answers. ][/i]</strong>
+
+<h2>Questions</h2>\
+<<include [[QuestionsSnippet]]>>
+
+/* TODO: Wait for both players */
+<<button [[View the answers.|Ch3_Answers]]>><</button>>
+
+
+:: Ch3_Answers
+<h1>Answers</h2>\
+<strong>1) Who killed Marlon Brando? (9 points)</strong>
+
+Marlon Brando was killed by James Dean.
+
+<strong>2) Why was Marlon Brando killed? (5 points)</strong>
+
+Marlon Brando was killed because James Dean was selling Project STORM data to Rasputin. Brando intended to arrest him with General Labienus, but Dean became suspicious and ambushed him before his meeting.
+
+<strong>3) Was there a security breach in Project STORM? If so, what was its nature, and who was involved? (5 points)</strong>
+
+Yes. As stated above, James Dean, who had access to Project STORM data, was selling it to Rasputin. They met the evening of the murder at First Connection and swapped briefcases.
+
+<strong>4) What was Brando's note about First Connection about? (3 points)</strong>
+
+It was a handwritten copy of a note that he'd intercepted from Rasputin, telling James Dean to meet him to do the swap.
+
+<strong>5) Was General Labienus involved, and if so, how? (3 points)</strong>
+
+Yes, but not actively. He was contacted by Marlon Brando and agreed to a meeting, but had no more involvement than that.
+
+<h2>Scoring</h2>\
+Agree with your partner on how many points to give yourself, as appropriate. You should give partial points for partial answers.
+
+What was your final score?
+
+<<button [[25 points|Ch3_GreatJob]]>><</button>>
+<<button [[Between 25 and 10 points|Ch3_OkayJob]]>><</button>>
+<<button [[10 or less points|Ch3_BadJob]]>><</button>>
+
+
+:: Ch3_GreatJob
+You did an outstanding job! Julius Caesar throws a parade for the two of you in your honor, and you ride a chariot pulled by four white horses past a cheering crowd of admirers.
+
+
+:: Ch3_OkayJob
+You didn't get it all right, but you did get enough for Sejanus to follow up and sort everything out, You retain your precious invitations the the President's Christmas Ball and have a wonderful time.
+
+
+:: Ch3_BadJob
+Unfortunately, you did terribly, and Julius Caesar bars you from the Christmas Ball when it becomes clear that you fingered the wrong suspect. How embarrassing!

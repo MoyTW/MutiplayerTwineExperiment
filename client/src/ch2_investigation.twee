@@ -45,4 +45,8 @@ You have $turnsRemaining turns remaining.
 :: Ch2_DisplayCluePoint
 <<include $cluePointPassage>>
 
+<<if $turnsRemaining gt 0>>\
 <<button [[Continue|Ch2_SelectNextCluePoint]]>><</button>>
+<<else>>
+<<button [[Continue|Ch3_Quiz]]>><</button>>
+<</if>>\

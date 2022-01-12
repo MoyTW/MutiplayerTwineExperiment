@@ -145,6 +145,7 @@ setup.registerHandler(setup.MessageTypes.NextCluePointConfirmed, function(data) 
     const playerCluePoint = State.variables.cluePoints.get(State.variables.nextCluePointPlayerSelection);
     const partnerCluePoint = State.variables.cluePoints.get(State.variables.nextCluePointPartnerSelection);
 
+    // TODO: Also mark reveals
     State.variables.turnsRemaining -= 1;
     playerCluePoint.visited = true;
     playerCluePoint.visitedBy = State.variables.playerCharacterName;

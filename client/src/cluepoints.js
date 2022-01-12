@@ -149,3 +149,7 @@ setup.initializeCluePoints = function() {
   });
   State.setVar('$cluePoints', cluePoints);
 }
+
+setup.markCluePointVisited() {
+
+}
