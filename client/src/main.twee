@@ -27,33 +27,23 @@ if (clientId && setup.isUUID(clientId)) {
 <</script>>\
 
 
-:: Playground
-<<script>>
-setup.initializeCluePoints();
-// I don't know of a better way to surface this to SugarCube.
-State.setVar('_cluePointsInOrder', setup.CluePointsInOrder);
-State.setVar('_btnNameToCluePointKey', {})
-<</script>>\
-<<set _playerSelectionKey to undefined>>\
-<<for _i to 0; _i lt _cluePointsInOrder.length; _i++>><<capture _i>>\
-  <<set _pointObj to $cluePoints.get(_cluePointsInOrder[_i])>>\
-  <<if _pointObj.known and not _pointObj.visited>>\
-    <<button _pointObj.name>>
-      <<script>>
-      const selectedKey = setup.CluePointsInOrder[State.getVar('_i')];
-      $('#player-selection').text('You have selected ' + State.getVar('$cluePoints').get(selectedKey).name + '.')
-      <</script>>
-    <</button>>
-  <</if>>\
-<</capture>><</for>>\
-@@#player-selection;You have not yet selected an action.@@
+:: InitializeVariables
+<<nobr>>
+/* Global */
+<<set $turnsRemaining to 7>>
 
+/* SelectCharacter */
+<<set $playerCharacterName to ''>>
+<<set $partnerCharacterName to ''>>
+<<set $selectCharacterPlayerConfirmed to false>>
+<<set $selectCharacterPartnerConfirmed to false>>
+<</nobr>>\
 
 :: Start
 <<include [[IdentifyClient]]>>\
-<<include [[Playground]]>>\
+<<include [[InitializeVariables]]>>\
 /* TODO: test sessionId & clientId */\
-/* <<set $clientId to '30620262-6c52-462b-9fc2-384369ade0a9'>>\ */
+/* <<set $clientId to '30620262-6c52-462b-9fc2-384369ade0a9'>>\ */\
 <h1>Introduction</h1>\
 The year is 2021. Neo America is prospering under the stern yet wise direction of President for Life, Gaius Julius Ceasar. 330 million souls live, love, and laugh, all working tirelessly for the glory of the American people!
 
@@ -98,13 +88,14 @@ Either copy and paste it to your partner or read it out loud to them. They will 
 
 
 :: JoinGame
-<<set $input>>\
+<<set _input>>\
 Please enter the session identifier you'd like to join.
-@@#session-input;<<textbox '$input' 'b416b45a-7fb7-4761-a173-0bdec11de841' autofocus>>@@
+@@#session-input;<<textbox '_input' 'b416b45a-7fb7-4761-a173-0bdec11de841' autofocus>>@@
 @@#join-button;<<disable>><<button 'Session identifier is invalid.'>>
   <<script>>
     // TODO: Connect only if not already connected
-    console.log($('#session-input input')[0].value)
+    console.log($
+    ('#session-input input')[0].value)
     setup.websocketConnect($('#session-input input')[0].value);
     // TODO: okay this is pretty funny
     setup.registerHandler('clientJoin', function(data) {
@@ -134,28 +125,16 @@ Please enter the session identifier you'd like to join.
 <</script>><</done>>\
 
 :: SelectCharacter
-<<set $playerCharacterName to ''>>\
-<<set $partnerCharacterName to ''>>\
-<<set _playerConfirmed to false>>\
-<<set _partnerConfirmed to false>>\
+/* TODO: Make this resilient */\
 <h1>Select your character:</h1>\
 <<button 'Mark Antony, Vice President of Neo America.'>>
-  /* TODO: Network calls */
   <<script>>
-    setup.chatSocket.send(JSON.stringify({
-      'type': 'character_select',
-      'clientId': State.variables.clientId,
-      'character': 'Antony'
-    }));
+    setup.sendCharacterSelected('Antony');
   <</script>>
 <</button>>
 <<button 'Cleopatra VII Philopator, Queen of Egypt.'>>
   <<script>>
-    setup.chatSocket.send(JSON.stringify({
-      'type': 'character_select',
-      'clientId': State.variables.clientId,
-      'character': 'Cleopatra'
-    }));
+    setup.sendCharacterSelected('Cleopatra');
   <</script>>
 <</button>>
 
@@ -164,43 +143,9 @@ Please enter the session identifier you'd like to join.
 
 @@#confirm;<<disable>><<button 'Confirm selection.'>>
   <<script>>
-    setup.chatSocket.send(JSON.stringify({
-      'type': 'character_confirm',
-      'clientId': State.variables.clientId
-    }));
+    setup.sendCharacterConfirmed()
     const button = $('#confirm button');
     button.html('Waiting for partner to confirm...');
     button.prop('disabled', true);
   <</script>>
 <</button>><</disable>>@@
-<<done>><<script>>
-setup.registerHandler('character_select', function(data) {
-  if (data.clientId === State.variables.clientId) {
-    State.variables.playerCharacterName = data.character;
-    $('#player-selection').text('Your have selected ' + data.character + '.')
-  } else {
-    State.variables.partnerCharacterName = data.character;
-    $('#partner-selection').text('Your partner has selected ' + data.character + '.')
-  }
-  // TODO: Synchronize the states
-  const playerCN = State.variables.playerCharacterName;
-  const partnerCN = State.variables.partnerCharacterName;
-  if (playerCN !== '' && partnerCN !== '' && playerCN != partnerCN) {
-    $('#confirm button').prop('disabled', false)
-  } else {
-    $('#confirm button').prop('disabled', true)
-  }
-});
-
-// TODO: Cross-check selections & kick back if different
-setup.registerHandler('character_confirm', function(data) {
-  if (data.clientId === State.variables.clientId) {
-    State.temporary._playerConfirmed = true
-  } else {
-    State.temporary._partnerConfirmed = true
-  }
-  if (State.temporary._playerConfirmed && State.temporary._partnerConfirmed) {
-    Engine.play('Ch1_CaseIntro1');
-  }
-})
-<</script>><</done>>\

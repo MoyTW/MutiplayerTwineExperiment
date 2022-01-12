@@ -8,4 +8,79 @@ If you aren't on a voice call with your partner, now is an ideal time to do so. 
 
 
 :: Ch2_SelectNextCluePoint
-/* TODO: all of this! */
+<<set _playerSelection to ''>>\
+<<set _partnerSelection to ''>>\
+<<set _playerConfirmed to false>>\
+<<set _partnerConfirmed to false>>\
+<<script>>
+// I don't know of a better way to surface this to SugarCube.
+State.setVar('_cluePointsInOrder', setup.CluePointsInOrder);
+<</script>>\
+<h1>Select your action</h1>\
+You have $turnsRemaining turns remaining.
+
+<<set _playerSelectionKey to undefined>>\
+<<for _i to 0; _i lt _cluePointsInOrder.length; _i++>><<capture _i>>\
+  <<set _pointObj to $cluePoints.get(_cluePointsInOrder[_i])>>\
+  <<if _pointObj.known and not _pointObj.visited>>\
+    <<button _pointObj.name>>
+      <<script>>
+      const selectedKey = setup.CluePointsInOrder[State.getVar('_i')];
+      setup.chatSocket.send(JSON.stringify({
+        'type': 'clue_point_select',
+        'clientId': State.variables.clientId,
+        'cluePointKey': selectedKey
+      }));
+      <</script>>
+    <</button>>
+  <</if>>\
+<</capture>><</for>>\
+
+@@#player-selection;You have not yet selected an action.@@
+@@#partner-selection;Your partner has not yet selected an action.@@
+
+@@#confirm;<<disable>><<button 'Confirm selection.'>>
+  <<script>>
+    setup.chatSocket.send(JSON.stringify({
+      'type': 'clue_point_confirm',
+      'clientId': State.variables.clientId
+    }));
+    const button = $('#confirm button');
+    button.html('Waiting for partner to confirm...');
+    button.prop('disabled', true);
+  <</script>>
+<</button>><</disable>>@@
+<<done>><<script>>
+setup.registerHandler('clue_point_select', function(data) {
+  if (data.clientId === State.variables.clientId) {
+    State.setVar('_playerSelection', data.cluePointKey);
+    $('#player-selection').text('You have selected ' + State.getVar('$cluePoints').get(data.cluePointKey).name + '.')
+  } else {
+    State.setVar('_partnerSelection', data.cluePointKey);
+    $('#partner-selection').text('Your partner has selected ' + State.getVar('$cluePoints').get(data.cluePointKey).name + '.')
+  }
+  // TODO: Synchronize the states
+  const playerSelection = State.getVar('_playerSelection');
+  const partnerSelection = State.getVar('_partnerSelection');
+  if (playerSelection !== '' && partnerSelection !== '' && playerSelection != partnerSelection) {
+    $('#confirm button').prop('disabled', false);
+  } else {
+    $('#confirm button').prop('disabled', true);
+  }
+});
+
+// TODO: Cross-check selections & kick back if different
+setup.registerHandler('clue_point_confirm', function(data) {
+  if (data.clientId === State.variables.clientId) {
+    State.setVar('_playerConfirmed', true);
+  } else {
+    State.setVar('_partnerConfirmed', true);
+  }
+  if (State.getVar('_playerConfirmed') && State.getVar('_partnerConfirmed')) {
+    // TODO: handle more nicely
+    State.setVar('$turnsRemaining', State.getVar('$turnsRemaining') - 1);
+    const nextPassage = State.getVar('$cluePoints').get(State.getVar('_playerSelection')).passage;
+    Engine.play(nextPassage);
+  }
+})
+<</script>><</done>>\
