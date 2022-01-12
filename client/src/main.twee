@@ -27,8 +27,31 @@ if (clientId && setup.isUUID(clientId)) {
 <</script>>\
 
 
+:: Playground
+<<script>>
+setup.initializeCluePoints();
+// I don't know of a better way to surface this to SugarCube.
+State.setVar('_cluePointsInOrder', setup.CluePointsInOrder);
+State.setVar('_btnNameToCluePointKey', {})
+<</script>>\
+<<set _playerSelectionKey to undefined>>\
+<<for _i to 0; _i lt _cluePointsInOrder.length; _i++>><<capture _i>>\
+  <<set _pointObj to $cluePoints.get(_cluePointsInOrder[_i])>>\
+  <<if _pointObj.known and not _pointObj.visited>>\
+    <<button _pointObj.name>>
+      <<script>>
+      const selectedKey = setup.CluePointsInOrder[State.getVar('_i')];
+      $('#player-selection').text('You have selected ' + State.getVar('$cluePoints').get(selectedKey).name + '.')
+      <</script>>
+    <</button>>
+  <</if>>\
+<</capture>><</for>>\
+@@#player-selection;You have not yet selected an action.@@
+
+
 :: Start
 <<include [[IdentifyClient]]>>\
+<<include [[Playground]]>>\
 /* TODO: test sessionId & clientId */\
 /* <<set $clientId to '30620262-6c52-462b-9fc2-384369ade0a9'>>\ */
 <h1>Introduction</h1>\
