@@ -133,6 +133,8 @@ setup.sendNextCluePointConfirmed = function() {
   button.prop('disabled', true);
 }
 
+// Holds all the logic for progressing time & recording visits - I can already tell distributing logic like this is
+// going to prove annoying. Hmm.
 setup.registerHandler(setup.MessageTypes.NextCluePointConfirmed, function(data) {
   if (data.clientId === State.variables.clientId) {
     State.variables.nextCluePointPlayerConfirmed = true;
@@ -140,10 +142,22 @@ setup.registerHandler(setup.MessageTypes.NextCluePointConfirmed, function(data) 
     State.variables.nextCluePointPartnerConfirmed = true;
   }
   if (State.variables.nextCluePointPlayerConfirmed && State.variables.nextCluePointPartnerConfirmed) {
-    // TODO: handle more nicely
+    const playerCluePoint = State.variables.cluePoints.get(State.variables.nextCluePointPlayerSelection);
+    const partnerCluePoint = State.variables.cluePoints.get(State.variables.nextCluePointPartnerSelection);
+
     State.variables.turnsRemaining -= 1;
-    const playerSelection = State.variables.nextCluePointPlayerSelection;
-    const nextPassage = State.variables.cluePoints.get(playerSelection).passage;
-    Engine.play(nextPassage);
+    playerCluePoint.visited = true;
+    playerCluePoint.visitedBy = State.variables.playerCharacterName;
+    partnerCluePoint.visited = true;
+    partnerCluePoint.visitedBy = State.variables.partnerCharacterName;
+    State.variables.cluePointPassage = playerCluePoint.passage;
+
+    // Wipe here, so that we can maintain if one player goes faster than the next
+    State.variables.nextCluePointPlayerSelection = '';
+    State.variables.nextCluePointPartnerSelection = '';
+    State.variables.nextCluePointPlayerConfirmed = false;
+    State.variables.nextCluePointPartnerConfirmed = false;
+    
+    Engine.play('Ch2_DisplayCluePoint');
   }
 })

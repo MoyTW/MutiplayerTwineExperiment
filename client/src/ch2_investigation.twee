@@ -41,3 +41,8 @@ You have $turnsRemaining turns remaining.
 @@#next-clue-point-confirm;<<disable>><<button 'Confirm selection.'>>
   <<script>>setup.sendNextCluePointConfirmed();<</script>>
 <</button>><</disable>>@@
+
+:: Ch2_DisplayCluePoint
+<<include $cluePointPassage>>
+
+<<button [[Continue|Ch2_SelectNextCluePoint]]>><</button>>

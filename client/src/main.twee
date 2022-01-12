@@ -43,6 +43,7 @@ if (clientId && setup.isUUID(clientId)) {
 <<set $nextCluePointPartnerSelection to ''>>\
 <<set $nextCluePointPlayerConfirmed to false>>\
 <<set $nextCluePointPartnerConfirmed to false>>\
+<<set $cluePointPassage to ''>>\
 <</nobr>>\
 
 :: Start
