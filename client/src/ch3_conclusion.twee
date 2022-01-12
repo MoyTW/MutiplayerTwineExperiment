@@ -8,13 +8,11 @@ You reconvene with @{player_idx Cleopatra | Antony} at the FBI headquarters. Hor
 
 <h2>Questions</h2>\
 <<include [[QuestionsSnippet]]>>
-
-/* TODO: Wait for both players */
 <<button [[View the answers.|Ch3_Answers]]>><</button>>
 
 
 :: Ch3_Answers
-<h1>Answers</h2>\
+<h1>Answers</h1>\
 <strong>1) Who killed Marlon Brando? (9 points)</strong>
 
 Marlon Brando was killed by James Dean.

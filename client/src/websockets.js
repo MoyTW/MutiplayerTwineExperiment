@@ -142,16 +142,10 @@ setup.registerHandler(setup.MessageTypes.NextCluePointConfirmed, function(data) 
     State.variables.nextCluePointPartnerConfirmed = true;
   }
   if (State.variables.nextCluePointPlayerConfirmed && State.variables.nextCluePointPartnerConfirmed) {
-    const playerCluePoint = State.variables.cluePoints.get(State.variables.nextCluePointPlayerSelection);
-    const partnerCluePoint = State.variables.cluePoints.get(State.variables.nextCluePointPartnerSelection);
-
-    // TODO: Also mark reveals
     State.variables.turnsRemaining -= 1;
-    playerCluePoint.visited = true;
-    playerCluePoint.visitedBy = State.variables.playerCharacterName;
-    partnerCluePoint.visited = true;
-    partnerCluePoint.visitedBy = State.variables.partnerCharacterName;
-    State.variables.cluePointPassage = playerCluePoint.passage;
+    setup.markCluePointVisited(State.variables.nextCluePointPlayerSelection, State.variables.playerCharacterName);
+    setup.markCluePointVisited(State.variables.nextCluePointPartnerSelection, State.variables.partnerCharacterName)
+    State.variables.cluePointPassage = setup.getCluePointPassage(State.variables.nextCluePointPlayerSelection);
 
     // Wipe here, so that we can maintain if one player goes faster than the next
     State.variables.nextCluePointPlayerSelection = '';

@@ -54,102 +54,175 @@ setup.CluePointsInOrder = [
   setup.CluePointKey.BloodDiamond
 ]
 
-setup.CluePointData = [
-  // People
-  {key: setup.CluePointKey.JocelynBrando, name: 'Jocelyn Brando', type: setup.CluePointType.Person, passage: 'CluePoint_JocelynBrando',
-    known: true,
-    reveals: []},
-  {key: setup.CluePointKey.TaritaBrando, name: 'Tarita Brando', type: setup.CluePointType.Person, passage: 'CluePoint_TaritaBrando',
-    known: true,
-    reveals: []},
-  {key: setup.CluePointKey.JamesDean, name: 'James Dean', type: setup.CluePointType.Person, passage: 'CluePoint_JamesDean',
-    known: true,
-    reveals: [setup.CluePointKey.VitruviusPollio,
-              setup.CluePointKey.NapoleonBonaparte,
-              setup.CluePointKey.GoldenLotus]},
-  {key: setup.CluePointKey.AudryHepburn, name: 'Audry Hepburn', type: setup.CluePointType.Person, passage: 'CluePoint_AudryHepburn',
-    known: true,
-    reveals: []},
-  {key: setup.CluePointKey.GeneralLabienus, name: 'General Labienus', type: setup.CluePointType.Person, passage: 'CluePoint_GeneralLabienus',
-  known: true,
+setup.CluePointData = new Map();
+// People
+setup.CluePointData.set(setup.CluePointKey.JocelynBrando, 
+  {name: 'Jocelyn Brando',
+   type: setup.CluePointType.Person,
+   passage: 'CluePoint_JocelynBrando',
+   defaultKnown: true,
+   reveals: []});
+setup.CluePointData.set(setup.CluePointKey.TaritaBrando,
+  {name: 'Tarita Brando',
+   type: setup.CluePointType.Person,
+   passage: 'CluePoint_TaritaBrando',
+   defaultKnown: true,
+   reveals: []});
+setup.CluePointData.set(setup.CluePointKey.JamesDean,
+  {name: 'James Dean',
+   type: setup.CluePointType.Person,
+   passage: 'CluePoint_JamesDean',
+   defaultKnown: true,
+   reveals: [setup.CluePointKey.VitruviusPollio,
+             setup.CluePointKey.NapoleonBonaparte,
+             setup.CluePointKey.GoldenLotus]});
+setup.CluePointData.set(setup.CluePointKey.AudryHepburn,
+  {name: 'Audry Hepburn',
+   type: setup.CluePointType.Person,
+   passage: 'CluePoint_AudryHepburn',
+   defaultKnown: true,
+   reveals: []});
+setup.CluePointData.set(setup.CluePointKey.GeneralLabienus,
+  {name: 'General Labienus',
+  type: setup.CluePointType.Person,
+  passage: 'CluePoint_GeneralLabienus',
+  defaultKnown: true,
     reveals: [setup.CluePointKey.VitruviusPollio,
               setup.CluePointKey.NapoleonBonaparte,
               setup.CluePointKey.OttoVonBismarck,
-              setup.CluePointKey.GrigoriRasputin]},
-  {key: setup.CluePointKey.Horace, name: 'Horace', type: setup.CluePointType.Person, passage: 'CluePoint_Horace',
-    known: true,
-    reveals: []},
-  {key: setup.CluePointKey.HoracesMother, name: "Horace's mother", type: setup.CluePointType.Person, passage: 'CluePoint_HoracesMother',
-    known: true,
-    reveals: []},
-  {key: setup.CluePointKey.VitruviusPollio, name: 'Vitruvius Pollio', type: setup.CluePointType.Person, passage: 'CluePoint_VitruviusPollio',
-    known: false,
-    reveals: [setup.CluePointKey.NapoleonBonaparte, setup.CluePointKey.GoldenLotus]},
-  {key: setup.CluePointKey.NapoleonBonaparte, name: 'Napoleon Bonaparte', type: setup.CluePointType.Person, passage: 'CluePoint_NapoleonBonaparte',
-    known: false,
-    reveals: [setup.CluePointKey.GoldenLotus]},
-  {key: setup.CluePointKey.OttoVonBismarck, name: 'Otto von Bismarck', type: setup.CluePointType.Person, passage: 'CluePoint_OttoVonBismarck',
-    known: false,
-    reveals: []},
-  {key: setup.CluePointKey.GrigoriRasputin, name: 'Grigori Rasputin', type: setup.CluePointType.Person, passage: 'CluePoint_GrigoriRasputin',
-    known: false,
-    reveals: []},
-  {key: setup.CluePointKey.GeorgeRandolphHearst, name: 'George Randolph Hearst', type: setup.CluePointType.Person, passage: 'CluePoint_GeorgeRandolphHearst',
-    known: false,
-    reveals: []},
-  {key: setup.CluePointKey.GaiusMarius, name: 'Gaius Marius', type: setup.CluePointType.Person, passage: 'CluePoint_GaiusMarius',
-    known: false,
-    reveals: []},
-  {key: setup.CluePointKey.LiviaDrusilla, name: 'Livia Drusilla', type: setup.CluePointType.Person, passage: 'CluePoint_LiviaDrusilla',
-    known: false,
-    reveals: []},
-  {key: setup.CluePointKey.MarieDeChampagne, name: 'Marie de Champagne', type: setup.CluePointType.Person, passage: 'CluePoint_MarieDeChampagne',
-    known: false,
-    reveals: []},
-   // Locations
-  {key: setup.CluePointKey.TheMurderScene, name: 'The murder scene', type: setup.CluePointType.Place, passage: 'CluePoint_TheMurderScene',
-    known: true,
-    reveals: [setup.CluePointKey.GoldenLotus]},
-  {key: setup.CluePointKey.TheRaytheonMainOffices, name: 'The Raytheon main offices', type: setup.CluePointType.Place, passage: 'CluePoint_TheRaytheonMainOffices',
-    known: true,
-    reveals: []},
-  {key: setup.CluePointKey.TheRaytheonSkunkworks, name: 'The Raytheon Skunkworks', type: setup.CluePointType.Place, passage: 'CluePoint_TheRaytheonSkunkworks',
-    known: true,
-    reveals: [setup.CluePointKey.VitruviusPollio]},
-  {key: setup.CluePointKey.GaryDanko, name: 'Gary Danko', type: setup.CluePointType.Place, passage: 'CluePoint_GaryDanko',
-    known: true,
-    reveals: [setup.CluePointKey.BloodDiamond]},
-  {key: setup.CluePointKey.FirstConnection, name: 'First Connection', type: setup.CluePointType.Place, passage: 'CluePoint_FirstConnection',
-    known: true,
-    reveals: [setup.CluePointKey.GrigoriRasputin,
-              setup.CluePointKey.GeorgeRandolphHearst]},
-  {key: setup.CluePointKey.GoldenLotus, name: 'Golden Lotus', type: setup.CluePointType.Place, passage: 'CluePoint_GoldenLotus',
-    known: false,
-    reveals: [setup.CluePointKey.NapoleonBonaparte,
-              setup.CluePointKey.GaiusMarius,
-              setup.CluePointKey.VitruviusPollio,
-              setup.CluePointKey.LiviaDrusilla,
-              setup.CluePointKey.OttoVonBismarck]},
-  {key: setup.CluePointKey.BloodDiamond, name: 'Blood Diamond', type: setup.CluePointType.Place, passagee: 'CluePoint_BloodDiamond',
-    known: false,
-    reveals: [setup.CluePointKey.MarieDeChampagne]}
-]
+              setup.CluePointKey.GrigoriRasputin]});
+setup.CluePointData.set(setup.CluePointKey.Horace,
+  {name: 'Horace',
+   type: setup.CluePointType.Person,
+   passage: 'CluePoint_Horace',
+   defaultKnown: true,
+   reveals: []});
+setup.CluePointData.set(setup.CluePointKey.HoracesMother,
+  {name: "Horace's mother",
+   type: setup.CluePointType.Person,
+   passage: 'CluePoint_HoracesMother',
+   defaultKnown: true,
+   reveals: []});
+setup.CluePointData.set(setup.CluePointKey.VitruviusPollio,
+  {name: 'Vitruvius Pollio',
+   type: setup.CluePointType.Person,
+   passage: 'CluePoint_VitruviusPollio',
+   defaultKnown: false,
+   reveals: [setup.CluePointKey.NapoleonBonaparte,
+             setup.CluePointKey.GoldenLotus]});
+setup.CluePointData.set(setup.CluePointKey.NapoleonBonaparte,
+  {name: 'Napoleon Bonaparte',
+   type: setup.CluePointType.Person,
+   passage: 'CluePoint_NapoleonBonaparte',
+   defaultKnown: false,
+   reveals: [setup.CluePointKey.GoldenLotus]});
+setup.CluePointData.set(setup.CluePointKey.OttoVonBismarck,
+  {name: 'Otto von Bismarck',
+   type: setup.CluePointType.Person,
+   passage: 'CluePoint_OttoVonBismarck',
+   defaultKnown: false,
+   reveals: []});
+setup.CluePointData.set(setup.CluePointKey.GrigoriRasputin,
+  {name: 'Grigori Rasputin',
+   type: setup.CluePointType.Person,
+   passage: 'CluePoint_GrigoriRasputin',
+   defaultKnown: false,
+   reveals: []});
+setup.CluePointData.set(setup.CluePointKey.GeorgeRandolphHearst,
+  {name: 'George Randolph Hearst',
+   type: setup.CluePointType.Person,
+   passage: 'CluePoint_GeorgeRandolphHearst',
+   defaultKnown: false,
+   reveals: []});
+setup.CluePointData.set(setup.CluePointKey.GaiusMarius,
+  {name: 'Gaius Marius',
+   type: setup.CluePointType.Person,
+   passage: 'CluePoint_GaiusMarius',
+   defaultKnown: false,
+   reveals: []});
+setup.CluePointData.set(setup.CluePointKey.LiviaDrusilla,
+  {name: 'Livia Drusilla',
+   type: setup.CluePointType.Person,
+   passage: 'CluePoint_LiviaDrusilla',
+   defaultKnown: false,
+   reveals: []});
+setup.CluePointData.set(setup.CluePointKey.MarieDeChampagne,
+  {name: 'Marie de Champagne',
+   type: setup.CluePointType.Person,
+   passage: 'CluePoint_MarieDeChampagne',
+   defaultKnown: false,
+   reveals: []});
+// Locations
+setup.CluePointData.set(setup.CluePointKey.TheMurderScene,
+  {name: 'The murder scene',
+   type: setup.CluePointType.Place,
+   passage: 'CluePoint_TheMurderScene',
+   defaultKnown: true,
+   reveals: [setup.CluePointKey.GoldenLotus]});
+setup.CluePointData.set(setup.CluePointKey.TheRaytheonMainOffices,
+  {name: 'The Raytheon main offices',
+   type: setup.CluePointType.Place,
+   passage: 'CluePoint_TheRaytheonMainOffices',
+   defaultKnown: true,
+   reveals: []});
+setup.CluePointData.set(setup.CluePointKey.TheRaytheonSkunkworks,
+  {name: 'The Raytheon Skunkworks',
+   type: setup.CluePointType.Place,
+   passage: 'CluePoint_TheRaytheonSkunkworks',
+   defaultKnown: true,
+   reveals: [setup.CluePointKey.VitruviusPollio]});
+setup.CluePointData.set(setup.CluePointKey.GaryDanko,
+  {name: 'Gary Danko', type: setup.CluePointType.Place, passage: 'CluePoint_GaryDanko',
+   defaultKnown: true,
+   reveals: [setup.CluePointKey.BloodDiamond]});
+setup.CluePointData.set(setup.CluePointKey.FirstConnection,
+  {name: 'First Connection',
+   type: setup.CluePointType.Place,
+   passage: 'CluePoint_FirstConnection',
+   defaultKnown: true,
+   reveals: [setup.CluePointKey.GrigoriRasputin,
+             setup.CluePointKey.GeorgeRandolphHearst]});
+setup.CluePointData.set(setup.CluePointKey.GoldenLotus,
+  {name: 'Golden Lotus',
+   type: setup.CluePointType.Place,
+   passage: 'CluePoint_GoldenLotus',
+   defaultKnown: false,
+   reveals: [setup.CluePointKey.NapoleonBonaparte,
+             setup.CluePointKey.GaiusMarius,
+             setup.CluePointKey.VitruviusPollio,
+             setup.CluePointKey.LiviaDrusilla,
+             setup.CluePointKey.OttoVonBismarck]});
+setup.CluePointData.set(setup.CluePointKey.BloodDiamond,
+  {name: 'Blood Diamond',
+   type: setup.CluePointType.Place,
+   passagee: 'CluePoint_BloodDiamond',
+   defaultKnown: false,
+   reveals: [setup.CluePointKey.MarieDeChampagne]});
 
 setup.initializeCluePoints = function() {
   const cluePoints = new Map();
-  setup.CluePointData.forEach(e => {
-    cluePoints.set(e.key, {
-      name: e.name,
-      type: e.type,
-      passage: e.passage,
-      known: e.known,
+  for (let entry of setup.CluePointData.entries()) {
+    cluePoints.set(entry[0], {
+      // TODO: change this to a fn invocation instead
+      name: entry[1].name,
+      known: entry[1].defaultKnown,
       visited: false,
       visitedBy: undefined
     });
-  });
+  }
+  // Should be used only for saving!
   State.setVar('$cluePoints', cluePoints);
 }
 
-setup.markCluePointVisited() {
+setup.markCluePointVisited = function(cluePointKey, visitedBy) {
+  const cluePoint = State.variables.cluePoints.get(cluePointKey);
+  cluePoint.visited = true;
+  cluePoint.visitedBy = visitedBy;
+  for (let revealedKey of setup.CluePointData.get(cluePointKey).reveals) {
+    State.variables.cluePoints.get(revealedKey).known = true;
+  }
+}
 
+setup.getCluePointPassage = function(cluePointKey) {
+  return setup.CluePointData.get(cluePointKey).passage;
 }
