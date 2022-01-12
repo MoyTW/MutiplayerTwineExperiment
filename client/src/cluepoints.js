@@ -224,7 +224,7 @@ setup.markCluePointVisited = function(cluePointKey, visitedBy) {
 }
 
 setup.knowsAboutCluePoint = function(cluePointKey) {
-  return State.variables.cluePoints.get(cluePointKey).known;
+  return State.variables.cluePoints.get(cluePointKey).known === true;
 }
 
 setup.getCluePointPassage = function(cluePointKey) {

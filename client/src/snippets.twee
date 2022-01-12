@@ -86,3 +86,57 @@ If the players feel they have sufficient data, they can also choose to skip stra
 
 
 :: PeopleAndPlacesSnippet
+<h3>People</h3>\
+<strong>President for Life Gaius Julius Caesar:</strong> The President for Life of Neo America.
+<strong>Mark Antony:</strong> The Vice President of the Neo America and Caesar's right-hand man.
+<strong>Cleopatra VII Philopater:</strong> The Queen of Egypt, the 51st state of Neo America.
+<strong>Director Aelius Sejanus:</strong> The head of the FBI. Has a fearsome reputation.
+<strong>Marlon Brando:</strong> Former CEO and President of Raytheon. Murdered March 15, 2021.
+<h3>People Of Interest</h3>\
+<<if setup.knowsAboutCluePoint(setup.CluePointKey.JocelynBrando)>>\
+  <strong>Jocelyn Brando:</strong> Marlon Brando's sister.
+  <strong>Tarita Brando:</strong> Marlon Brando's third and last wife.
+  <strong>James Dean:</strong> COO of Raytheon.
+  <strong>Audry Hepburn:</strong> CEO of Raytheon. Was formerly CMO, but ascended upon Brando's death.
+  <strong>General Labienus:</strong> A high-ranking general who served alongside both Caesar and Antony for many years.
+  <strong>Horace:</strong> Marlon Brando's secretary. His mother's birthday was the day before the murder.
+  <strong>Horace's mother:</strong> Marlon Brando's secretary's mother.
+<</if>>\
+<<if setup.knowsAboutCluePoint(setup.CluePointKey.VitruviusPollio)>>\
+  <strong>Vitruvius Pollio:</strong> An engineer who works at Raytheon who was suspected of being a security risk.
+<</if>>\
+<<if setup.knowsAboutCluePoint(setup.CluePointKey.NapoleonBonaparte)>>\
+  <strong>Napolean Bonaparte:</strong> The French ambassador.
+<</if>>\
+<<if setup.knowsAboutCluePoint(setup.CluePointKey.OttoVonBismarck)>>\
+    <strong>Otto von Bismarck:</strong> The German ambassador.
+<</if>>\
+<<if setup.knowsAboutCluePoint(setup.CluePointKey.GrigoriRasputin)>>\
+    <strong>Grigori Rasputin:</strong> The Russian ambassador.
+<</if>>\
+<<if setup.knowsAboutCluePoint(setup.CluePointKey.GeorgeRandolphHearst)>>\
+    <strong>George Randolph Hearst:</strong> A media magnate who was drinking in the bar indicated by Brando's note.
+<</if>>\
+<<if setup.knowsAboutCluePoint(setup.CluePointKey.GaiusMarius)>>\
+    <strong>Gaius Marius:</strong> A US Senator. Bought Golden Lotus cigarettes.
+<</if>>\
+<<if setup.knowsAboutCluePoint(setup.CluePointKey.LiviaDrusilla)>>\
+    <strong>Livia Drusilla:</strong> The daughter-in-law to President Caesar. Bought Golden Lotus cigarettes.
+<</if>>\
+<<if setup.knowsAboutCluePoint(setup.CluePointKey.MarieDeChampagne)>>\
+    <strong>Marie de Champagne:</strong> The woman who left her ring at her dinner with Marlon Brando.
+<</if>>\
+<h3>Places of Interest</h3>\
+<<if setup.knowsAboutCluePoint(setup.CluePointKey.JocelynBrando)>>\
+  <strong>The murder scene:</strong> A guard has been posted at the scene, who can give you more details if you ask.
+  <strong>Raytheon main offices:</strong> This is where Marlon Brando worked.
+  <strong>Raytheon Skunkworks:</strong> "Skunkworks" is a marketing term for secret project development. This particular project is housed in a different building than the main offices.
+  <strong>Gary Danko:</strong> A locally famous and very expensive restaurant, though not so famous that seats are hard to get.
+  <strong>First Connection:</strong> An upscale and fairly subdued bar near the Potomac. Cleopatra considers it gloomy.
+<</if>>\
+<<if setup.knowsAboutCluePoint(setup.CluePointKey.GoldenLotus)>>\
+  <strong>Golden Lotus Tobacco:</strong> A shop which sells a distinctive brand of cigarettes.
+<</if>>\
+<<if setup.knowsAboutCluePoint(setup.CluePointKey.BloodDiamond)>>\
+  <strong>Blood Diamond:</strong> A jewelery shop whose jewelry was found in a restaurant where Marlon Brando ate.
+<</if>>\
