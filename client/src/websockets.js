@@ -31,6 +31,7 @@ setup.MessageTypes = {
   CharacterConfirm: 'CHARACTER_CONFIRM',
   NextCluePointSelected: 'NEXT_CLUE_POINT_SELECTED',
   NextCluePointConfirmed: 'NEXT_CLUE_POINT_CONFIRMED',
+  ViewTheAnswersConfirmed: 'VIEW_THE_ANSWERS_CONFIRMED',
 }
 
 // ==================== SelectCharacter ====================
@@ -154,5 +155,27 @@ setup.registerHandler(setup.MessageTypes.NextCluePointConfirmed, function(data) 
     State.variables.nextCluePointPartnerConfirmed = false;
     
     Engine.play('Ch2_DisplayCluePoint');
+  }
+})
+
+// ==================== Ch3_Quiz ====================
+setup.sendViewTheAnswersConfirmed = function() {
+  setup.chatSocket.send(JSON.stringify({
+    'type': setup.MessageTypes.ViewTheAnswersConfirmed,
+    'clientId': State.variables.clientId
+  }));
+  const button = $('#view-the-answers-confirm button');
+  button.html('Waiting for partner to confirm...');
+  button.prop('disabled', true);
+}
+
+setup.registerHandler(setup.MessageTypes.ViewTheAnswersConfirmed, function(data) {
+  if (data.clientId === State.variables.clientId) {
+    State.variables.viewTheAnswersPlayerConfirmed = true;
+  } else {
+    State.variables.viewTheAnswersPartnerConfirmed = true;
+  }
+  if (State.variables.viewTheAnswersPlayerConfirmed && State.variables.viewTheAnswersPartnerConfirmed) {
+    Engine.play('Ch3_Answers');
   }
 })

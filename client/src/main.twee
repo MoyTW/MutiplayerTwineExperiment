@@ -30,7 +30,8 @@ if (clientId && setup.isUUID(clientId)) {
 :: InitializeGameVariables
 <<nobr>>
 /* Global */
-<<set $turnsRemaining to 7>>
+/* <<set $turnsRemaining to 7>> */
+<<set $turnsRemaining to 1>>
 
 /* SelectCharacter */
 <<set $playerCharacterName to ''>>
@@ -39,11 +40,15 @@ if (clientId && setup.isUUID(clientId)) {
 <<set $selectCharacterPartnerConfirmed to false>>
 
 /* Ch2_SelectNextCluePoint */
-<<set $nextCluePointPlayerSelection to ''>>\
-<<set $nextCluePointPartnerSelection to ''>>\
-<<set $nextCluePointPlayerConfirmed to false>>\
-<<set $nextCluePointPartnerConfirmed to false>>\
-<<set $cluePointPassage to ''>>\
+<<set $nextCluePointPlayerSelection to ''>>
+<<set $nextCluePointPartnerSelection to ''>>
+<<set $nextCluePointPlayerConfirmed to false>>
+<<set $nextCluePointPartnerConfirmed to false>>
+<<set $cluePointPassage to ''>>
+
+/* Ch3_Quiz */
+<<set $viewTheAnswersPlayerConfirmed to false>>
+<<set $viewTheAnswersPartnerConfirmed to false>>
 <</nobr>>\
 
 :: Start

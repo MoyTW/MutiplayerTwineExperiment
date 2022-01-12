@@ -8,7 +8,9 @@ You reconvene with @{player_idx Cleopatra | Antony} at the FBI headquarters. Hor
 
 <h2>Questions</h2>\
 <<include [[QuestionsSnippet]]>>
-<<button [[View the answers.|Ch3_Answers]]>><</button>>
+@@#view-the-answers-confirm;<<button 'View the answers.'>>
+  <<script>>setup.sendViewTheAnswersConfirmed();<</script>>
+<</button>>@@
 
 
 :: Ch3_Answers
