@@ -1,0 +1,34 @@
+:: RightSidebar
+<h2>Resources</h2>\
+<<if hasVisited('Ch1_CaseIntro3')>>\
+  <<button 'Review Introduction'>>
+    <<script>>setup.showDialogWithPassage('Introduction', 'IntroductionSnippet');<</script>>
+  <</button>>
+  <<button 'People & Places'>>
+    <<script>>setup.showDialogWithPassage('Introduction', 'PeopleAndPlacesSnippet');<</script>>
+  <</button>>
+<</if>>\
+<<if hasVisited('Ch2_HowToPlay')>>\
+  <<button 'How To Play'>>
+    <<script>>setup.showDialogWithPassage('How To Play', 'HowToPlaySnippet');<</script>>
+  <</button>>
+<</if>>\
+<<if hasVisited('Ch2_SelectNextCluePoint')>>\
+<h2>Case Notes</h2>\
+/* TODO: This is kinda inefficient */\
+<<script>>
+// I don't know of a better way to surface this to SugarCube.
+State.setVar('_cluePointsInOrder', setup.CluePointsInOrder);
+<</script>>\
+<<for _i to 0; _i lt setup.CluePointsInOrder.length; _i++>><<capture _i>>\
+  <<set _pointObj to $cluePoints.get(_cluePointsInOrder[_i])>>\
+  <<if _pointObj.visited and _pointObj.visitedBy is $playerCharacterName>>\
+    <<button _pointObj.name>>
+      <<script>>
+      const selectedKey = setup.CluePointsInOrder[State.getVar('_i')];
+      setup.showDialogWithPassage(setup.getCluePointName(selectedKey), setup.getCluePointPassage(selectedKey));
+      <</script>>
+    <</button>>
+  <</if>>\
+<</capture>><</for>>\
+<</if>>\

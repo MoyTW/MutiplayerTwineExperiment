@@ -227,6 +227,10 @@ setup.knowsAboutCluePoint = function(cluePointKey) {
   return State.variables.cluePoints.get(cluePointKey).known === true;
 }
 
+setup.getCluePointName = function(cluePointKey) {
+  return setup.CluePointData.get(cluePointKey).name;
+}
+
 setup.getCluePointPassage = function(cluePointKey) {
   return setup.CluePointData.get(cluePointKey).passage;
 }

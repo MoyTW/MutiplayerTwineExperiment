@@ -52,22 +52,6 @@ if (clientId && setup.isUUID(clientId)) {
 <<set $viewTheAnswersPartnerConfirmed to false>>
 <</nobr>>\
 
-:: StoryRightSidebar
-<h2>Case Notes</h2>\
-<<if hasVisited('Ch1_CaseIntro3')>>\
-  <<button 'Review Introduction'>>
-    <<script>>setup.showDialogWithPassage('Introduction', 'IntroductionSnippet');<</script>>
-  <</button>>
-  <<button 'People & Places'>>
-    <<script>>setup.showDialogWithPassage('Introduction', 'PeopleAndPlacesSnippet');<</script>>
-  <</button>>
-<</if>>\
-<<if hasVisited('Ch2_HowToPlay')>>\
-  <<button 'How To Play'>>
-    <<script>>setup.showDialogWithPassage('How To Play', 'HowToPlaySnippet');<</script>>
-  <</button>>
-<</if>>\
-
 
 :: Start
 <<include [[IdentifyClient]]>>\
@@ -85,9 +69,9 @@ rightUiBar.find('#right-ui-bar-toggle').ariaClick({
     // $('#passage-start').toggleClass('passage-fullscreen');
 	});
 
-/* Automatically show the contents of the StoryRightSidebar passage in the right-ui-bar-body element. */
+/* Automatically show the contents of the RightSidebar passage in the right-ui-bar-body element. */
 postrender["Display Right Sidebar Contents"] = function (content, taskName) {
-	setPageElement('right-ui-bar-body', 'StoryRightSidebar');
+	setPageElement('right-ui-bar-body', 'RightSidebar');
 };
 
 /*

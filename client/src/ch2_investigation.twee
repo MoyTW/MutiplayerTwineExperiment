@@ -11,13 +11,13 @@ You can review these instructions by hitting the <strong>How To Play</strong> bu
 
 
 :: Ch2_SelectNextCluePoint
+<h1>Select your action</h1>\
+You have $turnsRemaining turns remaining.
+
 <<script>>
 // I don't know of a better way to surface this to SugarCube.
 State.setVar('_cluePointsInOrder', setup.CluePointsInOrder);
 <</script>>\
-<h1>Select your action</h1>\
-You have $turnsRemaining turns remaining.
-
 <<for _i to 0; _i lt _cluePointsInOrder.length; _i++>><<capture _i>>\
   <<set _pointObj to $cluePoints.get(_cluePointsInOrder[_i])>>\
   <<if _pointObj.known and not _pointObj.visited>>\
@@ -50,6 +50,6 @@ You have $turnsRemaining turns remaining.
 
 <<if $turnsRemaining gt 0>>\
 <<button [[Continue|Ch2_SelectNextCluePoint]]>><</button>>
-<<else>>
+<<else>>\
 <<button [[Continue|Ch3_Quiz]]>><</button>>
 <</if>>\
