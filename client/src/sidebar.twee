@@ -1,4 +1,15 @@
 :: RightSidebar
+TODO: Rework this UI
+<<button 'Hard reset'>><<script>>
+  Save.autosave.delete();
+  Engine.restart();
+<</script>><</button>>
+<<button 'Save to file'>><<script>>
+  Save.export();
+<</script>><</button>>
+<<button 'Serialize'>><<script>>
+  const serializedGame = Save.serialize();
+<</script>><</button>>
 <h2>Resources</h2>\
 <<if hasVisited('Ch1_CaseIntro3')>>\
   <<button 'Review Introduction'>>

@@ -34,6 +34,9 @@ if (clientId && setup.isUUID(clientId)) {
 <<set $startTurns to 1>>
 <<set $turnsRemaining to $startTurns>>
 
+/* Websocket tracking */
+<<set $websocketProcessedUpToMs to 0>>
+
 /* SelectCharacter */
 <<set $playerCharacterName to ''>>
 <<set $partnerCharacterName to ''>>
@@ -55,13 +58,9 @@ if (clientId && setup.isUUID(clientId)) {
 
 :: StoryInit
 <<script>>
-if (Save.autosave.has()) {
-  Save.autosave.load();
-  console.log(State.variables.playerCharacterName);
-  // TODO: this is janky
-  if (State.variables.shouldBeConnected) {
-    setup.Socket.connect(State.variables.sessionId);
-  }
+// TODO: Instead of forcing the autosave load, you should get the server to rebroadcast all the events from your disconnect point.
+if (State.variables.shouldBeConnected) {
+  setup.Socket.connect(State.variables.sessionId);
 }
 
 /* Connect the UI bar */
@@ -135,7 +134,6 @@ Now, would you like to:
   setup.Socket.connect(State.variables.sessionId);
   setup.Socket.registerHandler('clientJoin', function(data) {
     Engine.play('SelectCharacter');
-    Save.autosave.save();
   });
 <</script>>\
 Your session identifier is:
@@ -154,19 +152,14 @@ Please enter the session identifier you'd like to join.
     // TODO: Reject connection if there's nobody hosting
     // TODO: Connect only if not already connected
     const targetId = $('#session-input input')[0].value;
-    setup.Socket.connect(targetId);
+    setup.Socket.connect(targetId, {
+      'type': 'clientJoin',
+      'clientId': State.variables.clientId
+    });
     setup.Socket.registerHandler('clientJoin', function(data) {
       State.variables.sessionId = targetId;
       Engine.play('SelectCharacter');
-      Save.autosave.save();
     });
-    // TODO: wrap all this in retry policy & safety & error handling
-    setup.chatSocket.onopen = function(_) {
-      setup.chatSocket.send(JSON.stringify({
-        'type': 'clientJoin',
-        'clientId': State.variables.clientId
-      }));
-    }
     // TODO: Confirm & progress
   <</script>>
 <</button>><</disable>>@@

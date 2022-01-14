@@ -7,17 +7,31 @@ setup.Socket.registerHandler = function(messageType, handler) {
 }
 
 // TODO: idempotent & also call on page refresh/load/broken connection
-setup.Socket.connect = function(sessionId) {
+setup.Socket.connect = function(sessionId, sendOnOpen) {
   State.variables.shouldBeConnected = true;
 
   // TODO: wss
   // TODO: change localhost
   setup.chatSocket = new WebSocket('ws://127.0.0.1:8000/ws/' + sessionId + '/');
 
+  setup.chatSocket.onopen = function(_) {
+    setup.chatSocket.send(JSON.stringify({
+      'type': 'CATCH_UP',
+      'clientId': State.variables.clientId,
+      'catchupStartMs': State.variables.websocketProcessedUpToMs
+    }));
+    if (sendOnOpen) {
+      setup.chatSocket.send(JSON.stringify(sendOnOpen));
+    }
+  }
+
   setup.chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
-    const handler = setup.Socket.handlers[data['type']]
+    const handler = setup.Socket.handlers[data['type']];
+
     console.log(data['type'], handler);
+
+    State.variables.processedUpToMs = data['server_timestamp_ms'];
     handler(data);
   };
 
@@ -30,10 +44,7 @@ setup.Socket._send = function(sessionId, obj) {
   if (setup.chatSocket && setup.chatSocket.readyState == 1) {
     setup.chatSocket.send(JSON.stringify(obj));
   } else {
-    setup.Socket.connect(sessionId);
-    setup.chatSocket.onopen = function(_) {
-      setup.chatSocket.send(JSON.stringify(obj));
-    }
+    setup.Socket.connect(sessionId, obj);
   }
 }
 
@@ -99,8 +110,8 @@ setup.Socket.registerHandler(setup.Socket.MessageTypes.CharacterConfirm, functio
     State.variables.selectCharacterPartnerConfirmed = true
   }
   if (State.variables.selectCharacterPlayerConfirmed && State.variables.selectCharacterPartnerConfirmed) {
+    State.variables.websocketTimestampMs = Date.now();
     Engine.play('Ch1_CaseIntro1');
-    Save.autosave.save();
   }
 })
 
@@ -169,8 +180,8 @@ setup.Socket.registerHandler(setup.Socket.MessageTypes.NextCluePointConfirmed, f
     State.variables.nextCluePointPlayerConfirmed = false;
     State.variables.nextCluePointPartnerConfirmed = false;
     
+    State.variables.websocketTimestampMs = Date.now();
     Engine.play('Ch2_DisplayCluePoint');
-    Save.autosave.save();
   }
 })
 
@@ -192,7 +203,7 @@ setup.Socket.registerHandler(setup.Socket.MessageTypes.ViewTheAnswersConfirmed, 
     State.variables.viewTheAnswersPartnerConfirmed = true;
   }
   if (State.variables.viewTheAnswersPlayerConfirmed && State.variables.viewTheAnswersPartnerConfirmed) {
+    State.variables.websocketTimestampMs = Date.now();
     Engine.play('Ch3_Answers');
-    Save.autosave.save();
   }
 })
