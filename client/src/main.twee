@@ -34,9 +34,6 @@ if (clientId && setup.isUUID(clientId)) {
 <<set $startTurns to 1>>
 <<set $turnsRemaining to $startTurns>>
 
-/* Websocket tracking */
-<<set $websocketProcessedUpToMs to 0>>
-
 /* SelectCharacter */
 <<set $playerCharacterName to ''>>
 <<set $partnerCharacterName to ''>>
@@ -56,13 +53,17 @@ if (clientId && setup.isUUID(clientId)) {
 <</nobr>>\
 
 
-:: StoryInit
+:: PassageReady
 <<script>>
-// TODO: Instead of forcing the autosave load, you should get the server to rebroadcast all the events from your disconnect point.
-if (State.variables.shouldBeConnected) {
+// This goes in PassageReady because it can't go in StoryInit - we can't check the state in StoryInit, because it's called before the game is restored!
+if (State.variables.shouldBeConnected === true) {
   setup.Socket.connect(State.variables.sessionId);
 }
+<</script>>
 
+
+:: StoryInit
+<<script>>
 /* Connect the UI bar */
 const rightUiBar = $('<div id="right-ui-bar"></div>').insertAfter("#ui-bar");
 rightUiBar.append('<div id="right-ui-bar-tray"><button id="right-ui-bar-toggle" tabindex="0" title="Toggle the Right UI bar" aria-label="Toggle the Right UI bar" type="button"></button></div>');
@@ -97,6 +98,9 @@ Config.history.maxStates = 1;
 
 :: Start
 <<include [[IdentifyClient]]>>\
+/* Websocket tracking */
+<<set $shouldBeConnected to false>>\
+<<set $websocketProcessedUpToMs to 0>>\
 /* TODO: test sessionId & clientId */\
 /* <<set $clientId to '30620262-6c52-462b-9fc2-384369ade0a9'>>\ */\
 <h1>Introduction</h1>\
@@ -128,7 +132,8 @@ Now, would you like to:
 
 :: HostGame
 /* TODO: call out to the server & start a new session */\
-<<set $sessionId to 'b416b45a-7fb7-4761-a173-0bdec11de841'>>\
+/* <<set $sessionId to 'b416b45a-7fb7-4761-a173-0bdec11de841'>> */\
+<<set $sessionId to 'b416b45b-7fb7-4761-a173-0bdec11de842'>>
 <<script>>
   // TODO: Add a wait to send invocations
   setup.Socket.connect(State.variables.sessionId);
@@ -145,7 +150,7 @@ Either copy and paste it to your partner or read it out loud to them. They will 
 :: JoinGame
 <<set _input>>\
 Please enter the session identifier you'd like to join.
-@@#session-input;<<textbox '_input' 'b416b45a-7fb7-4761-a173-0bdec11de841' autofocus>>@@
+@@#session-input;<<textbox '_input' 'b416b45b-7fb7-4761-a173-0bdec11de842' autofocus>>@@
 @@#join-button;<<disable>><<button 'Session identifier is invalid.'>>
   <<script>>
     // TODO: Handle failures to connect
@@ -191,8 +196,16 @@ setup.initializeCluePoints();
   <<script>>setup.sendCharacterSelected('Cleopatra');<</script>>
 <</button>>
 
-@@#select-character-player-selection;You have not yet selected a character.@@
-@@#select-character-partner-selection;Your partner has not yet selected a character.@@
+@@#select-character-player-selection;<<if $playerCharacterName is ''>>\
+  You have not yet selected a character.\
+<<else>>\
+  You have selected $playerCharacterName.\
+<</if>>@@
+@@#select-character-partner-selection;<<if $partnerCharacterName is ''>>\
+  Your partner has not yet selected a character.\
+<<else>>\
+  Your partner has selected $partnerCharacterName.\
+<</if>>@@
 
 @@#select-character-confirm;<<disable>><<button 'Confirm selection.'>>
   <<script>>setup.sendCharacterConfirmed()<</script>>

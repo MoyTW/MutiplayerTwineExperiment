@@ -1,6 +1,8 @@
 import json
+import time
 from asgiref.sync import async_to_sync
 from channels.generic.websocket import WebsocketConsumer
+from gameserver.models import WebsocketMessage
 
 class ChatConsumer(WebsocketConsumer):
   def connect(self):
@@ -22,15 +24,29 @@ class ChatConsumer(WebsocketConsumer):
     )
   
   def receive(self, text_data, bytes_data=None):
-    text_data_json = json.loads(text_data)
+    text_data_map = json.loads(text_data)
+    server_ms = int(time.time() * 1000)
+    text_data_map['server_timestamp_ms'] = server_ms
 
-    async_to_sync(self.channel_layer.group_send)(
-      self.session_id_group_name,
-      {
-        'type': 'chat_message',
-        'message': text_data_json
-      }
-    )
+    print(text_data_map)
+
+    if text_data_map['type'] == 'CATCH_UP':
+      messages = WebsocketMessage.objects.filter(session_id__exact=self.session_id, timestamp__gt=text_data_map['catchupStartMs'])
+      # TODO: this is a little farcical tbh
+      content = {'type': 'CATCH_UP', 'messages': [json.loads(m.json) for m in messages]}
+      # content = {'type': 'CATCH_UP', 'messages': [m.json for m in messages]}
+      self.send(text_data=json.dumps(content))
+    else:
+      row = WebsocketMessage(session_id=self.session_id, client_id=text_data_map['clientId'], timestamp=server_ms, json=text_data)
+      row.save()
+
+      async_to_sync(self.channel_layer.group_send)(
+        self.session_id_group_name,
+        {
+          'type': 'chat_message',
+          'message': text_data_map
+        }
+      )
 
   def chat_message(self, event):
     print(event)

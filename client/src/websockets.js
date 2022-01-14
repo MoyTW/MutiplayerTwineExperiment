@@ -6,8 +6,12 @@ setup.Socket.registerHandler = function(messageType, handler) {
   setup.Socket.handlers[messageType] = handler;
 }
 
-// TODO: idempotent & also call on page refresh/load/broken connection
 setup.Socket.connect = function(sessionId, sendOnOpen) {
+  // If we already have a connection or are attempting to establish a connection, leave it be!
+  if (setup.chatSocket && setup.chatSocket.readyState < 2) {
+    return;
+  }
+
   State.variables.shouldBeConnected = true;
 
   // TODO: wss
@@ -18,7 +22,7 @@ setup.Socket.connect = function(sessionId, sendOnOpen) {
     setup.chatSocket.send(JSON.stringify({
       'type': 'CATCH_UP',
       'clientId': State.variables.clientId,
-      'catchupStartMs': State.variables.websocketProcessedUpToMs
+      'catchupStartMs': State.variables.websocketProcessedUpToMs || 0
     }));
     if (sendOnOpen) {
       setup.chatSocket.send(JSON.stringify(sendOnOpen));
@@ -31,7 +35,7 @@ setup.Socket.connect = function(sessionId, sendOnOpen) {
 
     console.log(data['type'], handler);
 
-    State.variables.processedUpToMs = data['server_timestamp_ms'];
+    State.variables.websocketProcessedUpToMs = data['server_timestamp_ms'];
     handler(data);
   };
 
@@ -47,6 +51,19 @@ setup.Socket._send = function(sessionId, obj) {
     setup.Socket.connect(sessionId, obj);
   }
 }
+
+setup.Socket.registerHandler('CATCH_UP', function(data) {
+  console.log('Attempting to catch up!');
+  for (const message of data['messages']) {
+    // TODO: There's surely a more elegant way of dealing with this
+    if (message['type'] !== 'clientJoin') {
+      const handler = setup.Socket.handlers[message['type']];
+      console.log('catching up', message['type']);
+      State.variables.websocketProcessedUpToMs = message['server_timestamp_ms'];
+      handler(message);
+    }
+  }
+})
 
 // ##################################################
 // #################### HANDLERS ####################
