@@ -55,6 +55,15 @@ if (clientId && setup.isUUID(clientId)) {
 
 :: StoryInit
 <<script>>
+if (Save.autosave.has()) {
+  Save.autosave.load();
+  console.log(State.variables.playerCharacterName);
+  // TODO: this is janky
+  if (State.variables.shouldBeConnected) {
+    setup.Socket.connect(State.variables.sessionId);
+  }
+}
+
 /* Connect the UI bar */
 const rightUiBar = $('<div id="right-ui-bar"></div>').insertAfter("#ui-bar");
 rightUiBar.append('<div id="right-ui-bar-tray"><button id="right-ui-bar-toggle" tabindex="0" title="Toggle the Right UI bar" aria-label="Toggle the Right UI bar" type="button"></button></div>');
@@ -125,7 +134,8 @@ Now, would you like to:
   // TODO: Add a wait to send invocations
   setup.Socket.connect(State.variables.sessionId);
   setup.Socket.registerHandler('clientJoin', function(data) {
-    Engine.play('SelectCharacter')
+    Engine.play('SelectCharacter');
+    Save.autosave.save();
   });
 <</script>>\
 Your session identifier is:
@@ -147,7 +157,8 @@ Please enter the session identifier you'd like to join.
     setup.Socket.connect(targetId);
     setup.Socket.registerHandler('clientJoin', function(data) {
       State.variables.sessionId = targetId;
-      Engine.play('SelectCharacter')
+      Engine.play('SelectCharacter');
+      Save.autosave.save();
     });
     // TODO: wrap all this in retry policy & safety & error handling
     setup.chatSocket.onopen = function(_) {

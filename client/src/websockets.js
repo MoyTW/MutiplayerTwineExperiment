@@ -100,6 +100,7 @@ setup.Socket.registerHandler(setup.Socket.MessageTypes.CharacterConfirm, functio
   }
   if (State.variables.selectCharacterPlayerConfirmed && State.variables.selectCharacterPartnerConfirmed) {
     Engine.play('Ch1_CaseIntro1');
+    Save.autosave.save();
   }
 })
 
@@ -169,6 +170,7 @@ setup.Socket.registerHandler(setup.Socket.MessageTypes.NextCluePointConfirmed, f
     State.variables.nextCluePointPartnerConfirmed = false;
     
     Engine.play('Ch2_DisplayCluePoint');
+    Save.autosave.save();
   }
 })
 
@@ -191,5 +193,6 @@ setup.Socket.registerHandler(setup.Socket.MessageTypes.ViewTheAnswersConfirmed, 
   }
   if (State.variables.viewTheAnswersPlayerConfirmed && State.variables.viewTheAnswersPartnerConfirmed) {
     Engine.play('Ch3_Answers');
+    Save.autosave.save();
   }
 })
