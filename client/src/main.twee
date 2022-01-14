@@ -59,11 +59,16 @@ if (clientId && setup.isUUID(clientId)) {
 if (State.variables.shouldBeConnected === true) {
   setup.Socket.connect(State.variables.sessionId);
 }
+// TODO: This is possibly invoking an unreasonable amount of saving.
+Save.autosave.save();
 <</script>>
 
 
 :: StoryInit
 <<script>>
+if (Save.autosave.has()) {
+  Save.autosave.load();
+}
 /* Connect the UI bar */
 const rightUiBar = $('<div id="right-ui-bar"></div>').insertAfter("#ui-bar");
 rightUiBar.append('<div id="right-ui-bar-tray"><button id="right-ui-bar-toggle" tabindex="0" title="Toggle the Right UI bar" aria-label="Toggle the Right UI bar" type="button"></button></div>');
@@ -90,9 +95,6 @@ postrender["Display Right Sidebar Contents"] = function (content, taskName) {
 */
 $('#ui-bar').remove();
 $(document.head).find('#style-ui-bar').remove();
-
-/* Disable history tracking to keep file size down */
-Config.history.maxStates = 1;
 <</script>>\
 
 
@@ -133,7 +135,7 @@ Now, would you like to:
 :: HostGame
 /* TODO: call out to the server & start a new session */\
 /* <<set $sessionId to 'b416b45a-7fb7-4761-a173-0bdec11de841'>> */\
-<<set $sessionId to 'b416b45b-7fb7-4761-a173-0bdec11de843'>>
+<<set $sessionId to 'b416b45b-7fb7-4761-a173-0bdec11de844'>>
 <<script>>
   // TODO: Add a wait to send invocations
   setup.Socket.connect(State.variables.sessionId);
@@ -150,7 +152,7 @@ Either copy and paste it to your partner or read it out loud to them. They will 
 :: JoinGame
 <<set _input>>\
 Please enter the session identifier you'd like to join.
-@@#session-input;<<textbox '_input' 'b416b45b-7fb7-4761-a173-0bdec11de843' autofocus>>@@
+@@#session-input;<<textbox '_input' 'b416b45b-7fb7-4761-a173-0bdec11de844' autofocus>>@@
 @@#join-button;<<disable>><<button 'Session identifier is invalid.'>>
   <<script>>
     // TODO: Handle failures to connect

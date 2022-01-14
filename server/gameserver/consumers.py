@@ -33,8 +33,7 @@ class ChatConsumer(WebsocketConsumer):
     if text_data_map['type'] == 'CATCH_UP':
       messages = WebsocketMessage.objects.filter(session_id__exact=self.session_id, timestamp__gt=text_data_map['catchupStartMs'])
       # TODO: this is a little farcical tbh
-      content = {'type': 'CATCH_UP', 'messages': [json.loads(m.json) for m in messages]}
-      # content = {'type': 'CATCH_UP', 'messages': [m.json for m in messages]}
+      content = {'type': 'CATCH_UP', 'messages': [json.loads(m.json) for m in messages], 'server_timestamp_ms': server_ms}
       self.send(text_data=json.dumps(content))
     else:
       row = WebsocketMessage(session_id=self.session_id, client_id=text_data_map['clientId'], timestamp=server_ms, json=text_data)
