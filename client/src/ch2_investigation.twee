@@ -7,7 +7,7 @@ If you aren't on a voice call with your partner, now is an ideal time to do so. 
 <<include 'HowToPlaySnippet'>>
 You can review these instructions by hitting the <strong>How To Play</strong> button on the sidebar.
 
-<<link [[Let's go!|Ch2_SelectNextCluePoint]]>><</link>>
+<<button [[Let's go!|Ch2_SelectNextCluePoint]]>><</button>>
 
 
 :: Ch2_SelectNextCluePoint

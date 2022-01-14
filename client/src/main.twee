@@ -133,7 +133,7 @@ Now, would you like to:
 :: HostGame
 /* TODO: call out to the server & start a new session */\
 /* <<set $sessionId to 'b416b45a-7fb7-4761-a173-0bdec11de841'>> */\
-<<set $sessionId to 'b416b45b-7fb7-4761-a173-0bdec11de842'>>
+<<set $sessionId to 'b416b45b-7fb7-4761-a173-0bdec11de843'>>
 <<script>>
   // TODO: Add a wait to send invocations
   setup.Socket.connect(State.variables.sessionId);
@@ -150,7 +150,7 @@ Either copy and paste it to your partner or read it out loud to them. They will 
 :: JoinGame
 <<set _input>>\
 Please enter the session identifier you'd like to join.
-@@#session-input;<<textbox '_input' 'b416b45b-7fb7-4761-a173-0bdec11de842' autofocus>>@@
+@@#session-input;<<textbox '_input' 'b416b45b-7fb7-4761-a173-0bdec11de843' autofocus>>@@
 @@#join-button;<<disable>><<button 'Session identifier is invalid.'>>
   <<script>>
     // TODO: Handle failures to connect

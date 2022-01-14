@@ -1,7 +1,6 @@
 :: RightSidebar
 TODO: Rework this UI
 <<button 'Hard reset'>><<script>>
-  Save.autosave.delete();
   Engine.restart();
 <</script>><</button>>
 <<button 'Save to file'>><<script>>

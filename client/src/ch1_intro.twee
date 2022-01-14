@@ -12,7 +12,7 @@ You check the number. It's the FBI hotline. You take the call. "A murder!" cries
 
 "Time…" you say in unison, "to fight crime!"
 
-<<link [[But first: Clothes!|Ch1_CaseIntro2]]>><</link>>
+<<button [[But first: Clothes!|Ch1_CaseIntro2]]>><</button>>
 
 
 :: Ch1_CaseIntro2
@@ -26,7 +26,7 @@ With that, he sweeps out of the room.
 
 "Jocelyn Brando," she says, standing. She takes in a deep breath as the two of you walk over. "A pleasure to meet you." After the introductions are done, you all take seats at the table.
 
-<<link [[Now, to business.|Ch1_CaseIntro3]]>><</link>>
+<<button [[Now, to business.|Ch1_CaseIntro3]]>><</button>>
 
 
 :: Ch1_CaseIntro3
@@ -34,4 +34,4 @@ With that, he sweeps out of the room.
 <<include IntroductionSnippet>>
 
 <em><strong>[ TODO: You can review the introduction at any point by going to the Show Stats button in the upper-left corner. ]</em></strong>
-<<link [[Start your investigation!|Ch2_HowToPlay]]>><</link>>
+<<button [[Start your investigation!|Ch2_HowToPlay]]>><</button>>
