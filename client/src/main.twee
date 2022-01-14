@@ -53,10 +53,9 @@ if (clientId && setup.isUUID(clientId)) {
 <</nobr>>\
 
 
-:: Start
-<<include [[IdentifyClient]]>>\
+:: StoryInit
 <<script>>
-//const rightUiBar = $('<div id="right-ui-bar"></div>').insertAfter("#ui-bar");
+/* Connect the UI bar */
 const rightUiBar = $('<div id="right-ui-bar"></div>').insertAfter("#ui-bar");
 rightUiBar.append('<div id="right-ui-bar-tray"><button id="right-ui-bar-toggle" tabindex="0" title="Toggle the Right UI bar" aria-label="Toggle the Right UI bar" type="button"></button></div>');
 rightUiBar.append('<div id="right-ui-bar-body"></div>');
@@ -66,7 +65,6 @@ rightUiBar.find('#right-ui-bar-toggle').ariaClick({
 		label : "Toggle the Right UI bar"
 	}, function () {
 		rightUiBar.toggleClass('stowed');
-    // $('#passage-start').toggleClass('passage-fullscreen');
 	});
 
 /* Automatically show the contents of the RightSidebar passage in the right-ui-bar-body element. */
@@ -84,6 +82,10 @@ postrender["Display Right Sidebar Contents"] = function (content, taskName) {
 $('#ui-bar').remove();
 $(document.head).find('#style-ui-bar').remove();
 <</script>>\
+
+
+:: Start
+<<include [[IdentifyClient]]>>\
 /* TODO: test sessionId & clientId */\
 /* <<set $clientId to '30620262-6c52-462b-9fc2-384369ade0a9'>>\ */\
 <h1>Introduction</h1>\
