@@ -9,6 +9,9 @@ setup.Socket.registerHandler = function(messageType, handler) {
 setup.Socket.connect = function(sessionId, sendOnOpen) {
   // If we already have a connection or are attempting to establish a connection, leave it be!
   if (setup.chatSocket && setup.chatSocket.readyState < 2) {
+    if (sendOnOpen) {
+      setup.chatSocket.send(JSON.stringify(sendOnOpen));
+    }
     return;
   }
 
