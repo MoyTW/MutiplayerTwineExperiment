@@ -1,19 +1,22 @@
 // TODO: proper initialization
-setup.handlers = {}
+setup.Socket = {}
+setup.Socket.handlers = {}
 
-setup.registerHandler = function(messageType, handler) {
-  setup.handlers[messageType] = handler;
+setup.Socket.registerHandler = function(messageType, handler) {
+  setup.Socket.handlers[messageType] = handler;
 }
 
 // TODO: idempotent & also call on page refresh/load/broken connection
-setup.websocketConnect = function(sessionId) {
+setup.Socket.connect = function(sessionId) {
+  State.variables.shouldBeConnected = true;
+
   // TODO: wss
   // TODO: change localhost
   setup.chatSocket = new WebSocket('ws://127.0.0.1:8000/ws/' + sessionId + '/');
 
   setup.chatSocket.onmessage = function(e) {
     const data = JSON.parse(e.data);
-    const handler = setup.handlers[data['type']]
+    const handler = setup.Socket.handlers[data['type']]
     console.log(data['type'], handler);
     handler(data);
   };
@@ -23,10 +26,21 @@ setup.websocketConnect = function(sessionId) {
   }
 }
 
+setup.Socket._send = function(sessionId, obj) {
+  if (setup.chatSocket && setup.chatSocket.readyState == 1) {
+    setup.chatSocket.send(JSON.stringify(obj));
+  } else {
+    setup.Socket.connect(sessionId);
+    setup.chatSocket.onopen = function(_) {
+      setup.chatSocket.send(JSON.stringify(obj));
+    }
+  }
+}
+
 // ##################################################
 // #################### HANDLERS ####################
 // ##################################################
-setup.MessageTypes = {
+setup.Socket.MessageTypes = {
   CharacterSelect: 'CHARACTER_SELECT',
   CharacterConfirm: 'CHARACTER_CONFIRM',
   NextCluePointSelected: 'NEXT_CLUE_POINT_SELECTED',
@@ -41,17 +55,17 @@ setup.sendCharacterSelected = function(character) {
     console.error(character + ' is not an allowed character!');
     return;
   }
-  setup.chatSocket.send(JSON.stringify({
-    'type': setup.MessageTypes.CharacterSelect,
+  setup.Socket._send(State.variables.sessionId, {
+    'type': setup.Socket.MessageTypes.CharacterSelect,
     'clientId': State.variables.clientId,
     'character': character
-  }));
+  });
 }
 
-setup.registerHandler(setup.MessageTypes.CharacterSelect, function(data) {
+setup.Socket.registerHandler(setup.Socket.MessageTypes.CharacterSelect, function(data) {
   if (data.clientId === State.variables.clientId) {
     State.variables.playerCharacterName = data.character;
-    $('#select-character-player-selection').text('Your have selected ' + data.character + '.')
+    $('#select-character-player-selection').text('You have selected ' + data.character + '.')
   } else {
     State.variables.partnerCharacterName = data.character;
     $('#select-character-partner-selection').text('Your partner has selected ' + data.character + '.')
@@ -68,14 +82,14 @@ setup.registerHandler(setup.MessageTypes.CharacterSelect, function(data) {
 
 // -------------------- CharacterConfirm --------------------
 setup.sendCharacterConfirmed = function() {
-  setup.chatSocket.send(JSON.stringify({
-    'type': setup.MessageTypes.CharacterConfirm,
+  setup.Socket._send(State.variables.sessionId, {
+    'type': setup.Socket.MessageTypes.CharacterConfirm,
     'clientId': State.variables.clientId
-  }));
+  });
 }
 
 // TODO: Cross-check selections & kick back if different
-setup.registerHandler(setup.MessageTypes.CharacterConfirm, function(data) {
+setup.Socket.registerHandler(setup.Socket.MessageTypes.CharacterConfirm, function(data) {
   if (data.clientId === State.variables.clientId) {
     State.variables.selectCharacterPlayerConfirmed = true
     const button = $('#select-character-confirm button');
@@ -92,14 +106,14 @@ setup.registerHandler(setup.MessageTypes.CharacterConfirm, function(data) {
 // ==================== Ch2_SelectNextCluePoint ====================
 // -------------------- NextCluePointSelected --------------------
 setup.sendNextCluePointSelected = function(selectedKey) {
-  setup.chatSocket.send(JSON.stringify({
-    'type': setup.MessageTypes.NextCluePointSelected,
+  setup.Socket._send(State.variables.sessionId, {
+    'type': setup.Socket.MessageTypes.NextCluePointSelected,
     'clientId': State.variables.clientId,
     'cluePointKey': selectedKey
-  }));
+  });
 }
 
-setup.registerHandler(setup.MessageTypes.NextCluePointSelected, function(data) {
+setup.Socket.registerHandler(setup.Socket.MessageTypes.NextCluePointSelected, function(data) {
   if (data.clientId === State.variables.clientId) {
     State.variables.nextCluePointPlayerSelection = data.cluePointKey;
     const selectionSpan = $('#next-clue-point-player-selection');
@@ -125,10 +139,10 @@ setup.registerHandler(setup.MessageTypes.NextCluePointSelected, function(data) {
 
 // -------------------- NextCluePointConfirmed --------------------
 setup.sendNextCluePointConfirmed = function() {
-  setup.chatSocket.send(JSON.stringify({
-    'type': setup.MessageTypes.NextCluePointConfirmed,
+  setup.Socket._send(State.variables.sessionId, {
+    'type': setup.Socket.MessageTypes.NextCluePointConfirmed,
     'clientId': State.variables.clientId
-  }));
+  });
   const button = $('#next-clue-point-confirm button');
   button.html('Waiting for partner to confirm...');
   button.prop('disabled', true);
@@ -136,7 +150,7 @@ setup.sendNextCluePointConfirmed = function() {
 
 // Holds all the logic for progressing time & recording visits - I can already tell distributing logic like this is
 // going to prove annoying. Hmm.
-setup.registerHandler(setup.MessageTypes.NextCluePointConfirmed, function(data) {
+setup.Socket.registerHandler(setup.Socket.MessageTypes.NextCluePointConfirmed, function(data) {
   if (data.clientId === State.variables.clientId) {
     State.variables.nextCluePointPlayerConfirmed = true;
   } else {
@@ -160,16 +174,16 @@ setup.registerHandler(setup.MessageTypes.NextCluePointConfirmed, function(data) 
 
 // ==================== Ch3_Quiz ====================
 setup.sendViewTheAnswersConfirmed = function() {
-  setup.chatSocket.send(JSON.stringify({
-    'type': setup.MessageTypes.ViewTheAnswersConfirmed,
+  setup.Socket._send(State.variables.sessionId, {
+    'type': setup.Socket.MessageTypes.ViewTheAnswersConfirmed,
     'clientId': State.variables.clientId
-  }));
+  });
   const button = $('#view-the-answers-confirm button');
   button.html('Waiting for partner to confirm...');
   button.prop('disabled', true);
 }
 
-setup.registerHandler(setup.MessageTypes.ViewTheAnswersConfirmed, function(data) {
+setup.Socket.registerHandler(setup.Socket.MessageTypes.ViewTheAnswersConfirmed, function(data) {
   if (data.clientId === State.variables.clientId) {
     State.variables.viewTheAnswersPlayerConfirmed = true;
   } else {

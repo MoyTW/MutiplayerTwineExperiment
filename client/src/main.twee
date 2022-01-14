@@ -120,8 +120,8 @@ Now, would you like to:
 <<set $sessionId to 'b416b45a-7fb7-4761-a173-0bdec11de841'>>\
 <<script>>
   // TODO: Add a wait to send invocations
-  setup.websocketConnect(State.variables.sessionId);
-  setup.registerHandler('clientJoin', function(data) {
+  setup.Socket.connect(State.variables.sessionId);
+  setup.Socket.registerHandler('clientJoin', function(data) {
     Engine.play('SelectCharacter')
   });
 <</script>>\
@@ -137,12 +137,13 @@ Please enter the session identifier you'd like to join.
 @@#session-input;<<textbox '_input' 'b416b45a-7fb7-4761-a173-0bdec11de841' autofocus>>@@
 @@#join-button;<<disable>><<button 'Session identifier is invalid.'>>
   <<script>>
+    // TODO: Handle failures to connect
+    // TODO: Reject connection if there's nobody hosting
     // TODO: Connect only if not already connected
-    console.log($
-    ('#session-input input')[0].value)
-    setup.websocketConnect($('#session-input input')[0].value);
-    // TODO: okay this is pretty funny
-    setup.registerHandler('clientJoin', function(data) {
+    const targetId = $('#session-input input')[0].value;
+    setup.Socket.connect(targetId);
+    setup.Socket.registerHandler('clientJoin', function(data) {
+      State.variables.sessionId = targetId;
       Engine.play('SelectCharacter')
     });
     // TODO: wrap all this in retry policy & safety & error handling
