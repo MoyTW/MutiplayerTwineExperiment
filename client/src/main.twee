@@ -81,6 +81,9 @@ postrender["Display Right Sidebar Contents"] = function (content, taskName) {
 */
 $('#ui-bar').remove();
 $(document.head).find('#style-ui-bar').remove();
+
+/* Disable history tracking to keep file size down */
+Config.history.maxStates = 1;
 <</script>>\
 
 
