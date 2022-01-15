@@ -55,12 +55,16 @@ if (clientId && setup.isUUID(clientId)) {
 
 :: PassageReady
 <<script>>
+console.log('Autosaving for scene: ', State.passage, ' session: ', State.variables.sessionId, State.variables);
+Save.autosave.save();
 // This goes in PassageReady because it can't go in StoryInit - we can't check the state in StoryInit, because it's called before the game is restored!
 if (State.variables.shouldBeConnected === true) {
-  setup.Socket.connect(State.variables.sessionId);
+  setup.Socket.connect(State.variables.sessionId, {
+    'type': 'AUTOSAVE',
+    'clientId': State.variables.clientId,
+    'serializedSave': Save.serialize()
+  });
 }
-// TODO: This is possibly invoking an unreasonable amount of saving.
-Save.autosave.save();
 <</script>>
 
 
@@ -132,7 +136,7 @@ Now, would you like to:
 :: HostGame
 /* TODO: call out to the server & start a new session */\
 /* <<set $sessionId to 'b416b45a-7fb7-4761-a173-0bdec11de841'>> */\
-<<set $sessionId to 'b416b45b-7fb7-4761-a173-0bdec11de844'>>
+<<set $sessionId to 'b416b45b-7fb7-4761-a173-0bdec11de845'>>
 <<script>>
   // TODO: Add a wait to send invocations
   setup.Socket.connect(State.variables.sessionId);
@@ -149,21 +153,16 @@ Either copy and paste it to your partner or read it out loud to them. They will 
 :: JoinGame
 <<set _input>>\
 Please enter the session identifier you'd like to join.
-@@#session-input;<<textbox '_input' 'b416b45b-7fb7-4761-a173-0bdec11de844' autofocus>>@@
+@@#session-input;<<textbox '_input' 'b416b45b-7fb7-4761-a173-0bdec11de845' autofocus>>@@
 @@#join-button;<<disable>><<button 'Session identifier is invalid.'>>
   <<script>>
     // TODO: Handle failures to connect
     // TODO: Reject connection if there's nobody hosting
     // TODO: Connect only if not already connected
     const targetId = $('#session-input input')[0].value;
-    setup.Socket.connect(targetId, {
-      'type': 'clientJoin',
-      'clientId': State.variables.clientId
-    });
-    setup.Socket.registerHandler('clientJoin', function(data) {
-      State.variables.sessionId = targetId;
-      Engine.play('SelectCharacter');
-    });
+    setup.Socket.connect(targetId);
+    State.variables.sessionId = targetId;
+    Engine.play('SelectCharacter');
     // TODO: Confirm & progress
   <</script>>
 <</button>><</disable>>@@

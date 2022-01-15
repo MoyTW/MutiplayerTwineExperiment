@@ -1,6 +1,7 @@
 // TODO: proper initialization
 setup.Socket = {}
 setup.Socket.handlers = {}
+setup.Socket.sendBuffer = []
 
 setup.Socket.registerHandler = function(messageType, handler) {
   setup.Socket.handlers[messageType] = handler;
@@ -8,7 +9,13 @@ setup.Socket.registerHandler = function(messageType, handler) {
 
 setup.Socket.connect = function(sessionId, sendOnOpen) {
   // If we already have a connection or are attempting to establish a connection, leave it be!
-  if (setup.chatSocket && setup.chatSocket.readyState < 2) {
+  if (setup.chatSocket && setup.chatSocket.readyState == 0) {
+    if (sendOnOpen) {
+      setup.Socket.sendBuffer.push(sendOnOpen);
+    }
+    return;
+  }
+  if (setup.chatSocket && setup.chatSocket.readyState == 1) {
     if (sendOnOpen) {
       setup.chatSocket.send(JSON.stringify(sendOnOpen));
     }
@@ -21,15 +28,20 @@ setup.Socket.connect = function(sessionId, sendOnOpen) {
   // TODO: change localhost
   setup.chatSocket = new WebSocket('ws://127.0.0.1:8000/ws/' + sessionId + '/');
 
+  if (sendOnOpen) {
+    setup.Socket.sendBuffer.push(sendOnOpen);
+  }
   setup.chatSocket.onopen = function(_) {
     setup.chatSocket.send(JSON.stringify({
       'type': 'CATCH_UP',
       'clientId': State.variables.clientId,
       'catchupStartMs': State.variables.websocketProcessedUpToMs || 0
     }));
-    if (sendOnOpen) {
-      setup.chatSocket.send(JSON.stringify(sendOnOpen));
+    for (const toSend of setup.Socket.sendBuffer) {
+      console.log('Sending buffered message, type:', toSend['type']);
+      setup.chatSocket.send(JSON.stringify(toSend));
     }
+    setup.Socket.sendBuffer.splice(0, setup.Socket.sendBuffer.length);
   }
 
   setup.chatSocket.onmessage = function(e) {
@@ -56,7 +68,11 @@ setup.Socket._send = function(sessionId, obj) {
 }
 
 setup.Socket.registerHandler('CATCH_UP', function(data) {
-  console.log('Attempting to catch up!');
+  const serializedSave = data['serialized_save']
+  console.log('Attempting to catch up! Loading:', serializedSave !== undefined);
+  if (serializedSave) {
+    Save.deserialize(serializedSave)
+  }
   for (const message of data['messages']) {
     // TODO: There's surely a more elegant way of dealing with this
     if (message['type'] !== 'clientJoin') {
