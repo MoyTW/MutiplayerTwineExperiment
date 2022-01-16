@@ -3,6 +3,8 @@ setup.Socket = {}
 setup.Socket.handlers = {}
 setup.Socket.sendBuffer = []
 
+setup.Socket.PROD_SERVER_URL = 'wss://mutiplayer-twine-server.herokuapp.com/ws/'
+
 setup.Socket.registerHandler = function(messageType, handler) {
   setup.Socket.handlers[messageType] = handler;
 }
@@ -24,9 +26,8 @@ setup.Socket.connect = function(sessionId, sendOnOpen) {
 
   State.variables.shouldBeConnected = true;
 
-  // TODO: wss
-  // TODO: change localhost
-  setup.chatSocket = new WebSocket('ws://127.0.0.1:8000/ws/' + sessionId + '/');
+  // TODO: Debug
+  setup.chatSocket = new WebSocket(setup.Socket.PROD_SERVER_URL + sessionId + '/');
 
   if (sendOnOpen) {
     setup.Socket.sendBuffer.push(sendOnOpen);
