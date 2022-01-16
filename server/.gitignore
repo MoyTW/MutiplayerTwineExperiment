@@ -12,3 +12,6 @@ lib/
 lib64
 lib64/
 share/
+
+# dev
+db.sqlite3
