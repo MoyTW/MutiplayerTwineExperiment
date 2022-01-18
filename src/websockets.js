@@ -1,13 +1,14 @@
-// TODO: proper initialization
 setup.Socket = {}
 setup.Socket.handlers = {}
 setup.Socket.sendBuffer = []
 
-setup.Socket.PROD_SERVER_URL = 'wss://mutiplayer-twine-server.herokuapp.com/ws/'
+setup.Socket.DEBUG = true;
+setup.Socket.DEV_SERVER_URL = 'ws://localhost:8000/ws/';
+setup.Socket.PROD_SERVER_URL = 'wss://multiplayer-twine-server.herokuapp.com/ws/';
 
 setup.Socket.registerHandler = function(messageType, handler) {
   setup.Socket.handlers[messageType] = handler;
-}
+};
 
 setup.Socket.connect = function(sessionId, sendOnOpen) {
   // If we already have a connection or are attempting to establish a connection, leave it be!
@@ -22,12 +23,15 @@ setup.Socket.connect = function(sessionId, sendOnOpen) {
       setup.chatSocket.send(JSON.stringify(sendOnOpen));
     }
     return;
-  }
+  };
 
   State.variables.shouldBeConnected = true;
 
-  // TODO: Debug
-  setup.chatSocket = new WebSocket(setup.Socket.PROD_SERVER_URL + sessionId + '/');
+  if (setup.Socket.DEBUG) {
+    setup.chatSocket = new WebSocket(setup.Socket.DEV_SERVER_URL + sessionId + '/');
+  } else {
+    setup.chatSocket = new WebSocket(setup.Socket.PROD_SERVER_URL + sessionId + '/');
+  }
 
   if (sendOnOpen) {
     setup.Socket.sendBuffer.push(sendOnOpen);
