@@ -65,22 +65,15 @@ Jocelyn clears her throat. "Horace was his executive assistant," she adds.
 
 
 :: HowToPlaySnippet
-/* TODO: text */\
 The goal of the game is to gather enough evidence to solve the case and answer a quiz at the end of the game.
 
 The game takes place over <strong>$startTurns turns.</strong>
 
-<strong>Every turn</strong>, each player can choose one of the following:
-*line_break
-<strong>1) Interview a person</strong>
-*line_break
-<strong>2) Investigate a location</strong>
+<strong>Every turn</strong>, each player can choose to <strong>investigate one lead.</strong>
 
-The possible people or locations are listed in the Stats page, accessible using the <strong>Show Stats</strong> button in the upper-left hand corner. As you interview people and investigate locations, new people and locations may unlock. After doing an interview of investigation, option for that character to revisit the location will be locked, but you can review the text of the result in the <strong>Show Stats</strong> page by selecting the <strong>Review Interviews & Investigations</strong> option.
+The possible leads listed in <strong>People & Places</strong> on the sidebar. As you interview people and investigate locations, new people and locations may unlock. After doing an interview of investigation, option for that character to revisit the location will be locked, but you can review the text of the result will be added to the sidebar for review, which you can do at any time.
 
-Mechanically, every turn, Antony and Cleopatra must agree on what interview or investigation they're each doing. The game then asks <strong>"What is Antony doing?</strong>" and <strong>"What is Cleopatra doing?"</strong> and each player must enter identical options, so that their games stay in sync. <strong>There is no advantage to both going to the same location!</strong> The text is the same for both players (an obvious avenue for improvement if the format pans out).
-
-If the players feel they have sufficient data, they can also choose to skip straight to the quiz. Otherwise, once the 7 turns are over, you must present your case before Sejanus and answer a quiz, with each question being worth a certain number of points. Then the points are added to give a final score. The questions are as follows:
+Once the 7 turns are over, you must present your case before Sejanus and answer a quiz, with each question being worth a certain number of points. Then the points are added to give a final score. The questions are as follows:
 
 <<include [[QuestionsSnippet]]>>
 

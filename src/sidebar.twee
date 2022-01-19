@@ -25,7 +25,6 @@
 <</if>>\
 <<if hasVisited('Ch2_SelectNextCluePoint')>>\
 <h2>Case Notes</h2>\
-/* TODO: This is kinda inefficient */\
 <<script>>
 // I don't know of a better way to surface this to SugarCube.
 State.setVar('_cluePointsInOrder', setup.CluePointsInOrder);

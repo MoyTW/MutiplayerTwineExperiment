@@ -108,11 +108,9 @@ $(document.head).find('#style-ui-bar').remove();
 
 :: Start
 <<include [[IdentifyClient]]>>\
-/* Websocket tracking */
+/* Websocket tracking */\
 <<set $shouldBeConnected to false>>\
 <<set $websocketProcessedUpToMs to 0>>\
-/* TODO: test sessionId & clientId */\
-/* <<set $clientId to '30620262-6c52-462b-9fc2-384369ade0a9'>>\ */\
 <h1>Introduction</h1>\
 The year is 2021. Neo America is prospering under the stern yet wise direction of President for Life, Gaius Julius Ceasar. 330 million souls live, love, and laugh, all working tirelessly for the glory of the American people!
 
@@ -184,14 +182,10 @@ Please enter the session identifier you'd like to join.
 <<textbox '_input' _defaultSessionId autofocus>>@@
 @@#join-button;<<disable>><<button 'Session identifier is invalid.'>>
   <<script>>
-    // TODO: Handle failures to connect
-    // TODO: Reject connection if there's nobody hosting
-    // TODO: Connect only if not already connected
     const targetId = $('#session-input input')[0].value;
     setup.Socket.connect(targetId);
     State.variables.sessionId = targetId;
     Engine.play('SelectCharacter');
-    // TODO: Confirm & progress
   <</script>>
 <</button>><</disable>>@@
 <<done>><<script>>
@@ -215,7 +209,6 @@ Please enter the session identifier you'd like to join.
 <<script>>
 setup.initializeCluePoints();
 <</script>>\
-/* TODO: Make this resilient */\
 <h1>Select your character:</h1>\
 <<button 'Mark Antony, Vice President of Neo America.'>>
   <<script>>setup.sendCharacterSelected('Antony');<</script>>
