@@ -135,9 +135,16 @@ Now, would you like to:
 <<for _i to 0; _i lt Save.slots.length; _i++>><<capture _i>>\
   <<if Save.slots.has(_i)>>\
     <<set _saveName to Save.slots.get(_i).title>>\
-    <<button _saveName>><<script>>
-      console.log(Save.slots.get(State.temporary.i).title);
-    <</script>><</button>>
+    <<set _spanId to 'span-num-' + _i>>\
+    <span @id="_spanId">\
+      <<button _saveName>><<script>>
+        console.log(Save.slots.get(State.temporary.i).title);
+      <</script>><</button>>\
+      <<button 'Delete Save'>><<script>>
+        $('#span-num-' + State.temporary.i)[0].remove();
+        Save.slots.delete(State.temporary.i);
+      <</script>><</button>>
+    </span>\
   <</if>>\
 <</capture>><</for>>\
 
