@@ -97,6 +97,13 @@ postrender["Display Right Sidebar Contents"] = function (content, taskName) {
 $('#ui-bar').remove();
 $(document.head).find('#style-ui-bar').remove();
 <</script>>\
+<<widget "IfAntony">>\
+  <<if $playerCharacterName is 'Antony'>>\
+    <<print $args[0]>>\
+  <<else>>\
+    <<print $args[1]>>\
+  <</if>>\
+<</widget>>\
 
 
 :: Start

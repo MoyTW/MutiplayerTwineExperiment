@@ -4,11 +4,11 @@ TODO: make a macro for "if antony, print else"
 <h2>The Case of the Raytheon CEO.</h2>\
 <strong>March 26, 2021</strong>
 
-You and @{player_idx Cleopatra | Antony} are lounging around on your gigantic pleasure barge, soaking up the sun and watching the Potomac go by, when both your phones light up at once.
+You and <<IfAntony 'Cleopatra' 'Antony'>> are lounging around on your gigantic pleasure barge, soaking up the sun and watching the Potomac go by, when both your phones light up at once.
 
-You check the number. It's the FBI hotline. You take the call. "A murder!" cries the officer on the other side. "A murder most foul! Marlon Brando, CEO of Raytheon, was found dead eleven days ago. This is now a matter of," and his voice drops to a whisper, "[i]national security![/i]"
+You check the number. It's the FBI hotline. You take the call. "A murder!" cries the officer on the other side. "A murder most foul! Marlon Brando, CEO of Raytheon, was found dead eleven days ago. This is now a matter of," and his voice drops to a whisper, "<em>national security!</em>"
 
-@{player_idx "We'll be there in fifteen," | "Finally, some excitement,"} you say, and hang up. You look over at @{player_idx Cleopatra. | Antony.}
+<<IfAntony "We'll be there in fifteen," "Finally, some excitement,">> you say, and hang up. You look over at <<IfAntony 'Cleopatra.' 'Antony.'}>>
 
 "Time…" you say in unison, "to fight crime!"
 
