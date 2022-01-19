@@ -45,3 +45,15 @@ setup.leaveSession = function() {
   Save.autosave.delete();
   Engine.restart();
 }
+
+setup.endGame = function() {
+  for (let i = 0; i < Save.slots.length; i++) {
+    const saveInSlot = Save.slots.get(i);
+    if (saveInSlot && saveInSlot.title.includes(State.variables.sessionId)) {
+      Save.slots.delete(i, 'Session ' + State.variables.sessionId);
+      break;
+    }
+  }
+  Save.autosave.delete();
+  Engine.restart();
+}
