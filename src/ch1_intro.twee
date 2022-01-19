@@ -1,5 +1,4 @@
 :: Ch1_CaseIntro1
-TODO: make a macro for "if antony, print else"
 <h1>CASE ONE</h1>\
 <h2>The Case of the Raytheon CEO.</h2>\
 <strong>March 26, 2021</strong>
@@ -18,11 +17,11 @@ You check the number. It's the FBI hotline. You take the call. "A murder!" cries
 :: Ch1_CaseIntro2
 Your helicopter buzzes over the FBI headquarters, trailed by the larger, more spacious Secret Service bird. Your pilot touches down on the helipad, and the two of you waste no time disembarking. Your FBI liaison meets you on the tarmac as your Secret Service escorts disembark, and you are lead through the maze at Langley to an unassuming briefing room.
 
-There are three people at the table, a stern looking woman with a FBI nametag, a devastated looking businesswoman on the verge of tears, and Sejanus, head of the FBI, at his customary spot at the head of the table. "Vice President," he says, nodding to @{player_idx you. | Antony.} "My Queen." He bows curtly to @{player_idx Cleopatra. | you.} "I'm not here to brief you. I'm just here to impress the importance of the situation to you. And, as you can guess, it's very important. From the President's mouth to your ears. <strong>Two days.</strong>" He cracks a grin and then gestures to the agent sitting beside him, a tall, stern-looking woman. "Hortensia will take it from here."
+There are three people at the table, a stern looking woman with a FBI nametag, a devastated looking businesswoman on the verge of tears, and Sejanus, head of the FBI, at his customary spot at the head of the table. "Vice President," he says, nodding to <<IfAntony 'you.' 'Antony.'>> "My Queen." He bows curtly to <<IfAntony 'Cleopatra.' 'you.'>> "I'm not here to brief you. I'm just here to impress the importance of the situation to you. And, as you can guess, it's very important. From the President's mouth to your ears. <strong>Two days.</strong>" He cracks a grin and then gestures to the agent sitting beside him, a tall, stern-looking woman. "Hortensia will take it from here."
 
 With that, he sweeps out of the room.
 
-"Good to see you, Hortensia," @{player_idx Cleopatra says. She shoots | you say, and shoot } a significant glance over at the businesswoman. "I don't believe we've been introduced."
+"Good to see you, Hortensia," <<IfAntony 'Cleopatra says. She shoots' 'you say, and shoot'>> a significant glance over at the businesswoman. "I don't believe we've been introduced."
 
 "Jocelyn Brando," she says, standing. She takes in a deep breath as the two of you walk over. "A pleasure to meet you." After the introductions are done, you all take seats at the table.
 
@@ -33,5 +32,5 @@ With that, he sweeps out of the room.
 <<set $ch1_intro_seen to true>>\
 <<include IntroductionSnippet>>
 
-<em><strong>[ TODO: You can review the introduction at any point by going to the Show Stats button in the upper-left corner. ]</em></strong>
+<em><strong>[ You can review the introduction at any point by going to the Show Stats button in the upper-left corner. ]</strong></em>
 <<button [[Start your investigation!|Ch2_HowToPlay]]>><</button>>

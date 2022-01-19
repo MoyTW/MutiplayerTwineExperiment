@@ -1,6 +1,6 @@
 :: Ch3_Quiz
 <h1>Time's up!</h1>\
-You reconvene with @{player_idx Cleopatra | Antony} at the FBI headquarters. Hortensia meets you at the door and leads you back to the briefing room, where Sejanus is waiting.
+You reconvene with <<IfAntony 'Cleopatra' 'Antony'>> at the FBI headquarters. Hortensia meets you at the door and leads you back to the briefing room, where Sejanus is waiting.
 
 "Right," he says, "who killed Marlon Brando? Was there a security breach on Project STORM, and if so, who was involved? And what did his note about First Connection mean?"
 
