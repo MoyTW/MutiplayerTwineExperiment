@@ -131,29 +131,43 @@ Now, would you like to:
 <<button [[Host a new game|HostGame]]>><</button>>
 <<button [[Join a game that somebody else has hosted|JoinGame]]>><</button>>
 /* TODO: continue a game (functionally equivalent to join) */\
+<h3>In-Progress Games</h3>\
+<<for _i to 0; _i lt Save.slots.length; _i++>><<capture _i>>\
+  <<if Save.slots.has(_i)>>\
+    <<set _saveName to Save.slots.get(_i).title>>\
+    <<button _saveName>><<script>>
+      console.log(Save.slots.get(State.temporary.i).title);
+    <</script>><</button>>
+  <</if>>\
+<</capture>><</for>>\
 
 
 :: HostGame
 /* TODO: call out to the server & start a new session */\
 /* <<set $sessionId to 'b416b45a-7fb7-4761-a173-0bdec11de841'>> */\
-<<set $sessionId to 'b416b45b-7fb7-4761-a173-0bdec11de845'>>
+<<script>>State.variables.sessionId = setup.uuidv4();<</script>>
 <<script>>
-  // TODO: Add a wait to send invocations
   setup.Socket.connect(State.variables.sessionId);
-  setup.Socket.registerHandler('clientJoin', function(data) {
-    Engine.play('SelectCharacter');
-  });
 <</script>>\
 Your session identifier is:
 <strong>$sessionId</strong>
 Either copy and paste it to your partner or read it out loud to them. They will need to enter this code to join your game.
-<h2>Waiting for partner to join...</h2>
+
+You can also find the session identifier at the top of the right sidebar. Press the button to continue once your partner has joined.
+
+<<button [[Got it!|SelectCharacter]]>><</button>>
 
 
 :: JoinGame
 <<set _input>>\
 Please enter the session identifier you'd like to join.
-@@#session-input;<<textbox '_input' 'b416b45b-7fb7-4761-a173-0bdec11de845' autofocus>>@@
+@@#session-input;\
+<<if setup.Socket.DEBUG is true>>\
+  <<set _defaultSessionId to 'b416b45b-7fb7-4761-a173-0bdec11de845'>>\
+<<else>>\
+  <<set _defaultSessionId to ''>>\
+<</if>>\
+<<textbox '_input' _defaultSessionId autofocus>>@@
 @@#join-button;<<disable>><<button 'Session identifier is invalid.'>>
   <<script>>
     // TODO: Handle failures to connect
@@ -178,6 +192,8 @@ Please enter the session identifier you'd like to join.
     }
   })
 <</script>><</done>>\
+
+<<button [[Back to main menu|Start]]>><</button>>
 
 :: SelectCharacter
 /* We initialize the variables here because it's the first screen on a new game */\

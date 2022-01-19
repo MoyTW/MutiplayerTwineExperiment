@@ -1,15 +1,14 @@
 :: RightSidebar
-TODO: Rework this UI
-<<button 'Hard reset'>><<script>>
-  Save.autosave.delete();
-  Engine.restart();
-<</script>><</button>>
-<<button 'Save to file'>><<script>>
-  Save.export();
-<</script>><</button>>
-<<button 'Serialize'>><<script>>
-  const serializedGame = Save.serialize();
-<</script>><</button>>
+<h2>Game Info</h2>\
+<<if $sessionId is undefined or $sessionId is ''>>\
+  You're not currently connected to a game.
+<<else>>\
+  Session ID: <strong>$sessionId</strong>
+  If your partner wants to connect, they will need this code.
+<</if>>\
+<<if $shouldBeConnected>>\
+  <<button 'Leave (game will be saved)'>><<script>>setup.leaveSession();<</script>><</button>>
+<</if>>\
 <h2>Resources</h2>\
 <<if hasVisited('Ch1_CaseIntro3')>>\
   <<button 'Review Introduction'>>

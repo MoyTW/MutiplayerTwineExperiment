@@ -27,10 +27,10 @@ setup.Socket.connect = function(sessionId, sendOnOpen) {
 
   State.variables.shouldBeConnected = true;
 
-  if (setup.Socket.DEBUG) {
-    setup.chatSocket = new WebSocket(setup.Socket.DEV_SERVER_URL + sessionId + '/');
-  } else {
+  if (setup.Socket.DEBUG === false) {
     setup.chatSocket = new WebSocket(setup.Socket.PROD_SERVER_URL + sessionId + '/');
+  } else {
+    setup.chatSocket = new WebSocket(setup.Socket.DEV_SERVER_URL + sessionId + '/');
   }
 
   if (sendOnOpen) {
