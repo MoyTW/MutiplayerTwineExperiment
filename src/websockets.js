@@ -147,6 +147,7 @@ setup.Socket.registerHandler(setup.Socket.MessageTypes.CharacterConfirm, functio
     const button = $('#select-character-confirm button');
     button.html('Waiting for partner to confirm...');
     button.prop('disabled', true);
+    $('#select-character-character-buttons button').prop('disabled', true)
   } else {
     State.variables.selectCharacterPartnerConfirmed = true
   }
@@ -184,7 +185,9 @@ setup.Socket.registerHandler(setup.Socket.MessageTypes.NextCluePointSelected, fu
   const playerSelection = State.variables.nextCluePointPlayerSelection;
   const partnerSelection = State.variables.nextCluePointPartnerSelection;
   if (playerSelection !== '' && partnerSelection !== '' && playerSelection != partnerSelection) {
-    $('#next-clue-point-confirm button').prop('disabled', false);
+    if (!State.variables.nextCluePointPlayerConfirmed) {
+      $('#next-clue-point-confirm button').prop('disabled', false);
+    }
   } else {
     $('#next-clue-point-confirm button').prop('disabled', true);
   }
@@ -196,9 +199,6 @@ setup.sendNextCluePointConfirmed = function() {
     'type': setup.Socket.MessageTypes.NextCluePointConfirmed,
     'clientId': State.variables.clientId
   });
-  const button = $('#next-clue-point-confirm button');
-  button.html('Waiting for partner to confirm...');
-  button.prop('disabled', true);
 }
 
 // Holds all the logic for progressing time & recording visits - I can already tell distributing logic like this is
@@ -206,6 +206,10 @@ setup.sendNextCluePointConfirmed = function() {
 setup.Socket.registerHandler(setup.Socket.MessageTypes.NextCluePointConfirmed, function(data) {
   if (data.clientId === State.variables.clientId) {
     State.variables.nextCluePointPlayerConfirmed = true;
+    const button = $('#next-clue-point-confirm button');
+    button.html('Waiting for partner to confirm...');
+    button.prop('disabled', true);
+    $('#next-clue-point-clue-point-buttons button').prop('disabled', true);
   } else {
     State.variables.nextCluePointPartnerConfirmed = true;
   }

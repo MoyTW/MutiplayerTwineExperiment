@@ -209,12 +209,12 @@ Please enter the session identifier you'd like to join.
 setup.initializeCluePoints();
 <</script>>\
 <h1>Select your character:</h1>\
-<<button 'Mark Antony, Vice President of Neo America.'>>
+@@#select-character-character-buttons;<<button 'Mark Antony, Vice President of Neo America.'>>
   <<script>>setup.sendCharacterSelected('Antony');<</script>>
 <</button>>
 <<button 'Cleopatra VII Philopator, Queen of Egypt.'>>
   <<script>>setup.sendCharacterSelected('Cleopatra');<</script>>
-<</button>>
+<</button>>@@
 
 @@#select-character-player-selection;<<if $playerCharacterName is ''>>\
   You have not yet selected a character.\
