@@ -155,8 +155,7 @@ Now, would you like to:
 
 
 :: HostGame
-/* TODO: call out to the server & start a new session */\
-/* <<set $sessionId to 'b416b45a-7fb7-4761-a173-0bdec11de841'>> */\
+<<include [[InitializeGameVariables]]>>\
 <<script>>State.variables.sessionId = setup.uuidv4();<</script>>
 <<script>>
   setup.Socket.connect(State.variables.sessionId);
@@ -171,6 +170,7 @@ You can also find the session identifier at the top of the right sidebar. Press 
 
 
 :: JoinGame
+<<include [[InitializeGameVariables]]>>\
 <<set _input>>\
 Please enter the session identifier you'd like to join.
 @@#session-input;\
@@ -205,7 +205,6 @@ Please enter the session identifier you'd like to join.
 
 :: SelectCharacter
 /* We initialize the variables here because it's the first screen on a new game */\
-<<include [[InitializeGameVariables]]>>\
 <<script>>
 setup.initializeCluePoints();
 <</script>>\
