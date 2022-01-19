@@ -30,8 +30,8 @@ if (clientId && setup.isUUID(clientId)) {
 :: InitializeGameVariables
 <<nobr>>
 /* Global */
-/* <<set $turnsRemaining to 7>> */
-<<set $startTurns to 1>>
+<<set $startTurns to 7>>
+/* <<set $startTurns to 1>> */
 <<set $turnsRemaining to $startTurns>>
 
 /* SelectCharacter */

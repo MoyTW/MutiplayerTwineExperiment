@@ -2,7 +2,7 @@ setup.Socket = {}
 setup.Socket.handlers = {}
 setup.Socket.sendBuffer = []
 
-setup.Socket.DEBUG = true;
+setup.Socket.DEBUG = false;
 setup.Socket.DEV_SERVER_URL = 'ws://localhost:8000/ws/';
 setup.Socket.PROD_SERVER_URL = 'wss://multiplayer-twine-server.herokuapp.com/ws/';
 
