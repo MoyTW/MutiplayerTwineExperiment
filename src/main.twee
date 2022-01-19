@@ -138,7 +138,7 @@ Now, would you like to:
     <<set _spanId to 'span-num-' + _i>>\
     <span @id="_spanId">\
       <<button _saveName>><<script>>
-        console.log(Save.slots.get(State.temporary.i).title);
+        Save.slots.load(State.temporary.i);
       <</script>><</button>>\
       <<button 'Delete Save'>><<script>>
         $('#span-num-' + State.temporary.i)[0].remove();
