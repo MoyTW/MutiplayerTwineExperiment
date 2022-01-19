@@ -4,7 +4,7 @@ You reconvene with @{player_idx Cleopatra | Antony} at the FBI headquarters. Hor
 
 "Right," he says, "who killed Marlon Brando? Was there a security breach on Project STORM, and if so, who was involved? And what did his note about First Connection mean?"
 
-<strong>[i][ Scoring works like this. Each of the following questions has a points score. The two players should agree on the answers, and on the next page, it will show the answers. ][/i]</strong>
+<strong><em>[ Scoring works like this. Each of the following questions has a points score. The two players should agree on the answers, and on the next page, it will show the answers. ]</em></strong>
 
 <h2>Questions</h2>\
 <<include [[QuestionsSnippet]]>>
