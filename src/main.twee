@@ -231,25 +231,20 @@ setup.initializeCluePoints();
 @@#select-character-confirm;<<disable>><<button 'Confirm selection.'>>
   <<script>>setup.sendCharacterConfirmed()<</script>>
 <</button>><</disable>>@@
-<<receive 'CHARACTER_SELECT'>><<script>>console.log('RECEIVE CHAR SELECT CONTENTS ARE EXECUTED');<</script>><</receive>>\
+/* I honestly find this waaaay harder to read than javascript, but I'm putting it in here as an example. */
+<<receive 'CHARACTER_SELECT'>>
+  <<if _receiveData.clientId is $clientId>>
+    <<set $playerCharacterName to _receiveData.character>>
+    <<replace '#select-character-player-selection'>>You have selected _receiveData.character.<</replace>>
+  <<else>>
+    <<set $partnerCharacterName to _receiveData.character>>
+    <<replace '#select-character-partner-selection'>>Your partner has selected _receiveData.character.<</replace>>
+  <</if>>
+  /* TODO: Synchronize the states */
+  <<if ($playerCharacterName is not '' and $partnerCharacterName is not '' and $playerCharacterName is not $partnerCharacterName)>>
+    <<run $('#select-character-confirm button').prop('disabled', false)>>
+  <<else>>
+    <<run $('#select-character-confirm button').prop('disabled', true)>>
+  <</if>>
+<</receive>>\
 <<receive 'CHARACTER_CONFIRM'>><<script>>console.log('RECEIVE CONTENTS ARE EXECUTED');<</script>><</receive>>\
-
-/*
-setup.Socket.registerHandler(setup.Socket.MessageTypes.CharacterSelect, function(data) {
-  if (data.clientId === State.variables.clientId) {
-    State.variables.playerCharacterName = data.character;
-    $('#select-character-player-selection').text('You have selected ' + data.character + '.')
-  } else {
-    State.variables.partnerCharacterName = data.character;
-    $('#select-character-partner-selection').text('Your partner has selected ' + data.character + '.')
-  }
-  // TODO: Synchronize the states
-  const playerCN = State.variables.playerCharacterName;
-  const partnerCN = State.variables.partnerCharacterName;
-  if (playerCN !== '' && partnerCN !== '' && playerCN != partnerCN) {
-    $('#select-character-confirm button').prop('disabled', false)
-  } else {
-    $('#select-character-confirm button').prop('disabled', true)
-  }
-})
-*/\
