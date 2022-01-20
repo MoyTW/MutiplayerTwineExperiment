@@ -65,6 +65,12 @@ setup.Socket.connect = function(sessionId, sendOnOpen) {
 }
 
 setup.Socket._send = function(sessionId, obj) {
+  if (typeof sessionId !== 'string') {
+    throw `Cannot send to session ${sessionId}`
+  }
+  if (typeof obj !== 'object') {
+    throw `Cannot send object ${obj} to session ${sessionId} as it's not an object!`
+  }
   if (setup.chatSocket && setup.chatSocket.readyState == 1) {
     setup.chatSocket.send(JSON.stringify(obj));
   } else {
@@ -99,25 +105,6 @@ setup.Socket.MessageTypes = {
   NextCluePointConfirmed: 'NEXT_CLUE_POINT_CONFIRMED',
   ViewTheAnswersConfirmed: 'VIEW_THE_ANSWERS_CONFIRMED',
 }
-
-// ==================== SelectCharacter ====================
-/*setup.Socket.registerHandler(setup.Socket.MessageTypes.CharacterSelect, function(data) {
-  if (data.clientId === State.variables.clientId) {
-    State.variables.playerCharacterName = data.character;
-    $('#select-character-player-selection').text('You have selected ' + data.character + '.')
-  } else {
-    State.variables.partnerCharacterName = data.character;
-    $('#select-character-partner-selection').text('Your partner has selected ' + data.character + '.')
-  }
-  // TODO: Synchronize the states
-  const playerCN = State.variables.playerCharacterName;
-  const partnerCN = State.variables.partnerCharacterName;
-  if (playerCN !== '' && partnerCN !== '' && playerCN != partnerCN) {
-    $('#select-character-confirm button').prop('disabled', false)
-  } else {
-    $('#select-character-confirm button').prop('disabled', true)
-  }
-})*/
 
 // -------------------- CharacterConfirm --------------------
 setup.sendCharacterConfirmed = function() {

@@ -135,7 +135,14 @@ If I'm not lurking on the call with you, please email your feedback to moytravis
 An important note - in the interest of putting up a MVP, I've stolen the scenario is wholesale from Sherlock Holmes, Consulting Detective, (specifically Case One).
 
 Now, would you like to:
-<<button [[Host a new game|HostGame]]>><</button>>
+<<button [[Host a new game|HostGame]]>>
+  /* You must do this BEFORE you cross the page transition or it will regenerate when you refresh the HostGame page! */
+  <<include [[InitializeGameVariables]]>>\
+  <<script>>State.variables.sessionId = setup.uuidv4();<</script>>
+  <<script>>
+    setup.Socket.connect(State.variables.sessionId);
+<</script>>\
+<</button>>
 <<button [[Join a game that somebody else has hosted|JoinGame]]>><</button>>
 <h3>In-Progress Games</h3>\
 <<for _i to 0; _i lt Save.slots.length; _i++>><<capture _i>>\
@@ -156,11 +163,6 @@ Now, would you like to:
 
 
 :: HostGame
-<<include [[InitializeGameVariables]]>>\
-<<script>>State.variables.sessionId = setup.uuidv4();<</script>>
-<<script>>
-  setup.Socket.connect(State.variables.sessionId);
-<</script>>\
 Your session identifier is:
 <strong>$sessionId</strong>
 Either copy and paste it to your partner or read it out loud to them. They will need to enter this code to join your game.
