@@ -137,9 +137,6 @@ An important note - in the interest of putting up a MVP, I've stolen the scenari
 Now, would you like to:
 <<button [[Host a new game|HostGame]]>><</button>>
 <<button [[Join a game that somebody else has hosted|JoinGame]]>><</button>>
-/* TODO: remove these */\
-<<receive 'CHARACTER_SELECT'>><<print 'abcd'>><</receive>>\
-<<receive>><<run 12>><</receive>>\
 <h3>In-Progress Games</h3>\
 <<for _i to 0; _i lt Save.slots.length; _i++>><<capture _i>>\
   <<if Save.slots.has(_i)>>\
@@ -235,4 +232,4 @@ setup.initializeCluePoints();
   <<script>>setup.sendCharacterConfirmed()<</script>>
 <</button>><</disable>>@@
 <<receive 'CHARACTER_SELECT'>><<print 'abcd'>><</receive>>\
-<<receive>><<run 12>><</receive>>\
+<<receive 'CHARACTER_CONFIRM'>><<run console.log('RECEIVE CONTENTS ARE EXECUTED');>><</receive>>\

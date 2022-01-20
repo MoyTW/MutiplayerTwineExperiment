@@ -251,24 +251,20 @@ setup.processPassages = function() {
     if (openerMatches.length == 0 && closerMatches.length == 0) {
       continue;
     }
-    if (openerMatches.length !== closerMatches.length) {
-      throw 'Opener recieve tags do not match closer receive tags! Check passage ' + passage.title;
-      continue;
-    }
+    // We don't actually need to check that they're closed or open - Twine does that for us!
 
-    const segmentStrs = [];
     var previousEndIdx = 0;
     for (let i = 0; i < openerMatches.length; i++) {
       const startIdx = openerMatches[i].index;
       const endIdx = closerMatches[i].index + 12; // length of <</receive>>
-      console.log(startIdx, endIdx);
+
       if (startIdx < previousEndIdx) {
         throw 'Overlapping receive tags in passage ' + passage.title + '!';
       }
       previousEndIdx = endIdx;
-      segmentStrs.push(passage.text.substring(startIdx, endIdx));
+
+      Wikifier.wikifyEval(passage.text.substring(startIdx, endIdx));
     }
-    console.log(segmentStrs);
   }
 }
 
@@ -308,7 +304,6 @@ Macro.add('send', {
 Macro.add('receive', {
   tags: null,
   handler: function() {
-    console.log(this.args);
-    console.log(this.payload);
+    console.log('In receive macro!', this.args, this.payload);
   }
 })
