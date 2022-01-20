@@ -40,7 +40,8 @@ setup.Socket.connect = function(sessionId, sendOnOpen) {
     setup.chatSocket.send(JSON.stringify({
       'type': 'CATCH_UP',
       'clientId': State.variables.clientId,
-      'catchupStartMs': State.variables.websocketProcessedUpToMs || 0
+      // We use current because we want every message since our last save
+      'catchupStartMs': State.current.variables.websocketProcessedUpToMs || 0
     }));
     for (const toSend of setup.Socket.sendBuffer) {
       console.log('Sending buffered message, type:', toSend['type']);
@@ -53,7 +54,7 @@ setup.Socket.connect = function(sessionId, sendOnOpen) {
     const data = JSON.parse(e.data);
     const handler = setup.Socket.handlers[data['type']];
 
-    console.log(data['type'], handler);
+    console.log('Processing message: ', data['type']);
 
     State.variables.websocketProcessedUpToMs = data['server_timestamp_ms'];
     handler(data);
@@ -78,11 +79,40 @@ setup.Socket._send = function(sessionId, obj) {
   }
 }
 
+// This is an insane hack to keep this variable out of the game state.
+setup.hasVisitedOnPassageReady = false;
+setup.manageSavesOnPassageReady = function() {
+  // Ensure or start the connection & catch up.
+  if (State.variables.shouldBeConnected === true) {
+    setup.Socket.connect(State.variables.sessionId);
+  }
+
+  // We always want to skip the first invocation, because that's right after game start.
+  if (!setup.hasVisitedOnPassageReady) {
+    // console.log('Skipping invocation due to game start!')
+    setup.hasVisitedOnPassageReady = true;
+    return;
+  }
+
+  // Any following invocation will only happen after a scene transfer.
+  // Note that autosave.save() and Save.serialize() DO NOT take the current state, they take the state on transition.
+  // Therefore, the fact that you may or may not have had state changes due to messages when this runs is irrelevant.
+  console.log('Autosaving for scene: ', State.passage, ' session: ', State.variables.sessionId);
+  Save.autosave.save();
+  if (State.variables.shouldBeConnected === true) {
+    setup.Socket._send(State.variables.sessionId, {
+      'type': 'AUTOSAVE',
+      'clientId': State.variables.clientId,
+      'serializedSave': Save.serialize()
+    });
+  }
+}
+
 setup.Socket.registerHandler('CATCH_UP', function(data) {
   const serializedSave = data['serialized_save']
   console.log('Attempting to catch up! Loading:', serializedSave !== undefined);
   if (serializedSave) {
-    Save.deserialize(serializedSave)
+    Save.deserialize(serializedSave);
   }
   for (const message of data['messages']) {
     // TODO: There's surely a more elegant way of dealing with this
@@ -93,6 +123,8 @@ setup.Socket.registerHandler('CATCH_UP', function(data) {
       handler(message);
     }
   }
+  State.variables.websocketProcessedUpToMs = data['server_timestamp_ms'];
+  console.log('Caught up to ' + State.variables.websocketProcessedUpToMs);
 })
 
 // ##################################################

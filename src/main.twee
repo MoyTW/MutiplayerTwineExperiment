@@ -55,16 +55,7 @@ if (clientId && setup.isUUID(clientId)) {
 
 :: PassageReady
 <<script>>
-console.log('Autosaving for scene: ', State.passage, ' session: ', State.variables.sessionId, State.variables);
-Save.autosave.save();
-// This goes in PassageReady because it can't go in StoryInit - we can't check the state in StoryInit, because it's called before the game is restored!
-if (State.variables.shouldBeConnected === true) {
-  setup.Socket.connect(State.variables.sessionId, {
-    'type': 'AUTOSAVE',
-    'clientId': State.variables.clientId,
-    'serializedSave': Save.serialize()
-  });
-}
+setup.manageSavesOnPassageReady();
 <</script>>
 
 
