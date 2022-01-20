@@ -101,7 +101,7 @@ setup.Socket.MessageTypes = {
 }
 
 // ==================== SelectCharacter ====================
-setup.Socket.registerHandler(setup.Socket.MessageTypes.CharacterSelect, function(data) {
+/*setup.Socket.registerHandler(setup.Socket.MessageTypes.CharacterSelect, function(data) {
   if (data.clientId === State.variables.clientId) {
     State.variables.playerCharacterName = data.character;
     $('#select-character-player-selection').text('You have selected ' + data.character + '.')
@@ -117,7 +117,7 @@ setup.Socket.registerHandler(setup.Socket.MessageTypes.CharacterSelect, function
   } else {
     $('#select-character-confirm button').prop('disabled', true)
   }
-})
+})*/
 
 // -------------------- CharacterConfirm --------------------
 setup.sendCharacterConfirmed = function() {
@@ -304,6 +304,27 @@ Macro.add('send', {
 Macro.add('receive', {
   tags: null,
   handler: function() {
-    console.log('In receive macro!', this.args, this.payload);
+    if (typeof this.args[0] !== 'string') {
+      return this.error(`${this.args[0]} is not a string, and is therefore ineligible for a receive target!`);
+    }
+    if (setup.Socket.handlers[this.args[0]]) {
+      return;
+    }
+
+    console.log('Processing receive macro!', this.args, this.payload);
+
+    const macroPayload = this.payload;
+    setup.Socket.registerHandler(this.args[0], function(data) {
+      if (State.temporary.receiveData !== undefined) {
+        console.error('_receiveData is set when it should not be! Overwriting!')
+      }
+      State.temporary.receiveData = data;
+
+      if (macroPayload[0].contents !== '') {
+        Wikifier.wikifyEval(macroPayload[0].contents.trim());
+      }
+
+      State.temporary.receiveData = undefined;
+    })
   }
 })

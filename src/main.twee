@@ -231,5 +231,25 @@ setup.initializeCluePoints();
 @@#select-character-confirm;<<disable>><<button 'Confirm selection.'>>
   <<script>>setup.sendCharacterConfirmed()<</script>>
 <</button>><</disable>>@@
-<<receive 'CHARACTER_SELECT'>><<print 'abcd'>><</receive>>\
-<<receive 'CHARACTER_CONFIRM'>><<run console.log('RECEIVE CONTENTS ARE EXECUTED');>><</receive>>\
+<<receive 'CHARACTER_SELECT'>><<script>>console.log('RECEIVE CHAR SELECT CONTENTS ARE EXECUTED');<</script>><</receive>>\
+<<receive 'CHARACTER_CONFIRM'>><<script>>console.log('RECEIVE CONTENTS ARE EXECUTED');<</script>><</receive>>\
+
+/*
+setup.Socket.registerHandler(setup.Socket.MessageTypes.CharacterSelect, function(data) {
+  if (data.clientId === State.variables.clientId) {
+    State.variables.playerCharacterName = data.character;
+    $('#select-character-player-selection').text('You have selected ' + data.character + '.')
+  } else {
+    State.variables.partnerCharacterName = data.character;
+    $('#select-character-partner-selection').text('Your partner has selected ' + data.character + '.')
+  }
+  // TODO: Synchronize the states
+  const playerCN = State.variables.playerCharacterName;
+  const partnerCN = State.variables.partnerCharacterName;
+  if (playerCN !== '' && partnerCN !== '' && playerCN != partnerCN) {
+    $('#select-character-confirm button').prop('disabled', false)
+  } else {
+    $('#select-character-confirm button').prop('disabled', true)
+  }
+})
+*/\
