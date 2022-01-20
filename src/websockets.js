@@ -301,9 +301,17 @@ Macro.add('send', {
   }
 })
 
+/**
+ * <<receive messageType>>contents<</receive>> executes contents when a message of type messageType is received.
+ *
+ * However, it is not assured that the macro is called on the same page as it is defined. Therefore, any contents which
+ * rely on the objects of the page (say <<replace>>) will throw an error when called off-page. Avoid any such macros
+ * and instead use caught javascript.
+ */
 Macro.add('receive', {
   tags: null,
   handler: function() {
+    // TODO: Check if passage is StoryInit?
     if (typeof this.args[0] !== 'string') {
       return this.error(`${this.args[0]} is not a string, and is therefore ineligible for a receive target!`);
     }

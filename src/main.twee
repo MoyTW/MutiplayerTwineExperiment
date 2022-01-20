@@ -235,6 +235,7 @@ setup.initializeCluePoints();
 <<receive 'CHARACTER_SELECT'>>
   <<if _receiveData.clientId is $clientId>>
     <<set $playerCharacterName to _receiveData.character>>
+    /* TURNS OUT THIS THROWS AN ERROR! Because it can be called off-page, it can't find it. */
     <<replace '#select-character-player-selection'>>You have selected _receiveData.character.<</replace>>
   <<else>>
     <<set $partnerCharacterName to _receiveData.character>>
