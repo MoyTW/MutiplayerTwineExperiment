@@ -8,3 +8,6 @@ sugarcube-2:
     send:
       name: send
       container: true
+    receive:
+      name: receive
+      container: true

@@ -70,6 +70,8 @@ if (State.variables.shouldBeConnected === true) {
 
 :: StoryInit
 <<script>>
+setup.processPassages();
+
 /* Connect the UI bar */
 const rightUiBar = $('<div id="right-ui-bar"></div>').insertAfter("#ui-bar");
 rightUiBar.append('<div id="right-ui-bar-tray"><button id="right-ui-bar-toggle" tabindex="0" title="Toggle the Right UI bar" aria-label="Toggle the Right UI bar" type="button"></button></div>');
@@ -135,7 +137,9 @@ An important note - in the interest of putting up a MVP, I've stolen the scenari
 Now, would you like to:
 <<button [[Host a new game|HostGame]]>><</button>>
 <<button [[Join a game that somebody else has hosted|JoinGame]]>><</button>>
-/* TODO: continue a game (functionally equivalent to join) */\
+/* TODO: remove these */\
+<<receive 'CHARACTER_SELECT'>><<print 'abcd'>><</receive>>\
+<<receive>><<run 12>><</receive>>\
 <h3>In-Progress Games</h3>\
 <<for _i to 0; _i lt Save.slots.length; _i++>><<capture _i>>\
   <<if Save.slots.has(_i)>>\
@@ -230,3 +234,5 @@ setup.initializeCluePoints();
 @@#select-character-confirm;<<disable>><<button 'Confirm selection.'>>
   <<script>>setup.sendCharacterConfirmed()<</script>>
 <</button>><</disable>>@@
+<<receive 'CHARACTER_SELECT'>><<print 'abcd'>><</receive>>\
+<<receive>><<run 12>><</receive>>\

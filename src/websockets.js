@@ -240,6 +240,38 @@ setup.Socket.registerHandler(setup.Socket.MessageTypes.ViewTheAnswersConfirmed, 
   }
 })
 
+setup.processPassages = function() {
+  const opener = /<<receive/g;
+  const closer = /<<\/receive>>/g;
+  const allPassages = Story.lookup();
+
+  for (let passage of allPassages) {
+    const openerMatches = [...passage.text.matchAll(opener)];
+    const closerMatches = [...passage.text.matchAll(closer)];
+    if (openerMatches.length == 0 && closerMatches.length == 0) {
+      continue;
+    }
+    if (openerMatches.length !== closerMatches.length) {
+      throw 'Opener recieve tags do not match closer receive tags! Check passage ' + passage.title;
+      continue;
+    }
+
+    const segmentStrs = [];
+    var previousEndIdx = 0;
+    for (let i = 0; i < openerMatches.length; i++) {
+      const startIdx = openerMatches[i].index;
+      const endIdx = closerMatches[i].index + 12; // length of <</receive>>
+      console.log(startIdx, endIdx);
+      if (startIdx < previousEndIdx) {
+        throw 'Overlapping receive tags in passage ' + passage.title + '!';
+      }
+      previousEndIdx = endIdx;
+      segmentStrs.push(passage.text.substring(startIdx, endIdx));
+    }
+    console.log(segmentStrs);
+  }
+}
+
 Macro.add('send', {
   skipArgs: false,
   tags: null,
@@ -270,5 +302,13 @@ Macro.add('send', {
     if (this.payload[0].contents !== '') {
       this.createShadowWrapper(() => Wikifier.wikifyEval(this.payload[0].contents.trim()))();
     }
+  }
+})
+
+Macro.add('receive', {
+  tags: null,
+  handler: function() {
+    console.log(this.args);
+    console.log(this.payload);
   }
 })
