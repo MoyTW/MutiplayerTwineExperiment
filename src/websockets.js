@@ -137,15 +137,6 @@ setup.Socket.MessageTypes = {
 }
 
 // ==================== Ch2_SelectNextCluePoint ====================
-// -------------------- NextCluePointSelected --------------------
-setup.sendNextCluePointSelected = function(selectedKey) {
-  setup.Socket._send(State.variables.sessionId, {
-    'type': setup.Socket.MessageTypes.NextCluePointSelected,
-    'clientId': State.variables.clientId,
-    'cluePointKey': selectedKey
-  });
-}
-
 setup.Socket.registerHandler(setup.Socket.MessageTypes.NextCluePointSelected, function(data) {
   if (data.clientId === State.variables.clientId) {
     State.variables.nextCluePointPlayerSelection = data.cluePointKey;

@@ -21,10 +21,7 @@ State.setVar('_cluePointsInOrder', setup.CluePointsInOrder);
   <<set _pointObj to $cluePoints.get(_cluePointsInOrder[_i])>>\
   <<if _pointObj.known and not _pointObj.visited>>\
     <<button _pointObj.name>>
-      <<script>>
-      const selectedKey = setup.CluePointsInOrder[State.getVar('_i')];
-      setup.sendNextCluePointSelected(selectedKey);
-      <</script>>
+      <<send 'NEXT_CLUE_POINT_SELECTED' { cluePointKey: setup.CluePointsInOrder[State.getVar('_i')] }>><</send>>
     <</button>>
   <</if>>\
 <</capture>><</for>>@@\
