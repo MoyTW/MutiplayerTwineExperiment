@@ -114,6 +114,34 @@ setup.sendCharacterSelected = function(character) {
   });
 }
 
+Macro.add('send', {
+  skipArgs: false,
+  handler: function() {
+    if (!State.variables.sessionId) {
+      return this.error(`Cannot send; no sessionId set!`);
+    }
+
+    const rest = this.args.full.replace(this.args[0], '').slice(3).trim();
+
+    try {
+      Scripting.evalJavaScript('State.temporary.websocketTemp = ' + rest);
+    } catch (err) {
+      return this.error(`bad evaluation: ${typeof ex === 'object' ? err.message : err}`);
+    }
+    const result = State.temporary.websocketTemp;
+    if (typeof result !== 'object') {
+      return this.error(`evaluation of object passed to send was ${result}, not an object!`);
+    }
+    if (result['type'] !== undefined || result['clientId'] !== undefined) {
+      return this.error(`type and clientId are reserved properties on a message object!`);
+    }
+
+    const msgObj = {type: this.args[0], clientId: State.variables.clientId};
+    Object.assign(msgObj, result);
+    setup.Socket._send(State.variables.sessionId, msgObj);
+  }
+})
+
 setup.Socket.registerHandler(setup.Socket.MessageTypes.CharacterSelect, function(data) {
   if (data.clientId === State.variables.clientId) {
     State.variables.playerCharacterName = data.character;
