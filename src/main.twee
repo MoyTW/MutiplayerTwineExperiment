@@ -210,10 +210,10 @@ setup.initializeCluePoints();
 <</script>>\
 <h1>Select your character:</h1>\
 @@#select-character-character-buttons;<<button 'Mark Antony, Vice President of Neo America.'>>
-  <<send 'CHARACTER_SELECT' {character: 'Antony'}>>
+  <<send 'CHARACTER_SELECT' {character: 'Antony'}>><</send>>
 <</button>>
 <<button 'Cleopatra VII Philopator, Queen of Egypt.'>>
-  <<script>>setup.sendCharacterSelected('Cleopatra');<</script>>
+  <<send 'CHARACTER_SELECT' {character: 'Cleopatra'}>><</send>>
 <</button>>@@
 
 @@#select-character-player-selection;<<if $playerCharacterName is ''>>\

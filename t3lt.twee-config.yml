@@ -7,3 +7,4 @@ sugarcube-2:
       name: IfAntony
     send:
       name: send
+      container: true

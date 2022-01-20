@@ -101,47 +101,6 @@ setup.Socket.MessageTypes = {
 }
 
 // ==================== SelectCharacter ====================
-// -------------------- CharacterSelect --------------------
-setup.sendCharacterSelected = function(character) {
-  if (character !== 'Antony' && character !== 'Cleopatra') {
-    console.error(character + ' is not an allowed character!');
-    return;
-  }
-  setup.Socket._send(State.variables.sessionId, {
-    'type': setup.Socket.MessageTypes.CharacterSelect,
-    'clientId': State.variables.clientId,
-    'character': character
-  });
-}
-
-Macro.add('send', {
-  skipArgs: false,
-  handler: function() {
-    if (!State.variables.sessionId) {
-      return this.error(`Cannot send; no sessionId set!`);
-    }
-
-    const rest = this.args.full.replace(this.args[0], '').slice(3).trim();
-
-    try {
-      Scripting.evalJavaScript('State.temporary.websocketTemp = ' + rest);
-    } catch (err) {
-      return this.error(`bad evaluation: ${typeof ex === 'object' ? err.message : err}`);
-    }
-    const result = State.temporary.websocketTemp;
-    if (typeof result !== 'object') {
-      return this.error(`evaluation of object passed to send was ${result}, not an object!`);
-    }
-    if (result['type'] !== undefined || result['clientId'] !== undefined) {
-      return this.error(`type and clientId are reserved properties on a message object!`);
-    }
-
-    const msgObj = {type: this.args[0], clientId: State.variables.clientId};
-    Object.assign(msgObj, result);
-    setup.Socket._send(State.variables.sessionId, msgObj);
-  }
-})
-
 setup.Socket.registerHandler(setup.Socket.MessageTypes.CharacterSelect, function(data) {
   if (data.clientId === State.variables.clientId) {
     State.variables.playerCharacterName = data.character;
@@ -278,5 +237,38 @@ setup.Socket.registerHandler(setup.Socket.MessageTypes.ViewTheAnswersConfirmed, 
   if (State.variables.viewTheAnswersPlayerConfirmed && State.variables.viewTheAnswersPartnerConfirmed) {
     State.variables.websocketTimestampMs = Date.now();
     Engine.play('Ch3_Answers');
+  }
+})
+
+Macro.add('send', {
+  skipArgs: false,
+  tags: null,
+  handler: function() {
+    if (!State.variables.sessionId) {
+      return this.error(`Cannot send; no sessionId set!`);
+    }
+
+    const rest = this.args.full.replace(this.args[0], '').slice(3).trim();
+
+    try {
+      Scripting.evalJavaScript('State.temporary.websocketTemp = ' + rest);
+    } catch (err) {
+      return this.error(`bad evaluation: ${typeof ex === 'object' ? err.message : err}`);
+    }
+    const result = State.temporary.websocketTemp;
+    if (typeof result !== 'object') {
+      return this.error(`evaluation of object passed to send was ${result}, not an object!`);
+    }
+    if (result['type'] !== undefined || result['clientId'] !== undefined) {
+      return this.error(`type and clientId are reserved properties on a message object!`);
+    }
+
+    const msgObj = {type: this.args[0], clientId: State.variables.clientId};
+    Object.assign(msgObj, result);
+    setup.Socket._send(State.variables.sessionId, msgObj);
+
+    if (this.payload[0].contents !== '') {
+      this.createShadowWrapper(() => Wikifier.wikifyEval(this.payload[0].contents.trim()))();
+    }
   }
 })
