@@ -41,6 +41,8 @@ setup.Socket.connect = function(sessionId, sendOnOpen) {
       'type': 'CATCH_UP',
       'clientId': State.variables.clientId,
       // We use current because we want every message since our last save
+      // TODO: If you join an in-progress game through join instead of using the load button, this will be 0 and you'll
+      // get the entire list, changing the state in unexpected ways!
       'catchupStartMs': State.current.variables.websocketProcessedUpToMs || 0
     }));
     for (const toSend of setup.Socket.sendBuffer) {
