@@ -131,37 +131,10 @@ setup.Socket.registerHandler('CATCH_UP', function(data) {
 // #################### HANDLERS ####################
 // ##################################################
 setup.Socket.MessageTypes = {
-  CharacterSelect: 'CHARACTER_SELECT',
-  CharacterConfirm: 'CHARACTER_CONFIRM',
   NextCluePointSelected: 'NEXT_CLUE_POINT_SELECTED',
   NextCluePointConfirmed: 'NEXT_CLUE_POINT_CONFIRMED',
   ViewTheAnswersConfirmed: 'VIEW_THE_ANSWERS_CONFIRMED',
 }
-
-// -------------------- CharacterConfirm --------------------
-setup.sendCharacterConfirmed = function() {
-  setup.Socket._send(State.variables.sessionId, {
-    'type': setup.Socket.MessageTypes.CharacterConfirm,
-    'clientId': State.variables.clientId
-  });
-}
-
-// TODO: Cross-check selections & kick back if different
-setup.Socket.registerHandler(setup.Socket.MessageTypes.CharacterConfirm, function(data) {
-  if (data.clientId === State.variables.clientId) {
-    State.variables.selectCharacterPlayerConfirmed = true
-    const button = $('#select-character-confirm button');
-    button.html('Waiting for partner to confirm...');
-    button.prop('disabled', true);
-    $('#select-character-character-buttons button').prop('disabled', true)
-  } else {
-    State.variables.selectCharacterPartnerConfirmed = true
-  }
-  if (State.variables.selectCharacterPlayerConfirmed && State.variables.selectCharacterPartnerConfirmed) {
-    State.variables.websocketTimestampMs = Date.now();
-    Engine.play('Ch1_CaseIntro1');
-  }
-})
 
 // ==================== Ch2_SelectNextCluePoint ====================
 // -------------------- NextCluePointSelected --------------------
@@ -231,7 +204,6 @@ setup.Socket.registerHandler(setup.Socket.MessageTypes.NextCluePointConfirmed, f
     State.variables.nextCluePointPlayerConfirmed = false;
     State.variables.nextCluePointPartnerConfirmed = false;
     
-    State.variables.websocketTimestampMs = Date.now();
     Engine.play('Ch2_DisplayCluePoint');
   }
 })
@@ -254,7 +226,6 @@ setup.Socket.registerHandler(setup.Socket.MessageTypes.ViewTheAnswersConfirmed, 
     State.variables.viewTheAnswersPartnerConfirmed = true;
   }
   if (State.variables.viewTheAnswersPlayerConfirmed && State.variables.viewTheAnswersPartnerConfirmed) {
-    State.variables.websocketTimestampMs = Date.now();
     Engine.play('Ch3_Answers');
   }
 })

@@ -222,22 +222,38 @@ setup.initializeCluePoints();
 <</if>>@@
 
 @@#select-character-confirm;<<disable>><<button 'Confirm selection.'>>
-  <<script>>setup.sendCharacterConfirmed()<</script>>
+  <<send 'CHARACTER_CONFIRM' {}>><</send>>
 <</button>><</disable>>@@
-/* I honestly find this waaaay harder to read than javascript, but I'm putting it in here as an example. */
-<<receive 'CHARACTER_SELECT'>>
-  <<if _receiveData.clientId is $clientId>>
-    <<set $playerCharacterName to _receiveData.character>>
-    <<run $('#select-character-player-selection').text('You have selected ' + State.temporary.receiveData.character + '.')>>
-  <<else>>
-    <<set $partnerCharacterName to _receiveData.character>>
-    <<run $('#select-character-partner-selection').text('Your partner has selected ' + State.temporary.receiveData.character + '.')>>
-  <</if>>
-  /* TODO: Synchronize the states */
-  <<if ($playerCharacterName is not '' and $partnerCharacterName is not '' and $playerCharacterName is not $partnerCharacterName)>>
-    <<run $('#select-character-confirm button').prop('disabled', false)>>
-  <<else>>
-    <<run $('#select-character-confirm button').prop('disabled', true)>>
-  <</if>>
-<</receive>>\
-<<receive 'CHARACTER_CONFIRM'>><<script>>console.log('RECEIVE CONTENTS ARE EXECUTED');<</script>><</receive>>\
+<<nobr>>
+  /* I honestly find this waaaay harder to read than javascript, but I'm putting it in here as an example. */
+  <<receive 'CHARACTER_SELECT'>>
+    <<if _receiveData.clientId is $clientId>>
+      <<set $playerCharacterName to _receiveData.character>>
+      <<run $('#select-character-player-selection').text('You have selected ' + State.temporary.receiveData.character + '.')>>
+    <<else>>
+      <<set $partnerCharacterName to _receiveData.character>>
+      <<run $('#select-character-partner-selection').text('Your partner has selected ' + State.temporary.receiveData.character + '.')>>
+    <</if>>
+    /* TODO: Synchronize the states */
+    <<if ($playerCharacterName is not '' and $partnerCharacterName is not '' and $playerCharacterName is not $partnerCharacterName)>>
+      <<run $('#select-character-confirm button').prop('disabled', false)>>
+    <<else>>
+      <<run $('#select-character-confirm button').prop('disabled', true)>>
+    <</if>>
+  <</receive>>
+  <<receive 'CHARACTER_CONFIRM'>><<script>>
+    const data = State.temporary.receiveData;
+    if (data.clientId === State.variables.clientId) {
+      State.variables.selectCharacterPlayerConfirmed = true;
+      const button = $('#select-character-confirm button');
+      button.html('Waiting for partner to confirm...');
+      button.prop('disabled', true);
+      $('#select-character-character-buttons button').prop('disabled', true);
+    } else {
+      State.variables.selectCharacterPartnerConfirmed = true;
+    }
+    if (State.variables.selectCharacterPlayerConfirmed && State.variables.selectCharacterPartnerConfirmed) {
+      Engine.play('Ch1_CaseIntro1');
+    }
+  <</script>><</receive>>
+<</nobr>>
