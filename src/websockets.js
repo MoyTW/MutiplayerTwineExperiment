@@ -40,7 +40,10 @@ setup.Socket.connect = function(sessionId, sendOnOpen) {
     setup.chatSocket.send(JSON.stringify({
       'type': 'CATCH_UP',
       'clientId': State.variables.clientId,
-      'catchupStartMs': State.variables.websocketProcessedUpToMs || 0
+      // We use current because we want every message since our last save
+      // TODO: If you join an in-progress game through join instead of using the load button, this will be 0 and you'll
+      // get the entire list, changing the state in unexpected ways!
+      'catchupStartMs': State.current.variables.websocketProcessedUpToMs || 0
     }));
     for (const toSend of setup.Socket.sendBuffer) {
       console.log('Sending buffered message, type:', toSend['type']);
@@ -53,7 +56,7 @@ setup.Socket.connect = function(sessionId, sendOnOpen) {
     const data = JSON.parse(e.data);
     const handler = setup.Socket.handlers[data['type']];
 
-    console.log(data['type'], handler);
+    console.log('Processing message: ', data['type']);
 
     State.variables.websocketProcessedUpToMs = data['server_timestamp_ms'];
     handler(data);
@@ -65,6 +68,12 @@ setup.Socket.connect = function(sessionId, sendOnOpen) {
 }
 
 setup.Socket._send = function(sessionId, obj) {
+  if (typeof sessionId !== 'string') {
+    throw `Cannot send to session ${sessionId}`
+  }
+  if (typeof obj !== 'object') {
+    throw `Cannot send object ${obj} to session ${sessionId} as it's not an object!`
+  }
   if (setup.chatSocket && setup.chatSocket.readyState == 1) {
     setup.chatSocket.send(JSON.stringify(obj));
   } else {
@@ -72,11 +81,40 @@ setup.Socket._send = function(sessionId, obj) {
   }
 }
 
+// This is an insane hack to keep this variable out of the game state.
+setup.hasVisitedOnPassageReady = false;
+setup.manageSavesOnPassageReady = function() {
+  // Ensure or start the connection & catch up.
+  if (State.variables.shouldBeConnected === true) {
+    setup.Socket.connect(State.variables.sessionId);
+  }
+
+  // We always want to skip the first invocation, because that's right after game start.
+  if (!setup.hasVisitedOnPassageReady) {
+    // console.log('Skipping invocation due to game start!')
+    setup.hasVisitedOnPassageReady = true;
+    return;
+  }
+
+  // Any following invocation will only happen after a scene transfer.
+  // Note that autosave.save() and Save.serialize() DO NOT take the current state, they take the state on transition.
+  // Therefore, the fact that you may or may not have had state changes due to messages when this runs is irrelevant.
+  console.log('Autosaving for scene: ', State.passage, ' session: ', State.variables.sessionId);
+  Save.autosave.save();
+  if (State.variables.shouldBeConnected === true) {
+    setup.Socket._send(State.variables.sessionId, {
+      'type': 'AUTOSAVE',
+      'clientId': State.variables.clientId,
+      'serializedSave': Save.serialize()
+    });
+  }
+}
+
 setup.Socket.registerHandler('CATCH_UP', function(data) {
   const serializedSave = data['serialized_save']
   console.log('Attempting to catch up! Loading:', serializedSave !== undefined);
   if (serializedSave) {
-    Save.deserialize(serializedSave)
+    Save.deserialize(serializedSave);
   }
   for (const message of data['messages']) {
     // TODO: There's surely a more elegant way of dealing with this
@@ -87,168 +125,103 @@ setup.Socket.registerHandler('CATCH_UP', function(data) {
       handler(message);
     }
   }
+  State.variables.websocketProcessedUpToMs = data['server_timestamp_ms'];
+  console.log('Caught up to ' + State.variables.websocketProcessedUpToMs);
 })
 
-// ##################################################
-// #################### HANDLERS ####################
-// ##################################################
-setup.Socket.MessageTypes = {
-  CharacterSelect: 'CHARACTER_SELECT',
-  CharacterConfirm: 'CHARACTER_CONFIRM',
-  NextCluePointSelected: 'NEXT_CLUE_POINT_SELECTED',
-  NextCluePointConfirmed: 'NEXT_CLUE_POINT_CONFIRMED',
-  ViewTheAnswersConfirmed: 'VIEW_THE_ANSWERS_CONFIRMED',
-}
+setup.processPassages = function() {
+  const opener = /<<receive/g;
+  const closer = /<<\/receive>>/g;
+  const allPassages = Story.lookup();
 
-// ==================== SelectCharacter ====================
-// -------------------- CharacterSelect --------------------
-setup.sendCharacterSelected = function(character) {
-  if (character !== 'Antony' && character !== 'Cleopatra') {
-    console.error(character + ' is not an allowed character!');
-    return;
-  }
-  setup.Socket._send(State.variables.sessionId, {
-    'type': setup.Socket.MessageTypes.CharacterSelect,
-    'clientId': State.variables.clientId,
-    'character': character
-  });
-}
-
-setup.Socket.registerHandler(setup.Socket.MessageTypes.CharacterSelect, function(data) {
-  if (data.clientId === State.variables.clientId) {
-    State.variables.playerCharacterName = data.character;
-    $('#select-character-player-selection').text('You have selected ' + data.character + '.')
-  } else {
-    State.variables.partnerCharacterName = data.character;
-    $('#select-character-partner-selection').text('Your partner has selected ' + data.character + '.')
-  }
-  // TODO: Synchronize the states
-  const playerCN = State.variables.playerCharacterName;
-  const partnerCN = State.variables.partnerCharacterName;
-  if (playerCN !== '' && partnerCN !== '' && playerCN != partnerCN) {
-    $('#select-character-confirm button').prop('disabled', false)
-  } else {
-    $('#select-character-confirm button').prop('disabled', true)
-  }
-})
-
-// -------------------- CharacterConfirm --------------------
-setup.sendCharacterConfirmed = function() {
-  setup.Socket._send(State.variables.sessionId, {
-    'type': setup.Socket.MessageTypes.CharacterConfirm,
-    'clientId': State.variables.clientId
-  });
-}
-
-// TODO: Cross-check selections & kick back if different
-setup.Socket.registerHandler(setup.Socket.MessageTypes.CharacterConfirm, function(data) {
-  if (data.clientId === State.variables.clientId) {
-    State.variables.selectCharacterPlayerConfirmed = true
-    const button = $('#select-character-confirm button');
-    button.html('Waiting for partner to confirm...');
-    button.prop('disabled', true);
-    $('#select-character-character-buttons button').prop('disabled', true)
-  } else {
-    State.variables.selectCharacterPartnerConfirmed = true
-  }
-  if (State.variables.selectCharacterPlayerConfirmed && State.variables.selectCharacterPartnerConfirmed) {
-    State.variables.websocketTimestampMs = Date.now();
-    Engine.play('Ch1_CaseIntro1');
-  }
-})
-
-// ==================== Ch2_SelectNextCluePoint ====================
-// -------------------- NextCluePointSelected --------------------
-setup.sendNextCluePointSelected = function(selectedKey) {
-  setup.Socket._send(State.variables.sessionId, {
-    'type': setup.Socket.MessageTypes.NextCluePointSelected,
-    'clientId': State.variables.clientId,
-    'cluePointKey': selectedKey
-  });
-}
-
-setup.Socket.registerHandler(setup.Socket.MessageTypes.NextCluePointSelected, function(data) {
-  if (data.clientId === State.variables.clientId) {
-    State.variables.nextCluePointPlayerSelection = data.cluePointKey;
-    const selectionSpan = $('#next-clue-point-player-selection');
-    if (selectionSpan) {
-      selectionSpan.text('You have selected ' + State.getVar('$cluePoints').get(data.cluePointKey).name + '.')
+  for (let passage of allPassages) {
+    const openerMatches = [...passage.text.matchAll(opener)];
+    const closerMatches = [...passage.text.matchAll(closer)];
+    if (openerMatches.length == 0 && closerMatches.length == 0) {
+      continue;
     }
-  } else {
-    State.variables.nextCluePointPartnerSelection = data.cluePointKey;
-    const selectionSpan = $('#next-clue-point-partner-selection')
-    if (selectionSpan) {
-      selectionSpan.text('Your partner has selected ' + State.getVar('$cluePoints').get(data.cluePointKey).name + '.')
+    // We don't actually need to check that they're closed or open - Twine does that for us!
+
+    var previousEndIdx = 0;
+    for (let i = 0; i < openerMatches.length; i++) {
+      const startIdx = openerMatches[i].index;
+      const endIdx = closerMatches[i].index + 12; // length of <</receive>>
+
+      if (startIdx < previousEndIdx) {
+        throw 'Overlapping receive tags in passage ' + passage.title + '!';
+      }
+      previousEndIdx = endIdx;
+
+      Wikifier.wikifyEval(passage.text.substring(startIdx, endIdx));
     }
   }
-  // TODO: Synchronize the states
-  const playerSelection = State.variables.nextCluePointPlayerSelection;
-  const partnerSelection = State.variables.nextCluePointPartnerSelection;
-  if (playerSelection !== '' && partnerSelection !== '' && playerSelection != partnerSelection) {
-    if (!State.variables.nextCluePointPlayerConfirmed) {
-      $('#next-clue-point-confirm button').prop('disabled', false);
-    }
-  } else {
-    $('#next-clue-point-confirm button').prop('disabled', true);
-  }
-});
-
-// -------------------- NextCluePointConfirmed --------------------
-setup.sendNextCluePointConfirmed = function() {
-  setup.Socket._send(State.variables.sessionId, {
-    'type': setup.Socket.MessageTypes.NextCluePointConfirmed,
-    'clientId': State.variables.clientId
-  });
 }
 
-// Holds all the logic for progressing time & recording visits - I can already tell distributing logic like this is
-// going to prove annoying. Hmm.
-setup.Socket.registerHandler(setup.Socket.MessageTypes.NextCluePointConfirmed, function(data) {
-  if (data.clientId === State.variables.clientId) {
-    State.variables.nextCluePointPlayerConfirmed = true;
-    const button = $('#next-clue-point-confirm button');
-    button.html('Waiting for partner to confirm...');
-    button.prop('disabled', true);
-    $('#next-clue-point-clue-point-buttons button').prop('disabled', true);
-  } else {
-    State.variables.nextCluePointPartnerConfirmed = true;
-  }
-  if (State.variables.nextCluePointPlayerConfirmed && State.variables.nextCluePointPartnerConfirmed) {
-    State.variables.turnsRemaining -= 1;
-    setup.markCluePointVisited(State.variables.nextCluePointPlayerSelection, State.variables.playerCharacterName);
-    setup.markCluePointVisited(State.variables.nextCluePointPartnerSelection, State.variables.partnerCharacterName)
-    State.variables.cluePointPassage = setup.getCluePointPassage(State.variables.nextCluePointPlayerSelection);
+Macro.add('send', {
+  skipArgs: false,
+  tags: null,
+  handler: function() {
+    if (!State.variables.sessionId) {
+      return this.error(`Cannot send; no sessionId set!`);
+    }
 
-    // Wipe here, so that we can maintain if one player goes faster than the next
-    State.variables.nextCluePointPlayerSelection = '';
-    State.variables.nextCluePointPartnerSelection = '';
-    State.variables.nextCluePointPlayerConfirmed = false;
-    State.variables.nextCluePointPartnerConfirmed = false;
-    
-    State.variables.websocketTimestampMs = Date.now();
-    Engine.play('Ch2_DisplayCluePoint');
+    const rest = this.args.full.replace(this.args[0], '').slice(3).trim();
+
+    try {
+      Scripting.evalJavaScript('State.temporary.websocketTemp = ' + rest);
+    } catch (err) {
+      return this.error(`bad evaluation: ${typeof ex === 'object' ? err.message : err}`);
+    }
+    const result = State.temporary.websocketTemp;
+    if (typeof result !== 'object') {
+      return this.error(`evaluation of object passed to send was ${result}, not an object!`);
+    }
+    if (result['type'] !== undefined || result['clientId'] !== undefined) {
+      return this.error(`type and clientId are reserved properties on a message object!`);
+    }
+
+    const msgObj = {type: this.args[0], clientId: State.variables.clientId};
+    Object.assign(msgObj, result);
+    setup.Socket._send(State.variables.sessionId, msgObj);
+
+    if (this.payload[0].contents !== '') {
+      this.createShadowWrapper(() => Wikifier.wikifyEval(this.payload[0].contents.trim()))();
+    }
   }
 })
 
-// ==================== Ch3_Quiz ====================
-setup.sendViewTheAnswersConfirmed = function() {
-  setup.Socket._send(State.variables.sessionId, {
-    'type': setup.Socket.MessageTypes.ViewTheAnswersConfirmed,
-    'clientId': State.variables.clientId
-  });
-  const button = $('#view-the-answers-confirm button');
-  button.html('Waiting for partner to confirm...');
-  button.prop('disabled', true);
-}
+/**
+ * <<receive messageType>>contents<</receive>> executes contents when a message of type messageType is received.
+ *
+ * However, it is not assured that the macro is called on the same page as it is defined. Therefore, any contents which
+ * rely on the objects of the page (say <<replace>>) will throw an error when called off-page. Avoid any such macros
+ * and instead use caught javascript.
+ */
+Macro.add('receive', {
+  tags: null,
+  handler: function() {
+    // TODO: Check if passage is StoryInit?
+    if (typeof this.args[0] !== 'string') {
+      return this.error(`${this.args[0]} is not a string, and is therefore ineligible for a receive target!`);
+    }
+    if (setup.Socket.handlers[this.args[0]]) {
+      return;
+    }
 
-setup.Socket.registerHandler(setup.Socket.MessageTypes.ViewTheAnswersConfirmed, function(data) {
-  if (data.clientId === State.variables.clientId) {
-    State.variables.viewTheAnswersPlayerConfirmed = true;
-  } else {
-    State.variables.viewTheAnswersPartnerConfirmed = true;
-  }
-  if (State.variables.viewTheAnswersPlayerConfirmed && State.variables.viewTheAnswersPartnerConfirmed) {
-    State.variables.websocketTimestampMs = Date.now();
-    Engine.play('Ch3_Answers');
+    console.log('Processing receive macro!', this.args, this.payload);
+
+    const macroPayload = this.payload;
+    setup.Socket.registerHandler(this.args[0], function(data) {
+      if (State.temporary.receiveData !== undefined) {
+        console.error('_receiveData is set when it should not be! Overwriting!')
+      }
+      State.temporary.receiveData = data;
+
+      if (macroPayload[0].contents !== '') {
+        Wikifier.wikifyEval(macroPayload[0].contents.trim());
+      }
+
+      State.temporary.receiveData = undefined;
+    })
   }
 })

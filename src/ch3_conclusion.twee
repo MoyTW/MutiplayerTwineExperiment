@@ -8,8 +8,25 @@ You reconvene with <<IfAntony 'Cleopatra' 'Antony'>> at the FBI headquarters. Ho
 <h2>Questions</h2>\
 <<include [[QuestionsSnippet]]>>
 @@#view-the-answers-confirm;<<button 'View the answers.'>>
-  <<script>>setup.sendViewTheAnswersConfirmed();<</script>>
+  <<send 'VIEW_THE_ANSWERS_CONFIRMED' {}>><<script>>
+    const button = $('#view-the-answers-confirm button');
+    button.html('Waiting for partner to confirm...');
+    button.prop('disabled', true);
+  <</script>><</send>>
 <</button>>@@
+<<nobr>>
+  <<receive 'VIEW_THE_ANSWERS_CONFIRMED'>><<script>>
+    const data = State.temporary.receiveData;
+    if (data.clientId === State.variables.clientId) {
+      State.variables.viewTheAnswersPlayerConfirmed = true;
+    } else {
+      State.variables.viewTheAnswersPartnerConfirmed = true;
+    }
+    if (State.variables.viewTheAnswersPlayerConfirmed && State.variables.viewTheAnswersPartnerConfirmed) {
+      Engine.play('Ch3_Answers');
+    }
+  <</script>><</receive>>
+<</nobr>>
 
 
 :: Ch3_Answers

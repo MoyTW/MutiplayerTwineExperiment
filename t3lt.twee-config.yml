@@ -5,3 +5,9 @@ sugarcube-2:
       container: true
     IfAntony:
       name: IfAntony
+    send:
+      name: send
+      container: true
+    receive:
+      name: receive
+      container: true

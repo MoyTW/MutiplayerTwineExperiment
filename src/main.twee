@@ -54,21 +54,14 @@ if (clientId && setup.isUUID(clientId)) {
 
 :: PassageReady
 <<script>>
-console.log('Autosaving for scene: ', State.passage, ' session: ', State.variables.sessionId, State.variables);
-Save.autosave.save();
-// This goes in PassageReady because it can't go in StoryInit - we can't check the state in StoryInit, because it's called before the game is restored!
-if (State.variables.shouldBeConnected === true) {
-  setup.Socket.connect(State.variables.sessionId, {
-    'type': 'AUTOSAVE',
-    'clientId': State.variables.clientId,
-    'serializedSave': Save.serialize()
-  });
-}
+setup.manageSavesOnPassageReady();
 <</script>>
 
 
 :: StoryInit
 <<script>>
+setup.processPassages();
+
 /* Connect the UI bar */
 const rightUiBar = $('<div id="right-ui-bar"></div>').insertAfter("#ui-bar");
 rightUiBar.append('<div id="right-ui-bar-tray"><button id="right-ui-bar-toggle" tabindex="0" title="Toggle the Right UI bar" aria-label="Toggle the Right UI bar" type="button"></button></div>');
@@ -132,9 +125,15 @@ If I'm not lurking on the call with you, please email your feedback to moytravis
 An important note - in the interest of putting up a MVP, I've stolen the scenario is wholesale from Sherlock Holmes, Consulting Detective, (specifically Case One).
 
 Now, would you like to:
-<<button [[Host a new game|HostGame]]>><</button>>
+<<button [[Host a new game|HostGame]]>>
+  /* You must do this BEFORE you cross the page transition or it will regenerate when you refresh the HostGame page! */
+  <<include [[InitializeGameVariables]]>>\
+  <<script>>State.variables.sessionId = setup.uuidv4();<</script>>
+  <<script>>
+    setup.Socket.connect(State.variables.sessionId);
+<</script>>\
+<</button>>
 <<button [[Join a game that somebody else has hosted|JoinGame]]>><</button>>
-/* TODO: continue a game (functionally equivalent to join) */\
 <h3>In-Progress Games</h3>\
 <<for _i to 0; _i lt Save.slots.length; _i++>><<capture _i>>\
   <<if Save.slots.has(_i)>>\
@@ -154,11 +153,6 @@ Now, would you like to:
 
 
 :: HostGame
-<<include [[InitializeGameVariables]]>>\
-<<script>>State.variables.sessionId = setup.uuidv4();<</script>>
-<<script>>
-  setup.Socket.connect(State.variables.sessionId);
-<</script>>\
 Your session identifier is:
 <strong>$sessionId</strong>
 Either copy and paste it to your partner or read it out loud to them. They will need to enter this code to join your game.
@@ -209,10 +203,10 @@ setup.initializeCluePoints();
 <</script>>\
 <h1>Select your character:</h1>\
 @@#select-character-character-buttons;<<button 'Mark Antony, Vice President of Neo America.'>>
-  <<script>>setup.sendCharacterSelected('Antony');<</script>>
+  <<send 'CHARACTER_SELECT' { character: 'Antony' }>><</send>>
 <</button>>
 <<button 'Cleopatra VII Philopator, Queen of Egypt.'>>
-  <<script>>setup.sendCharacterSelected('Cleopatra');<</script>>
+  <<send 'CHARACTER_SELECT' { character: 'Cleopatra' }>><</send>>
 <</button>>@@
 
 @@#select-character-player-selection;<<if $playerCharacterName is ''>>\
@@ -227,5 +221,38 @@ setup.initializeCluePoints();
 <</if>>@@
 
 @@#select-character-confirm;<<disable>><<button 'Confirm selection.'>>
-  <<script>>setup.sendCharacterConfirmed()<</script>>
+  <<send 'CHARACTER_CONFIRM' {}>><</send>>
 <</button>><</disable>>@@
+<<nobr>>
+  /* I honestly find this waaaay harder to read than javascript, but I'm putting it in here as an example. */
+  <<receive 'CHARACTER_SELECT'>>
+    <<if _receiveData.clientId is $clientId>>
+      <<set $playerCharacterName to _receiveData.character>>
+      <<run $('#select-character-player-selection').text('You have selected ' + State.temporary.receiveData.character + '.')>>
+    <<else>>
+      <<set $partnerCharacterName to _receiveData.character>>
+      <<run $('#select-character-partner-selection').text('Your partner has selected ' + State.temporary.receiveData.character + '.')>>
+    <</if>>
+    /* TODO: Synchronize the states */
+    <<if ($playerCharacterName is not '' and $partnerCharacterName is not '' and $playerCharacterName is not $partnerCharacterName)>>
+      <<run $('#select-character-confirm button').prop('disabled', false)>>
+    <<else>>
+      <<run $('#select-character-confirm button').prop('disabled', true)>>
+    <</if>>
+  <</receive>>
+  <<receive 'CHARACTER_CONFIRM'>><<script>>
+    const data = State.temporary.receiveData;
+    if (data.clientId === State.variables.clientId) {
+      State.variables.selectCharacterPlayerConfirmed = true;
+      const button = $('#select-character-confirm button');
+      button.html('Waiting for partner to confirm...');
+      button.prop('disabled', true);
+      $('#select-character-character-buttons button').prop('disabled', true);
+    } else {
+      State.variables.selectCharacterPartnerConfirmed = true;
+    }
+    if (State.variables.selectCharacterPlayerConfirmed && State.variables.selectCharacterPartnerConfirmed) {
+      Engine.play('Ch1_CaseIntro1');
+    }
+  <</script>><</receive>>
+<</nobr>>

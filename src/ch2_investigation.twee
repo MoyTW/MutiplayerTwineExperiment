@@ -13,18 +13,12 @@ You can review these instructions by hitting the <strong>How To Play</strong> bu
 <h1>Select your action</h1>\
 You have $turnsRemaining turns remaining.
 
-<<script>>
-// I don't know of a better way to surface this to SugarCube.
-State.setVar('_cluePointsInOrder', setup.CluePointsInOrder);
-<</script>>\
+<<set _cluePointsInOrder to setup.CluePointsInOrder>>\
 @@#next-clue-point-clue-point-buttons;<<for _i to 0; _i lt _cluePointsInOrder.length; _i++>><<capture _i>>\
   <<set _pointObj to $cluePoints.get(_cluePointsInOrder[_i])>>\
   <<if _pointObj.known and not _pointObj.visited>>\
     <<button _pointObj.name>>
-      <<script>>
-      const selectedKey = setup.CluePointsInOrder[State.getVar('_i')];
-      setup.sendNextCluePointSelected(selectedKey);
-      <</script>>
+      <<send 'NEXT_CLUE_POINT_SELECTED' { cluePointKey: setup.CluePointsInOrder[State.getVar('_i')] }>><</send>>
     <</button>>
   <</if>>\
 <</capture>><</for>>@@\
@@ -41,8 +35,57 @@ State.setVar('_cluePointsInOrder', setup.CluePointsInOrder);
 <</if>>@@
 
 @@#next-clue-point-confirm;<<disable>><<button 'Confirm selection.'>>
-  <<script>>setup.sendNextCluePointConfirmed();<</script>>
+  <<send 'NEXT_CLUE_POINT_CONFIRMED' {}>><</send>>
 <</button>><</disable>>@@
+<<nobr>>
+  <<receive 'NEXT_CLUE_POINT_SELECTED'>><<script>>
+    const data = State.temporary.receiveData;
+    if (data.clientId === State.variables.clientId) {
+      State.variables.nextCluePointPlayerSelection = data.cluePointKey;
+      $('#next-clue-point-player-selection').text('You have selected ' + State.getVar('$cluePoints').get(data.cluePointKey).name + '.');
+    } else {
+      State.variables.nextCluePointPartnerSelection = data.cluePointKey;
+      $('#next-clue-point-partner-selection').text('Your partner has selected ' + State.getVar('$cluePoints').get(data.cluePointKey).name + '.');
+    }
+    // TODO: Synchronize the states
+    const playerSelection = State.variables.nextCluePointPlayerSelection;
+    const partnerSelection = State.variables.nextCluePointPartnerSelection;
+    if (playerSelection !== '' && partnerSelection !== '' && playerSelection != partnerSelection) {
+      if (!State.variables.nextCluePointPlayerConfirmed) {
+        $('#next-clue-point-confirm button').prop('disabled', false);
+      }
+    } else {
+      $('#next-clue-point-confirm button').prop('disabled', true);
+    }
+  <</script>><</receive>>
+  <<receive 'NEXT_CLUE_POINT_CONFIRMED'>><<script>>
+    const data = State.temporary.receiveData;
+    if (data.clientId === State.variables.clientId) {
+      State.variables.nextCluePointPlayerConfirmed = true;
+      const button = $('#next-clue-point-confirm button');
+      button.html('Waiting for partner to confirm...');
+      button.prop('disabled', true);
+      $('#next-clue-point-clue-point-buttons button').prop('disabled', true);
+    } else {
+      State.variables.nextCluePointPartnerConfirmed = true;
+    }
+    if (State.variables.nextCluePointPlayerConfirmed && State.variables.nextCluePointPartnerConfirmed) {
+      State.variables.turnsRemaining -= 1;
+      setup.markCluePointVisited(State.variables.nextCluePointPlayerSelection, State.variables.playerCharacterName);
+      setup.markCluePointVisited(State.variables.nextCluePointPartnerSelection, State.variables.partnerCharacterName)
+      State.variables.cluePointPassage = setup.getCluePointPassage(State.variables.nextCluePointPlayerSelection);
+
+      // Wipe here, so that we can maintain if one player goes faster than the next
+      State.variables.nextCluePointPlayerSelection = '';
+      State.variables.nextCluePointPartnerSelection = '';
+      State.variables.nextCluePointPlayerConfirmed = false;
+      State.variables.nextCluePointPartnerConfirmed = false;
+      
+      Engine.play('Ch2_DisplayCluePoint');
+    }
+  <</script>><</receive>>
+<</nobr>>
+
 
 :: Ch2_DisplayCluePoint
 <<include $cluePointPassage>>
