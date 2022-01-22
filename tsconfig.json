@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["es7", "DOM"],
+    "strict": true,
+  },
+  "include": ["src/**/*"],
+}
