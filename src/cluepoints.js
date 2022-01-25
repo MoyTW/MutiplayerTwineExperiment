@@ -195,7 +195,7 @@ setup.CluePointData.set(setup.CluePointKey.GoldenLotus,
 setup.CluePointData.set(setup.CluePointKey.BloodDiamond,
   {name: 'Blood Diamond',
    type: setup.CluePointType.Place,
-   passagee: 'CluePoint_BloodDiamond',
+   passage: 'CluePoint_BloodDiamond',
    defaultKnown: false,
    reveals: [setup.CluePointKey.MarieDeChampagne]});
 

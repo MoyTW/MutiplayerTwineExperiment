@@ -32,6 +32,6 @@ With that, he sweeps out of the room.
 <<set $ch1_intro_seen to true>>\
 <<include IntroductionSnippet>>
 
-<em><strong>[ You can review the introduction at any point by going to the Show Stats button in the upper-left corner. ]</strong></em>
+<em><strong>[ You can review the introduction at any point via the right sidebar. ]</strong></em>
 
 <<button [[Start your investigation!|Ch2_HowToPlay]]>><</button>>
