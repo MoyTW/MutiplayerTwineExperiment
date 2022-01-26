@@ -1,18 +1,27 @@
 :: Ch3_Quiz
+<<set _pressedViewAnswers to false>>\
 <h1>Time's up!</h1>\
 You reconvene with <<IfAntony 'Cleopatra' 'Antony'>> at the FBI headquarters. Hortensia meets you at the door and leads you back to the briefing room, where Sejanus is waiting.
 
 "Right," he says, "who killed Marlon Brando? Was there a security breach on Project STORM, and if so, who was involved? And what did his note about First Connection mean?"
 
-<strong><em>[ Scoring works like this. Each of the following questions has a points score. The two players should agree on the answers, and on the next page, it will show the answers. ]</em></strong>
+<strong><em>[ Scoring works like this. Each of the following questions has a points score. The two players should both agree on the answers to the questions, and on the next page, it will display an explanation for each. ]</em></strong>
 <h2>Questions</h2>\
-<<include [[QuestionsSnippet]]>>
-@@#view-the-answers-confirm;<<button 'View the answers.'>>
-  <<send 'VIEW_THE_ANSWERS_CONFIRMED' {}>><<script>>
-    const button = $('#view-the-answers-confirm button');
-    button.html('Waiting for partner to confirm...');
-    button.prop('disabled', true);
-  <</script>><</send>>
+<<include [[QuestionsSnippet]]>>\
+<h2>Before you hit this button!</h2>\
+<strong>There is no automated quiz!</strong> It's self-graded! On the next screen is the answer key, where it tells you who the murderer, why he did it, etc, etc. <strong>Do not press this button until you've agreed on answers to the questions!</strong>
+
+@@#view-the-answers-confirm;<<button 'View the answer key.'>>
+  <<if _pressedViewAnswers is false>>
+    <<replace '#view-the-answers-confirm button'>>Are you sure you want to view the answer key?<</replace>>>>
+    <<set _pressedViewAnswers to true>>
+  <<else>>
+    <<send 'VIEW_THE_ANSWERS_CONFIRMED' {}>><<script>>
+      const button = $('#view-the-answers-confirm button');
+      button.html('Waiting for partner to confirm...');
+      button.prop('disabled', true);
+    <</script>><</send>>
+  <</if>>
 <</button>>@@
 <<nobr>>
   <<receive 'VIEW_THE_ANSWERS_CONFIRMED'>><<script>>
