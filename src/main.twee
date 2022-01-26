@@ -203,10 +203,14 @@ setup.initializeCluePoints();
 <</script>>\
 <h1>Select your character:</h1>\
 @@#select-character-character-buttons;<<button 'Mark Antony, Vice President of Neo America.'>>
-  <<send 'CHARACTER_SELECT' { character: 'Antony' }>><</send>>
+  <<send 'CHARACTER_SELECT' { character: 'Antony' }>>
+    <<run $('#select-character-player-selection').text('You have selected Antony.')>>
+  <</send>>
 <</button>>
 <<button 'Cleopatra VII Philopator, Queen of Egypt.'>>
-  <<send 'CHARACTER_SELECT' { character: 'Cleopatra' }>><</send>>
+  <<send 'CHARACTER_SELECT' { character: 'Cleopatra' }>>
+    <<run $('#select-character-player-selection').text('You have selected Cleopatra.')>>
+  <</send>>
 <</button>>@@
 
 @@#select-character-player-selection;<<if $playerCharacterName is ''>>\
@@ -221,7 +225,12 @@ setup.initializeCluePoints();
 <</if>>@@
 
 @@#select-character-confirm;<<disable>><<button 'Confirm selection.'>>
-  <<send 'CHARACTER_CONFIRM' {}>><</send>>
+  <<send 'CHARACTER_CONFIRM' {}>><<script>>
+    const button = $('#select-character-confirm button');
+    button.html('Waiting for partner to confirm...');
+    button.prop('disabled', true);
+    $('#select-character-character-buttons button').prop('disabled', true);
+  <</script>><</send>>
 <</button>><</disable>>@@
 <<nobr>>
   /* I honestly find this waaaay harder to read than javascript, but I'm putting it in here as an example. */

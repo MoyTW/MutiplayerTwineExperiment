@@ -18,7 +18,10 @@ You have $turnsRemaining turns remaining.
   <<set _pointObj to $cluePoints.get(_cluePointsInOrder[_i])>>\
   <<if _pointObj.known and not _pointObj.visited>>\
     <<button _pointObj.name>>
-      <<send 'NEXT_CLUE_POINT_SELECTED' { cluePointKey: setup.CluePointsInOrder[State.getVar('_i')] }>><</send>>
+      <<send 'NEXT_CLUE_POINT_SELECTED' { cluePointKey: setup.CluePointsInOrder[State.getVar('_i')] }>><<script>>
+        const cluePointKey = setup.CluePointsInOrder[State.getVar('_i')];
+        $('#next-clue-point-player-selection').text('You have selected ' + State.getVar('$cluePoints').get(cluePointKey).name + '.');
+      <</script>><</send>>
     <</button>>
   <</if>>\
 <</capture>><</for>>@@\
@@ -35,7 +38,12 @@ You have $turnsRemaining turns remaining.
 <</if>>@@
 
 @@#next-clue-point-confirm;<<disable>><<button 'Confirm selection.'>>
-  <<send 'NEXT_CLUE_POINT_CONFIRMED' {}>><</send>>
+  <<send 'NEXT_CLUE_POINT_CONFIRMED' {}>><<script>>
+    const button = $('#next-clue-point-confirm button');
+    button.html('Waiting for partner to confirm...');
+    button.prop('disabled', true);
+    $('#next-clue-point-clue-point-buttons button').prop('disabled', true);
+  <</script>><</send>>
 <</button>><</disable>>@@
 <<nobr>>
   <<receive 'NEXT_CLUE_POINT_SELECTED'>><<script>>
