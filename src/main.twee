@@ -129,9 +129,7 @@ Now, would you like to:
   /* You must do this BEFORE you cross the page transition or it will regenerate when you refresh the HostGame page! */
   <<include [[InitializeGameVariables]]>>\
   <<script>>State.variables.sessionId = setup.uuidv4();<</script>>
-  <<script>>
-    setup.Socket.connect(State.variables.sessionId);
-<</script>>\
+  <<connect $sessionId>>
 <</button>>
 <<button [[Join a game that somebody else has hosted|JoinGame]]>><</button>>
 <h3>In-Progress Games</h3>\
@@ -174,10 +172,9 @@ Please enter the session identifier you'd like to join.
 <</if>>\
 <<textbox '_input' _defaultSessionId autofocus>>@@
 @@#join-button;<<disable>><<button 'Session identifier is invalid.'>>
+  <<set $sessionId to $('#session-input input')[0].value>>
+  <<connect $sessionId>>
   <<script>>
-    const targetId = $('#session-input input')[0].value;
-    setup.Socket.connect(targetId);
-    State.variables.sessionId = targetId;
     Engine.play('SelectCharacter');
   <</script>>
 <</button>><</disable>>@@

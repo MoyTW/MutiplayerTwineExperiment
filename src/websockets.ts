@@ -133,7 +133,17 @@
     console.log('Caught up to ' + State.getVar('$websocketProcessedUpToMs'));
   })
 
-
+  Macro.add('connect', {
+    handler: function() {
+      if (this.args.length != 1) {
+        return this.error(`bad evaluation: connect macro can only take 1 parameter, the sessionId`);
+      }
+      if (typeof this.args[0] !== 'string') {
+        return this.error(`bad evaluation: connect macro input ${this.args[0]} was not a string!`);
+      }
+      _setup.Socket.connect(this.args[0]);
+    }
+  })
 
   Macro.add('send', {
     skipArgs: false,

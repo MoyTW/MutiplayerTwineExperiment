@@ -11,3 +11,5 @@ sugarcube-2:
     receive:
       name: receive
       container: true
+    connect:
+      name: connect
