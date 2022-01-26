@@ -1,6 +1,7 @@
 (function () {
   const _setup: any = setup as any
 
+  var chatSocket: WebSocket | undefined = undefined
   const handlers: Record<string, (data: object) => void> = {}
   const sendBuffer: object[] = []
 
@@ -15,15 +16,15 @@
 
   const connect = function(sessionId: string, sendOnOpen?: object) {
     // If we already have a connection or are attempting to establish a connection, leave it be!
-    if (_setup.chatSocket && _setup.chatSocket.readyState == 0) {
+    if (chatSocket && chatSocket.readyState == 0) {
       if (sendOnOpen) {
         sendBuffer.push(sendOnOpen)
       }
       return;
     }
-    if (_setup.chatSocket && _setup.chatSocket.readyState == 1) {
+    if (chatSocket && chatSocket.readyState == 1) {
       if (sendOnOpen) {
-        _setup.chatSocket.send(JSON.stringify(sendOnOpen))
+        chatSocket.send(JSON.stringify(sendOnOpen))
       }
       return;
     };
@@ -32,17 +33,17 @@
 
     // @ts-ignore: Unreachable code error
     if (DEBUG === false) {
-      _setup.chatSocket = new WebSocket(PROD_SERVER_URL + sessionId + '/');
+      chatSocket = new WebSocket(PROD_SERVER_URL + sessionId + '/');
     } else {
-      _setup.chatSocket = new WebSocket(DEV_SERVER_URL + sessionId + '/');
+      chatSocket = new WebSocket(DEV_SERVER_URL + sessionId + '/');
     }
 
     if (sendOnOpen) {
       sendBuffer.push(sendOnOpen);
     }
-    _setup.chatSocket.onopen = function(_: any) {
+    chatSocket.onopen = function(_: any) {
       const current = State.current as any
-      _setup.chatSocket.send(JSON.stringify({
+      chatSocket!.send(JSON.stringify({
         'type': 'CATCH_UP',
         'clientId': State.getVar('$clientId'),
         // We use current because we want every message since our last save
@@ -52,12 +53,12 @@
       }));
       for (const toSend of sendBuffer) {
         console.log('Sending buffered message, type:', (toSend as any)['type']);
-        _setup.chatSocket.send(JSON.stringify(toSend));
+        chatSocket!.send(JSON.stringify(toSend));
       }
       sendBuffer.splice(0, sendBuffer.length);
     }
 
-    _setup.chatSocket.onmessage = function(e: any) {
+    chatSocket.onmessage = function(e: any) {
       const data = JSON.parse(e.data);
       const handler = handlers[data['type']];
 
@@ -67,7 +68,7 @@
       handler(data);
     };
 
-    _setup.chatSocket.onclose = function(_: any) {
+    chatSocket.onclose = function(_: any) {
       console.error('TODO: Handle appropriately');
     }
   }
@@ -79,8 +80,8 @@
     if (typeof obj !== 'object') {
       throw `Cannot send object ${obj} to session ${sessionId} as it's not an object!`
     }
-    if (_setup.chatSocket && _setup.chatSocket.readyState == 1) {
-      _setup.chatSocket.send(JSON.stringify(obj));
+    if (chatSocket && chatSocket.readyState == 1) {
+      chatSocket.send(JSON.stringify(obj));
     } else {
       connect(sessionId, obj);
     }
