@@ -244,6 +244,36 @@
     }
   })
 
+  Macro.add("leavemultiplayersession", {
+  /* TODO: Bring up save management or cycle the saves or something! */
+    handler: function() {
+      const sessionId = State.getVar('$sessionId')
+      var openSlot = undefined;
+
+      for (let i = 0; i < Save.slots.length; i++) {
+        const saveInSlot = Save.slots.get(i);
+        if (saveInSlot && saveInSlot.title.includes(sessionId)) {
+          Save.slots.save(i, 'Session ' + sessionId);
+          Save.autosave.delete();
+          Engine.restart();
+          return;
+        }
+        if (!Save.slots.has(i)) {
+          openSlot = i;
+        }
+      }
+
+      if (openSlot !== undefined) {
+        Save.slots.save(openSlot, 'Session ' + sessionId);
+      } else {
+        console.error('TODO: Too many save slots!')
+      }
+
+      Save.autosave.delete();
+      Engine.restart();
+    }
+  })
+
   Macro.add('endmultiplayergame', {
     handler: function() {
       const sessionId = State.getVar('$sessionId')

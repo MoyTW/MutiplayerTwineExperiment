@@ -18,30 +18,3 @@ setup.showDialogWithPassage = function(title, passageName) {
   Dialog.wiki(Story.get(passageName).processText());
   Dialog.open();
 }
-
-/* TODO: Bring up save management or cycle the saves or something! */
-setup.leaveSession = function() {
-  var openSlot = undefined;
-
-  for (let i = 0; i < Save.slots.length; i++) {
-    const saveInSlot = Save.slots.get(i);
-    if (saveInSlot && saveInSlot.title.includes(State.variables.sessionId)) {
-      Save.slots.save(i, 'Session ' + State.variables.sessionId);
-      Save.autosave.delete();
-      Engine.restart();
-      return;
-    }
-    if (!Save.slots.has(i)) {
-      openSlot = i;
-    }
-  }
-
-  if (openSlot !== undefined) {
-    Save.slots.save(openSlot, 'Session ' + State.variables.sessionId);
-  } else {
-    console.error('TODO: Too many save slots!')
-  }
-
-  Save.autosave.delete();
-  Engine.restart();
-}

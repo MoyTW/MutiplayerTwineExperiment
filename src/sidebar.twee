@@ -7,7 +7,7 @@
   If your partner wants to connect, they will need this code.
 <</if>>\
 <<if $shouldBeConnected>>\
-  <<button 'Leave (game will be saved)'>><<script>>setup.leaveSession();<</script>><</button>>
+  <<button 'Leave (game will be saved)'>><<leavemultiplayersession>><</button>>
 <</if>>\
 <h2>Resources</h2>\
 <<if hasVisited('Ch1_CaseIntro3')>>\
