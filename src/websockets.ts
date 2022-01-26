@@ -1,6 +1,4 @@
 (function () {
-  const _setup: any = setup as any
-
   var chatSocket: WebSocket | undefined = undefined
   const handlers: Record<string, (data: object) => void> = {}
   const sendBuffer: object[] = []
@@ -42,14 +40,13 @@
       sendBuffer.push(sendOnOpen);
     }
     chatSocket.onopen = function(_: any) {
-      const current = State.current as any
       chatSocket!.send(JSON.stringify({
         'type': 'CATCH_UP',
         'clientId': State.getVar('$clientId'),
         // We use current because we want every message since our last save
         // TODO: If you join an in-progress game through join instead of using the load button, this will be 0 and you'll
         // get the entire list, changing the state in unexpected ways!
-        'catchupStartMs': current.variables.websocketProcessedUpToMs || 0
+        'catchupStartMs': (State.current as any).variables.websocketProcessedUpToMs || 0
       }));
       for (const toSend of sendBuffer) {
         console.log('Sending buffered message, type:', (toSend as any)['type']);
@@ -58,7 +55,7 @@
       sendBuffer.splice(0, sendBuffer.length);
     }
 
-    chatSocket.onmessage = function(e: any) {
+    chatSocket.onmessage = function(e: MessageEvent<any>) {
       const data = JSON.parse(e.data);
       const handler = handlers[data['type']];
 
@@ -84,35 +81,6 @@
       chatSocket.send(JSON.stringify(obj));
     } else {
       connect(sessionId, obj);
-    }
-  }
-
-  // This is an insane hack to keep this variable out of the game state.
-  _setup.hasVisitedOnPassageReady = false;
-  _setup.manageSavesOnPassageReady = function() {
-    // Ensure or start the connection & catch up.
-    if (State.getVar('$shouldBeConnected') === true) {
-      connect(State.getVar('$sessionId'));
-    }
-
-    // We always want to skip the first invocation, because that's right after game start.
-    if (!_setup.hasVisitedOnPassageReady) {
-      // console.log('Skipping invocation due to game start!')
-      _setup.hasVisitedOnPassageReady = true;
-      return;
-    }
-
-    // Any following invocation will only happen after a scene transfer.
-    // Note that autosave.save() and Save.serialize() DO NOT take the current state, they take the state on transition.
-    // Therefore, the fact that you may or may not have had state changes due to messages when this runs is irrelevant.
-    console.log('Autosaving for scene: ', State.passage, ' session: ', State.getVar('$sessionId'));
-    Save.autosave.save();
-    if (State.getVar('$shouldBeConnected') === true) {
-      send(State.getVar('$sessionId'), {
-        'type': 'AUTOSAVE',
-        'clientId': State.getVar('$clientId'),
-        'serializedSave': Save.serialize()
-      });
     }
   }
 
@@ -216,31 +184,63 @@
     }
   })
 
-  _setup.processPassages = function() {
-    const opener = /<<receive/g;
-    const closer = /<<\/receive>>/g;
-    const allPassages = Story.lookupWith((_: TwineSugarCube.Passage) => true);
-  
-    for (let passage of allPassages) {
-      const openerMatches = [...passage.text.matchAll(opener)];
-      const closerMatches = [...passage.text.matchAll(closer)];
-      if (openerMatches.length == 0 && closerMatches.length == 0) {
-        continue;
-      }
-      // We don't actually need to check that they're closed or open - Twine does that for us!
-  
-      var previousEndIdx = 0;
-      for (let i = 0; i < openerMatches.length; i++) {
-        const startIdx: number = openerMatches[i].index!;
-        const endIdx: number = closerMatches[i].index! + 12; // length of <</receive>>
-  
-        if (startIdx < previousEndIdx) {
-          throw 'Overlapping receive tags in passage ' + passage.title + '!';
+  Macro.add('preprocessreceivetags', {
+    handler: function() {
+      const opener = /<<receive/g;
+      const closer = /<<\/receive>>/g;
+      const allPassages = Story.lookupWith((_: TwineSugarCube.Passage) => true);
+
+      for (let passage of allPassages) {
+        const openerMatches = [...passage.text.matchAll(opener)];
+        const closerMatches = [...passage.text.matchAll(closer)];
+        if (openerMatches.length == 0 && closerMatches.length == 0) {
+          continue;
         }
-        previousEndIdx = endIdx;
-  
-        Wikifier.wikifyEval(passage.text.substring(startIdx, endIdx));
+        // We don't actually need to check that they're closed or open - Twine does that for us!
+
+        var previousEndIdx = 0;
+        for (let i = 0; i < openerMatches.length; i++) {
+          const startIdx: number = openerMatches[i].index!;
+          const endIdx: number = closerMatches[i].index! + 12; // length of <</receive>>
+
+          if (startIdx < previousEndIdx) {
+            throw 'Overlapping receive tags in passage ' + passage.title + '!';
+          }
+          previousEndIdx = endIdx;
+
+          Wikifier.wikifyEval(passage.text.substring(startIdx, endIdx));
+        }
       }
     }
-  }
+  })
+
+  // Placed here to be close to the code.
+  var hasVisitedOnPassageReady = false;
+  Macro.add('managesavesonpassageready', {
+    handler: function() {
+      // Ensure or start the connection & catch up.
+      if (State.getVar('$shouldBeConnected') === true) {
+        connect(State.getVar('$sessionId'));
+      }
+
+      // We always want to skip the first invocation, because that's right after game start.
+      if (!hasVisitedOnPassageReady) {
+        hasVisitedOnPassageReady = true;
+        return;
+      }
+
+      // Any following invocation will only happen after a scene transfer.
+      // Note that autosave.save() and Save.serialize() DO NOT take the current state, they take the state on transition.
+      // Therefore, the fact that you may or may not have had state changes due to messages when this runs is irrelevant.
+      console.log('Autosaving for scene: ', State.passage, ' session: ', State.getVar('$sessionId'));
+      Save.autosave.save();
+      if (State.getVar('$shouldBeConnected') === true) {
+        send(State.getVar('$sessionId'), {
+          'type': 'AUTOSAVE',
+          'clientId': State.getVar('$clientId'),
+          'serializedSave': Save.serialize()
+        });
+      }
+    }
+  })
 }());

@@ -53,15 +53,12 @@ if (clientId && setup.isUUID(clientId)) {
 
 
 :: PassageReady
-<<script>>
-setup.manageSavesOnPassageReady();
-<</script>>
+<<managesavesonpassageready>>
 
 
 :: StoryInit
+<<preprocessreceivetags>>
 <<script>>
-setup.processPassages();
-
 /* Connect the UI bar */
 const rightUiBar = $('<div id="right-ui-bar"></div>').insertAfter("#ui-bar");
 rightUiBar.append('<div id="right-ui-bar-tray"><button id="right-ui-bar-toggle" tabindex="0" title="Toggle the Right UI bar" aria-label="Toggle the Right UI bar" type="button"></button></div>');
