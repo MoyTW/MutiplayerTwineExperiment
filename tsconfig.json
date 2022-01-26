@@ -3,6 +3,7 @@
     "target": "es6",
     "lib": ["es2020", "DOM"],
     "strict": true,
+    "outDir": "src/build",
   },
   "include": ["src/**/*"],
 }
