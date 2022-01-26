@@ -1,19 +1,19 @@
 (function () {
   const _setup: any = setup as any
 
-  _setup.Socket = {}
   const handlers: Record<string, (data: object) => void> = {}
   const sendBuffer: object[] = []
 
-  _setup.Socket.DEBUG = true;
-  const DEV_SERVER_URL = 'ws://localhost:8000/ws/'
-  const PROD_SERVER_URL = 'wss://multiplayer-twine-server.herokuapp.com/ws/'
+  // Deliberately not tying it into Sugarcube's debug because turning that on makes everything hideous
+  const DEBUG: boolean = true;
+  const DEV_SERVER_URL: string = 'ws://localhost:8000/ws/'
+  const PROD_SERVER_URL: string = 'wss://multiplayer-twine-server.herokuapp.com/ws/'
 
   const registerHandler = function(messageType: string, handler: (data: object) => void) {
     handlers[messageType] = handler
   };
 
-  _setup.Socket.connect = function(sessionId: string, sendOnOpen: object) {
+  const connect = function(sessionId: string, sendOnOpen?: object) {
     // If we already have a connection or are attempting to establish a connection, leave it be!
     if (_setup.chatSocket && _setup.chatSocket.readyState == 0) {
       if (sendOnOpen) {
@@ -30,7 +30,8 @@
 
     State.setVar('$shouldBeConnected', true)
 
-    if (_setup.Socket.DEBUG === false) {
+    // @ts-ignore: Unreachable code error
+    if (DEBUG === false) {
       _setup.chatSocket = new WebSocket(PROD_SERVER_URL + sessionId + '/');
     } else {
       _setup.chatSocket = new WebSocket(DEV_SERVER_URL + sessionId + '/');
@@ -81,7 +82,7 @@
     if (_setup.chatSocket && _setup.chatSocket.readyState == 1) {
       _setup.chatSocket.send(JSON.stringify(obj));
     } else {
-      _setup.Socket.connect(sessionId, obj);
+      connect(sessionId, obj);
     }
   }
 
@@ -90,7 +91,7 @@
   _setup.manageSavesOnPassageReady = function() {
     // Ensure or start the connection & catch up.
     if (State.getVar('$shouldBeConnected') === true) {
-      _setup.Socket.connect(State.getVar('$sessionId'));
+      connect(State.getVar('$sessionId'));
     }
 
     // We always want to skip the first invocation, because that's right after game start.
@@ -141,7 +142,7 @@
       if (typeof this.args[0] !== 'string') {
         return this.error(`bad evaluation: connect macro input ${this.args[0]} was not a string!`);
       }
-      _setup.Socket.connect(this.args[0]);
+      connect(this.args[0]);
     }
   })
 

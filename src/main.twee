@@ -164,13 +164,7 @@ You can also find the session identifier at the top of the right sidebar. Press 
 <<include [[InitializeGameVariables]]>>\
 <<set _input>>\
 Please enter the session identifier you'd like to join.
-@@#session-input;\
-<<if setup.Socket.DEBUG is true>>\
-  <<set _defaultSessionId to 'b416b45b-7fb7-4761-a173-0bdec11de845'>>\
-<<else>>\
-  <<set _defaultSessionId to ''>>\
-<</if>>\
-<<textbox '_input' _defaultSessionId autofocus>>@@
+@@#session-input;<<textbox '_input' '' autofocus>>@@
 @@#join-button;<<disable>><<button 'Session identifier is invalid.'>>
   <<set $sessionId to $('#session-input input')[0].value>>
   <<connect $sessionId>>
