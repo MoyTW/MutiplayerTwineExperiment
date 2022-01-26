@@ -1,0 +1,25 @@
+{
+  "name": "multiplayertwineexperiment",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "typescript": "^4.5.5"
+  },
+  "devDependencies": {
+    "@types/twine-sugarcube": "^2.36.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MoyTW/MutiplayerTwineExperiment.git"
+  },
+  "author": "Travis Moy",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MoyTW/MutiplayerTwineExperiment/issues"
+  },
+  "homepage": "https://github.com/MoyTW/MutiplayerTwineExperiment#readme"
+}
