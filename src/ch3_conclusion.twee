@@ -73,16 +73,16 @@ What was your final score?
 :: Ch3_GreatJob
 You did an outstanding job! Julius Caesar throws a parade for the two of you in your honor, and you ride a chariot pulled by four white horses past a cheering crowd of admirers.
 
-<<button 'End game and return to main menu'>><<run setup.endGame()>><</button>>
+<<button 'End game and return to main menu'>><<endmultiplayergame>><</button>>
 
 
 :: Ch3_OkayJob
 You didn't get it all right, but you did get enough for Sejanus to follow up and sort everything out, You retain your precious invitations the the President's Christmas Ball and have a wonderful time.
 
-<<button 'End game and return to main menu'>><<run setup.endGame()>><</button>>
+<<button 'End game and return to main menu'>><<endmultiplayergame>><</button>>
 
 
 :: Ch3_BadJob
 Unfortunately, you did terribly, and Julius Caesar bars you from the Christmas Ball when it becomes clear that you fingered the wrong suspect. How embarrassing!
 
-<<button 'End game and return to main menu'>><<run setup.endGame()>><</button>>
+<<button 'End game and return to main menu'>><<endmultiplayergame>><</button>>

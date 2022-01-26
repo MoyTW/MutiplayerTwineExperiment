@@ -243,4 +243,19 @@
       }
     }
   })
+
+  Macro.add('endmultiplayergame', {
+    handler: function() {
+      const sessionId = State.getVar('$sessionId')
+      for (let i = 0; i < Save.slots.length; i++) {
+        const saveInSlot = Save.slots.get(i)
+        if (saveInSlot && saveInSlot.title.includes(sessionId)) {
+          Save.slots.delete(i)
+          break
+        }
+      }
+      Save.autosave.delete()
+      Engine.restart()
+    }
+  })
 }());

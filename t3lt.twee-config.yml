@@ -17,3 +17,5 @@ sugarcube-2:
       name: preprocessreceivetags
     managesavesonpassageready:
       name: managesavesonpassageready
+    endmultiplayergame:
+      name: endmultiplayergame
