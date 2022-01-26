@@ -2,22 +2,22 @@
   const _setup: any = setup as any
 
   _setup.Socket = {}
-  _setup.Socket.handlers = {}
-  _setup.Socket.sendBuffer = []
+  const handlers: Record<string, (data: object) => void> = {}
+  const sendBuffer: object[] = []
 
   _setup.Socket.DEBUG = true;
-  _setup.Socket.DEV_SERVER_URL = 'ws://localhost:8000/ws/'
-  _setup.Socket.PROD_SERVER_URL = 'wss://multiplayer-twine-server.herokuapp.com/ws/'
+  const DEV_SERVER_URL = 'ws://localhost:8000/ws/'
+  const PROD_SERVER_URL = 'wss://multiplayer-twine-server.herokuapp.com/ws/'
 
-  _setup.Socket.registerHandler = function(messageType: string, handler: any) {
-    _setup.Socket.handlers[messageType] = handler
+  const registerHandler = function(messageType: string, handler: (data: object) => void) {
+    handlers[messageType] = handler
   };
 
   _setup.Socket.connect = function(sessionId: string, sendOnOpen: object) {
     // If we already have a connection or are attempting to establish a connection, leave it be!
     if (_setup.chatSocket && _setup.chatSocket.readyState == 0) {
       if (sendOnOpen) {
-        _setup.Socket.sendBuffer.push(sendOnOpen)
+        sendBuffer.push(sendOnOpen)
       }
       return;
     }
@@ -31,13 +31,13 @@
     State.setVar('$shouldBeConnected', true)
 
     if (_setup.Socket.DEBUG === false) {
-      _setup.chatSocket = new WebSocket(_setup.Socket.PROD_SERVER_URL + sessionId + '/');
+      _setup.chatSocket = new WebSocket(PROD_SERVER_URL + sessionId + '/');
     } else {
-      _setup.chatSocket = new WebSocket(_setup.Socket.DEV_SERVER_URL + sessionId + '/');
+      _setup.chatSocket = new WebSocket(DEV_SERVER_URL + sessionId + '/');
     }
 
     if (sendOnOpen) {
-      _setup.Socket.sendBuffer.push(sendOnOpen);
+      sendBuffer.push(sendOnOpen);
     }
     _setup.chatSocket.onopen = function(_: any) {
       const current = State.current as any
@@ -49,16 +49,16 @@
         // get the entire list, changing the state in unexpected ways!
         'catchupStartMs': current.variables.websocketProcessedUpToMs || 0
       }));
-      for (const toSend of _setup.Socket.sendBuffer) {
-        console.log('Sending buffered message, type:', toSend['type']);
+      for (const toSend of sendBuffer) {
+        console.log('Sending buffered message, type:', (toSend as any)['type']);
         _setup.chatSocket.send(JSON.stringify(toSend));
       }
-      _setup.Socket.sendBuffer.splice(0, _setup.Socket.sendBuffer.length);
+      sendBuffer.splice(0, sendBuffer.length);
     }
 
     _setup.chatSocket.onmessage = function(e: any) {
       const data = JSON.parse(e.data);
-      const handler = _setup.Socket.handlers[data['type']];
+      const handler = handlers[data['type']];
 
       console.log('Processing message: ', data['type']);
 
@@ -71,7 +71,7 @@
     }
   }
 
-  _setup.Socket._send = function(sessionId: string, obj: object) {
+  const send = function(sessionId: string, obj: object) {
     if (typeof sessionId !== 'string') {
       throw `Cannot send to session ${sessionId}`
     }
@@ -106,7 +106,7 @@
     console.log('Autosaving for scene: ', State.passage, ' session: ', State.getVar('$sessionId'));
     Save.autosave.save();
     if (State.getVar('$shouldBeConnected') === true) {
-      _setup.Socket._send(State.getVar('$sessionId'), {
+      send(State.getVar('$sessionId'), {
         'type': 'AUTOSAVE',
         'clientId': State.getVar('$clientId'),
         'serializedSave': Save.serialize()
@@ -114,7 +114,7 @@
     }
   }
 
-  _setup.Socket.registerHandler('CATCH_UP', function(data: any) {
+  registerHandler('CATCH_UP', function(data: any) {
     const serializedSave = data['serialized_save']
     console.log('Attempting to catch up! Loading:', serializedSave !== undefined);
     if (serializedSave) {
@@ -123,7 +123,7 @@
     for (const message of data['messages']) {
       // TODO: There's surely a more elegant way of dealing with this
       if (message['type'] !== 'clientJoin') {
-        const handler = _setup.Socket.handlers[message['type']];
+        const handler = handlers[message['type']];
         console.log('catching up', message['type']);
         State.setVar('$websocketProcessedUpToMs', message['server_timestamp_ms'])
         handler(message);
@@ -160,7 +160,7 @@
 
       const msgObj = {type: this.args[0], clientId: State.getVar('$clientId')};
       Object.assign(msgObj, result);
-      _setup.Socket._send(State.getVar('$sessionId'), msgObj);
+      send(State.getVar('$sessionId'), msgObj);
 
       if (this.payload[0].contents !== '') {
         this.createShadowWrapper(() => Wikifier.wikifyEval(this.payload[0].contents.trim()))();
@@ -182,14 +182,14 @@
       if (typeof this.args[0] !== 'string') {
         return this.error(`${this.args[0]} is not a string, and is therefore ineligible for a receive target!`);
       }
-      if (_setup.Socket.handlers[this.args[0]]) {
+      if (handlers[this.args[0]]) {
         return;
       }
 
       console.log('Processing receive macro!', this.args, this.payload);
 
       const macroPayload = this.payload;
-      _setup.Socket.registerHandler(this.args[0], function(data: any) {
+      registerHandler(this.args[0], function(data: object) {
         if (State.temporary.receiveData !== undefined) {
           console.error('_receiveData is set when it should not be! Overwriting!')
         }
