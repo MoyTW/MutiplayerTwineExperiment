@@ -57,7 +57,8 @@ if (clientId && setup.isUUID(clientId)) {
 
 
 :: StoryInit
-<<set $serverUrl to 'http://localhost:8000'>>
+<<set $imageRoot to 'http://localhost:8080/images/'>>
+/* <<set $imageRoot to 'images/'>> */
 <<script>>
 /* Connect the UI bar */
 const rightUiBar = $('<div id="right-ui-bar"></div>').insertAfter("#ui-bar");
@@ -144,7 +145,17 @@ Now, would you like to:
       <</script>><</button>>
     </span>\
   <</if>>\
-<</capture>><</for>>\
+<</capture>><</for>>
+<<button [[Credits|Credits]]>><</button>>
+
+
+:: Credits
+<strong>Images</strong>
+<ul>
+  <li>Antony: Image by Sergey Sosnovskiy at <a href='https://commons.wikimedia.org/wiki/File:Marcus_Antonius_marble_bust_in_the_Vatican_Museums.jpg'>Wikimedia</a> under <a href='https://creativecommons.org/licenses/by-sa/4.0/deed.en'>CC BY-SA 4.0</a></li>
+  <li>Cleopatra: Image by Louis le Grand at <a href='https://en.wikipedia.org/wiki/File:Kleopatra-VII.-Altes-Museum-Berlin1.jpg'>Wikimedia</a> in the public domain.</li>
+</ul>\
+<<button [[Back|Start]]>><</button>>
 
 
 :: HostGame
@@ -193,7 +204,7 @@ setup.initializeCluePoints();
 <h1>Select your character:</h1>\
 @@#select-character-character-buttons;<div class='row'>\
   <div class='column'>\
-    [img[$serverUrl + '/static/Antony.jpg']]
+    [img[$imageRoot + 'Antony.jpg']]
     <<button 'Mark Antony, Vice President of Neo America.'>>
       <<send 'CHARACTER_SELECT' { character: 'Antony' }>>
         <<run $('#select-character-player-selection').text('You have selected Antony.')>>
@@ -201,7 +212,7 @@ setup.initializeCluePoints();
     <</button>>\
   </div>\
   <div class='column'>\
-    [img[$serverUrl + '/static/Cleopatra.jpg']]\
+    [img[$imageRoot + 'Cleopatra.jpg']]\
     <<button 'Cleopatra VII Philopator, Queen of Egypt.'>>
       <<send 'CHARACTER_SELECT' { character: 'Cleopatra' }>>
         <<run $('#select-character-player-selection').text('You have selected Cleopatra.')>>
