@@ -57,7 +57,6 @@ if (clientId && setup.isUUID(clientId)) {
 
 
 :: StoryInit
-<<preprocessreceivetags>>
 <<script>>
 /* Connect the UI bar */
 const rightUiBar = $('<div id="right-ui-bar"></div>').insertAfter("#ui-bar");

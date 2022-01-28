@@ -13,8 +13,6 @@ sugarcube-2:
       container: true
     connect:
       name: connect
-    preprocessreceivetags:
-      name: preprocessreceivetags
     managesavesonpassageready:
       name: managesavesonpassageready
     endmultiplayergame:

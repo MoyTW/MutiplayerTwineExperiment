@@ -166,7 +166,7 @@
         return;
       }
 
-      console.log('Processing receive macro!', this.args, this.payload);
+      console.log(`Found receive macro for ${this.args[0]}`);
 
       const macroPayload = this.payload;
       registerHandler(this.args[0], function(data: object) {
@@ -184,35 +184,35 @@
     }
   })
 
-  Macro.add('preprocessreceivetags', {
-    handler: function() {
-      const opener = /<<receive/g;
-      const closer = /<<\/receive>>/g;
-      const allPassages = Story.lookupWith((_: TwineSugarCube.Passage) => true);
+  const preprocessReceiveTags = function() {
+    console.log(`Preprocessing all receive tags.`)
 
-      for (let passage of allPassages) {
-        const openerMatches = [...passage.text.matchAll(opener)];
-        const closerMatches = [...passage.text.matchAll(closer)];
-        if (openerMatches.length == 0 && closerMatches.length == 0) {
-          continue;
+    const opener = /<<receive/g;
+    const closer = /<<\/receive>>/g;
+    const allPassages = Story.lookupWith((_: TwineSugarCube.Passage) => true);
+
+    for (let passage of allPassages) {
+      const openerMatches = [...passage.text.matchAll(opener)];
+      const closerMatches = [...passage.text.matchAll(closer)];
+      if (openerMatches.length == 0 && closerMatches.length == 0) {
+        continue;
+      }
+      // We don't actually need to check that they're closed or open - Twine does that for us!
+
+      var previousEndIdx = 0;
+      for (let i = 0; i < openerMatches.length; i++) {
+        const startIdx: number = openerMatches[i].index!;
+        const endIdx: number = closerMatches[i].index! + 12; // length of <</receive>>
+
+        if (startIdx < previousEndIdx) {
+          throw 'Overlapping receive tags in passage ' + passage.title + '!';
         }
-        // We don't actually need to check that they're closed or open - Twine does that for us!
+        previousEndIdx = endIdx;
 
-        var previousEndIdx = 0;
-        for (let i = 0; i < openerMatches.length; i++) {
-          const startIdx: number = openerMatches[i].index!;
-          const endIdx: number = closerMatches[i].index! + 12; // length of <</receive>>
-
-          if (startIdx < previousEndIdx) {
-            throw 'Overlapping receive tags in passage ' + passage.title + '!';
-          }
-          previousEndIdx = endIdx;
-
-          Wikifier.wikifyEval(passage.text.substring(startIdx, endIdx));
-        }
+        Wikifier.wikifyEval(passage.text.substring(startIdx, endIdx));
       }
     }
-  })
+  }
 
   // Placed here to be close to the code.
   var hasVisitedOnPassageReady = false;
@@ -288,4 +288,9 @@
       Engine.restart()
     }
   })
+
+  // We preprocess the receive tags exactly once, when the javascript is evaluated. This relies upon the fact that the
+  // passages have been already loaded and Story.passages() will appropriately return them; if this ever changes, well,
+  // good luck! Hopefully it won't!
+  preprocessReceiveTags()
 }());
