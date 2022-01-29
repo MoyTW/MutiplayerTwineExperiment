@@ -204,7 +204,7 @@ setup.initializeCluePoints();
 <h1>Select your character:</h1>\
 @@#select-character-character-buttons;<div class='row'>\
   <div class='column'>\
-    [img[$imageRoot + 'Antony.jpg']]
+    [img[$imageRoot + 'Antony.jpg']]\
     <<button 'Mark Antony, Vice President of Neo America.'>>
       <<send 'CHARACTER_SELECT' { character: 'Antony' }>>
         <<run $('#select-character-player-selection').text('You have selected Antony.')>>

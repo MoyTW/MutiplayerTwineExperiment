@@ -205,6 +205,7 @@ setup.initializeCluePoints = function() {
     cluePoints.set(entry[0], {
       // TODO: change this to a fn invocation instead
       name: entry[1].name,
+      type: entry[1].type,
       known: entry[1].defaultKnown,
       visited: false,
       visitedBy: undefined

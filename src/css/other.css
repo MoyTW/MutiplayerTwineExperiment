@@ -1,10 +1,21 @@
+body {
+  background-color: #000000;
+  font: 18px/1 Helmet,Freesans,sans-serif
+}
+
+/* Row & Column */
 .row {
-  display:flex;
-  width:100%;
+  display: flex;
+  width: 100%;
 }
 
 .column {
   width: 50%;
+  display: flex;
+  flex-direction: column;
+  border-style: double;
+  border-color: #ffd700;
+  border-width: medium;
 }
 
 .column img {
@@ -16,3 +27,10 @@
   width: 100%;
   height: auto;
 }
+
+/* Macro Elements */
+/*
+.macro-button {
+  background-color: #7f0000;
+}
+*/
