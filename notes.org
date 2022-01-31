@@ -1,0 +1,92 @@
+* R & Z Testing
++ Z's first link click brought up a dictionary (?) - is that the Mac dictionary
+  search gone mad?
++ Players decided to literally read the whole thing out loud (even the shared
+  parts)
+  - I don't think anybody has done that before!
++ Oh, hey, a typo - it says they have 7 turns. Check the rules screen for typos,
+  I guess. Also Z had a pause there - also a typo?
++ "Oh it forks! We're doing it separately!"
++ Oh NOW they've stopped reading it.
++ Z's sidebar is dying horribly, somehow! Refreshing seems to have solved it.
+  - Good to know my code for syncing state seems mostly functional.
++ Hahaha, Z's suspicious of Horace & Horace's Mother (because who sends their
+  secretaries' mothers gifts, basically nobody)
++ I think that in this format, having betrayal points could work really well! Or
+  putting in action or other sorts of things into the various pages.
++ huh that inconsistency about meeting/non meeting seems far too subtle!
++ People & Places seems universally well-received, definitely great.
++ Oh no there's a bug!
+  - There's some sort of sync bug that they fixed by reloading?
+  - Oh, the network lag got them - argh, okay. Yeah I should update the client
+    proactively. It won't necessarily fix lag, but...
++ Huuuuuh! Hilariously, R went to First Connection and Z went to Rasputin, and
+  it looks like...the info conveyed was...huh! Let me reread my passage - it
+  sounds like R thought that BRANDO was in the bar.
++ Hmm they're continually expecting more respnsiveness from the game than exists
+  (for example, since they talked to Hepburn they should be able to see the
+  tapes)
+  - Wait, what, did I mess up the timing and schedule Marie & Jocelyn's dinners
+    over each other?
+  - Also no you cannot tell Jocelyn about Marie, game is not NEARLY so
+    responsive.
++ People (reasonably) keep thinking Tarita is involved.
++ People KEEP CLICKING THROUGH, hahaha.
++ They completely missed, huh? due to the difficulty inherent in summarizing, I
+  guess.
+* D & K Testing
++ Some notes about itch.io - I changed it to fullscreen on click on the itch.io
+  site
++ In Ch1_CaseIntro2 D noted that it was unclear who was Hortensia; writing
+  crtique
++ Maybe I should explicitly call out the People & Places button (also see R & Z)
++ Typo "invited too his Christmas ball."
++ Hahaha, I have the 7 turns typo still in apparently!
++ Huh, they wanted to interview the children, haha.
++ They're definitely going hard on the thinking (to the point where they're
+  questioning who wrote the notebook)
++ "The historical Marlon Brando was an ass!" hahahahaHA
++ Some slight discussion between the two about whether to read out to each other
+  or copy or whatever
+  - See, that's coming back to the "totally transparent" style of cooperative
+    game design...
++ Huh! That's some sorta bug! He got into the action screen & it popped him back
+  into the Select your Action screen. Maybe network failure?
+  - HUH. Okay, there's some sort of replay bug going on where it boots them back
+    to the previous screen after they went into the clue point.
+  - wtf I can't reproduce it on my end, argh
+  - no, seriously, let's see if it keeps happening
++ D's showing his Game Literacy now
+  - K's also very into it
+  - Wow these two are really good at this!? relative to, like, everybody else!?
++ Everybody thinks the James Dean bills scene is weird, haha.
++ Huh, Dean never actually states that he met Brando on the day of the murder!
+  Hahaha! Well, sure, I mean, that's fair enough.
++ "Where's forensics?" *bangs table* "I need forensics!"
++ Funny dialogue about the First Connection note "Did Grigori Rasputin write
+  this!?" hahaha! okay that's immensely amusing
+  - To be fair the explanation for the notebook is hilariously awful in the
+    Consulting Detective case
+  - You know...it's actually hilarious to think that the notebook is Rasputin's
++ It snapped K back to the scene again
+  - Argh, what the heck!?
+  - I can't seem to reproduce any of this!
+  - I wonder if their internets are worse?
++ People keep wanting to Ask Person About Other Thing, haha...
++ I should add a "Your People & Places has been updated!" or something.
++ Huh, they're settling on "Dean deffo did it" but they're unsure about Pollio's
+  involvement in the whole thing (whether Dean or Pollio did the drop)
+  - Oh the original had both the bar people having briefcases, I apparently
+    forgot to write that Dean had one. RIP.
++ Impressions
+  - paper books are super easy to cheat
+  - multiplayerness?
+    - different from SHCD in multiplayerness
+    - it's Pandemic multiplayerness
+    - D wonders if asking the player to NOT read full text would be better
+    - partial information
+      - chat-based online escape room where chat messages were corrupted - other
+        players did not receive the whole message, only got first two words!
+      - click on sentences to verbatim push to the other player, and limit how
+        much to do?
+    - Small World?
