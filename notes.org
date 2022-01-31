@@ -90,3 +90,44 @@
       - click on sentences to verbatim push to the other player, and limit how
         much to do?
     - Small World?
+
+* Bugs?
+** D & K get kicked back into last clue point from Select Action
+Basically, D was in the Select Action screen (Ch2_SelectNextClutPoint) and then
+something happened, and the clue point screen showed up!
+
+When he clicked back through, the number of turns had *not* changed.
+
+The *only* code path that leads to the clue point screen is via the Engine.play
+statement on receipt of the NEXT_CLUE_POINT_CONFIRMED message, and since that
+code also decrements the remaining turns, it means that it was not invoked!
+
+Therefore, my initial instict was that it had to do with reloading a save/the
+save not properly saving when he moved to the next screen/the server having an
+old save and pushing the save to the client, which then loaded it.
+
+Hmm! The "old save in server" seems entirely plausible. Here's how it could
+happen:
+1. User enters the Clue Point display scene
+2. Client autosaves & pushes the save to the server
+3. User enters the Select Action screen =
+4. The connection breaks/the autosave push occuring on screen transition
+   fails/some combination of actions occur such that the autosave never reaches
+   the server
+5. They click a button on the screen, leading to a reconnect, and the server
+   throws the autosave back at them, placing them back onto the previous screen
+
+If true, you could force a replication by:
+1. Playing up to the clue point scene
+2. Modifying the code to error on the autosave send
+3. Going into the Select Action scene and pressing any button
+
+The bigger issue here is that there's no retry mechanism, and that's a Problem
+over a spotty connection or prolonged period of time.
+
+OKAY, yep, I reproduced the error by editing the code to close the connection
+instead of sending the autosave message. Basically...my code doesn't properly
+guard against network failures, which, I mean. I knew that, but I was just kinda
+hoping it wouldn't come up much.
+
+TODO: fix this bug lol
