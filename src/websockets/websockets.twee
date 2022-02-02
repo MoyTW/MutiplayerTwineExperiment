@@ -3,7 +3,9 @@
 <<set _lastTtl to 2>>\
 <<set _expBackoffFactor to 2>>\
 <<set _maxBackoffFactor to 60>>\
-Sorry, there's been some sort of issue contacting the server! Please wait while we attempt to reconnect.
+Sorry, there's been some sort of issue contacting the server!
+Please wait while we attempt to reconnect.
+TODO: Figure out why the buttons flash
 
 Next reconnect attempt in: @@#ttl;_currentTtl@@
 
@@ -18,6 +20,7 @@ Next reconnect attempt in: @@#ttl;_currentTtl@@
     <<run $('#force-btn button').html('Force reconnection attempt')>>
   <</timed>>
 <</button>>@@
+<<button 'Save & quit'>><<leavemultiplayersession>><</button>>
 <<silently>>
   <<repeat 1s>>
     /* Figure out how to tell if you're connected! */
