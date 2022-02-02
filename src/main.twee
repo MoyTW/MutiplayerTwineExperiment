@@ -32,6 +32,8 @@ if (clientId && setup.isUUID(clientId)) {
 /* Global */
 <<set $startTurns to 9>>
 <<set $turnsRemaining to $startTurns>>
+<<set $hostClientId to ''>>
+<<set $partnerPassages to []>>
 
 /* SelectCharacter */
 <<set $playerCharacterName to ''>>
@@ -127,13 +129,31 @@ Now, would you like to:
 
 
 :: HostGame
+<<set $hostClientId to $clientId>>\
 Your session identifier is:
 <strong>$sessionId</strong>
 Either copy and paste it to your partner or read it out loud to them. They will need to enter this code to join your game.
 
 You can also find the session identifier at the top of the right sidebar. Press the button to continue once your partner has joined.
 
-<<button [[Got it!|SelectCharacter]]>><</button>>
+@@#hostgame-continue;<<disable>><<button [[Waiting for partner...|SelectCharacter]]>><</button>><</disable>>@@
+
+<<button 'Back to main menu'>><<run Engine.restart()>><</button>>
+<<nobr>>
+  <<receive 'CLIENT_CONNECTED'>>
+    <<if State.variables.clientId === State.variables.hostClientId>>
+      <<send 'GAME_STARTED' {}>><</send>>
+    <</if>>
+  <</receive>>
+  <<receive 'GAME_STARTED'>>
+    <<if State.variables.clientId === State.variables.hostClientId>>
+      <<run $('#hostgame-continue button').text('Start game!')>>
+      <<run $('#hostgame-continue button').prop('disabled', false)>>
+    <<else>>
+      <<run Engine.play('SelectCharacter');>>
+    <</if>>
+  <</receive>>
+<</nobr>>
 
 
 :: JoinGame
@@ -144,9 +164,10 @@ Please enter the session identifier you'd like to join.
 @@#join-button;<<disable>><<button 'Session identifier is invalid.'>>
   <<set $sessionId to $('#session-input input')[0].value>>
   <<connect $sessionId>>
-  <<script>>
-    Engine.play('SelectCharacter');
-  <</script>>
+  <<send 'CLIENT_CONNECTED' {}>>
+    <<run $('#join-button').text('Joining game...')>>
+    <<run $('#join-button').prop('disabled', true)>>
+  <</send>>
 <</button>><</disable>>@@
 <<done>><<script>>
   const button = $('#join-button button')
@@ -161,7 +182,7 @@ Please enter the session identifier you'd like to join.
   })
 <</script>><</done>>\
 
-<<button [[Back to main menu|Start]]>><</button>>
+<<button 'Back to main menu'>><<run Engine.restart()>><</button>>
 
 
 :: SelectCharacter
