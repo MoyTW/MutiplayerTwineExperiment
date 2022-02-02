@@ -52,10 +52,6 @@ if (clientId && setup.isUUID(clientId)) {
 <</nobr>>\
 
 
-:: PassageReady
-<<managesavesonpassageready>>
-
-
 :: StoryInit
 <<set $imageRoot to 'http://localhost:8080/images/'>>\
 /* <<set $imageRoot to 'images/'>> */

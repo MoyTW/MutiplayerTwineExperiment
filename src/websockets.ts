@@ -218,36 +218,6 @@
     }
   }
 
-  // Placed here to be close to the code.
-  var hasVisitedOnPassageReady = false;
-  Macro.add('managesavesonpassageready', {
-    handler: function() {
-      // Ensure or start the connection & catch up.
-      if (State.getVar('$shouldBeConnected') === true) {
-        connect(State.getVar('$sessionId'));
-      }
-
-      // We always want to skip the first invocation, because that's right after game start.
-      if (!hasVisitedOnPassageReady) {
-        hasVisitedOnPassageReady = true;
-        return;
-      }
-
-      // Any following invocation will only happen after a scene transfer.
-      // Note that autosave.save() and Save.serialize() DO NOT take the current state, they take the state on transition.
-      // Therefore, the fact that you may or may not have had state changes due to messages when this runs is irrelevant.
-      console.log('Autosaving for scene: ', State.passage, ' session: ', State.getVar('$sessionId'));
-      Save.autosave.save();
-      if (State.getVar('$shouldBeConnected') === true) {
-        send(State.getVar('$sessionId'), {
-          'type': 'AUTOSAVE',
-          'clientId': State.getVar('$clientId'),
-          'serializedSave': Save.serialize()
-        });
-      }
-    }
-  })
-
   Macro.add("leavemultiplayersession", {
   /* TODO: Bring up save management or cycle the saves or something! */
     handler: function() {
@@ -297,4 +267,33 @@
   // passages have been already loaded and Story.passages() will appropriately return them; if this ever changes, well,
   // good luck! Hopefully it won't!
   preprocessReceiveTags()
+
+  // When the passage starts, before the passage is rendered but after the state is changed, reconnect & attempt save
+  // management. We want to skip the very first invocation on page refresh/game entry.
+  var hasVisitedOnPassageReady = false;
+  $(document).on(':passagestart', function (ev) {
+    // Ensure or start the connection & catch up.
+    if (State.getVar('$shouldBeConnected') === true) {
+      connect(State.getVar('$sessionId'));
+    }
+
+    // We always want to skip the first invocation, because that's right after game start.
+    if (!hasVisitedOnPassageReady) {
+      hasVisitedOnPassageReady = true;
+      return;
+    }
+
+    // Any following invocation will only happen after a scene transfer.
+    // Note that autosave.save() and Save.serialize() DO NOT take the current state, they take the state on transition.
+    // Therefore, the fact that you may or may not have had state changes due to messages when this runs is irrelevant.
+    console.log('Autosaving for scene: ', State.passage, ' session: ', State.getVar('$sessionId'));
+    Save.autosave.save();
+    if (State.getVar('$shouldBeConnected') === true) {
+      send(State.getVar('$sessionId'), {
+        'type': 'AUTOSAVE',
+        'clientId': State.getVar('$clientId'),
+        'serializedSave': Save.serialize()
+      });
+    }
+  });
 }());
