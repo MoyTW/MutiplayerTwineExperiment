@@ -65,8 +65,12 @@
       handler(data);
     };
 
-    chatSocket.onclose = function(_: any) {
-      console.error('TODO: Handle appropriately');
+    chatSocket.onerror = function(ev: Event) {
+      console.error('Websocket error: ', ev)
+    }
+
+    chatSocket.onclose = function(ev: CloseEvent) {
+      console.error('Websocket connection closed: ', ev);
     }
   }
 
