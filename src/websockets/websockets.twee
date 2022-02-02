@@ -1,0 +1,42 @@
+:: NetworkErrorDialog
+<<set _currentTtl to 1>>\
+<<set _lastTtl to 2>>\
+<<set _expBackoffFactor to 2>>\
+<<set _maxBackoffFactor to 60>>\
+Sorry, there's been some sort of issue contacting the server! Please wait while we attempt to reconnect.
+
+Next reconnect attempt in: @@#ttl;_currentTtl@@
+
+@@#force-btn;<<button 'Force reconnection attempt'>>
+  <<connect $sessionId>>
+  <<if _lastTtl lt 16>><<set _lastTtl to 16>><</if>>
+  <<set _currentTtl to _lastTtl>>
+  <<run $('#force-btn button').prop('disabled', true)>>
+  <<run $('#force-btn button').html('Attempting to reconnect...')>>
+  <<timed 10s>>
+    <<run $('#force-btn button').prop('disabled', false)>>
+    <<run $('#force-btn button').html('Force reconnection attempt')>>
+  <</timed>>
+<</button>>@@
+<<silently>>
+  <<repeat 1s>>
+    /* Figure out how to tell if you're connected! */
+    <<set _currentTtl to _currentTtl - 1>>
+    <<if _currentTtl is 0>>
+      <<connect $sessionId>>
+      <<script>>
+        State.temporary.lastTtl = State.temporary.lastTtl * State.temporary.expBackoffFactor
+        if (State.temporary.lastTtl > State.temporary.maxBackoffFactor) {
+          State.temporary.lastTtl = State.temporary.maxBackoffFactor
+        }
+        State.temporary.currentTtl = State.temporary.lastTtl
+      <</script>>
+    <</if>>
+    <<replace "#ttl">>_currentTtl<</replace>>
+  <</repeat>>
+<</silently>>
+<<done>><<script>>
+  // Disable the ability to exit the dialog
+  $("#ui-overlay").removeClass("ui-close");
+  $('#ui-dialog-close').hide()
+<</script>><</done>>\

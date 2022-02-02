@@ -70,7 +70,17 @@
     }
 
     chatSocket.onclose = function(ev: CloseEvent) {
-      console.error('Websocket connection closed: ', ev);
+      if (State.getVar('$shouldBeConnected') === true) {
+        console.error('Websocket connection closed unexpectedly: ', ev);
+        if (!Dialog.isOpen('networkerrordialog')) {
+          Dialog.setup('Network error!', 'networkerrordialog');
+          Dialog.wiki(Story.get('NetworkErrorDialog').processText());
+          Dialog.open();
+          console.log('Network error dialog opened.')
+        }
+      } else {
+        console.log('Websocket connection closed: ', ev);
+      }
     }
   }
 
@@ -296,4 +306,10 @@
       });
     }
   });
+
+  // Because the error dialog will disable the ability to exit, re-enable on dialog close
+  $(document).on(':dialogclosed', function (ev) {
+    $("#ui-overlay").addClass("ui-close");
+    $('#ui-dialog-close').show()
+  })
 }());
