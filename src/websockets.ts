@@ -1,4 +1,6 @@
 (function () {
+  const NETWORK_DIALOG_CLASS = 'networkerrordialog'
+
   var _chatSocket: WebSocket | undefined = undefined
   const _handlers: Record<string, (data: object) => void> = {}
   const _sendBuffer: object[] = []
@@ -52,6 +54,10 @@
       _sendBuffer.push(sendOnOpen);
     }
     _chatSocket.onopen = function(_: any) {
+      if (Dialog.isOpen(NETWORK_DIALOG_CLASS)) {
+        Dialog.close()
+      }
+
       _chatSocket!.send(JSON.stringify({
         'type': 'CATCH_UP',
         'clientId': State.getVar('$clientId'),
@@ -84,8 +90,8 @@
     _chatSocket.onclose = function(ev: CloseEvent) {
       if (State.getVar('$shouldBeConnected') === true) {
         console.error('Websocket connection closed unexpectedly: ', ev);
-        if (!Dialog.isOpen('networkerrordialog')) {
-          Dialog.setup('Network error!', 'networkerrordialog');
+        if (!Dialog.isOpen(NETWORK_DIALOG_CLASS)) {
+          Dialog.setup('Network error!', NETWORK_DIALOG_CLASS);
           Dialog.wiki(Story.get('NetworkErrorDialog').processText());
           Dialog.open();
           console.log('Network error dialog opened.')

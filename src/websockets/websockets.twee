@@ -3,8 +3,12 @@
 <<set _lastTtl to 2>>\
 <<set _expBackoffFactor to 2>>\
 <<set _maxBackoffFactor to 60>>\
-Sorry, there's been some sort of issue contacting the server!
-Please wait while we attempt to reconnect.
+Sorry, there's been some sort of issue contacting the server! Please wait while
+we attempt to reconnect.
+
+After the game reconnects, the game state will be synchronized and may forcibly
+refresh you. Depending on the nature of the network error, you might be placed
+in a previous room, or actions taken on the page may be undone.
 
 Next reconnect attempt in: @@#ttl;_currentTtl@@
 
