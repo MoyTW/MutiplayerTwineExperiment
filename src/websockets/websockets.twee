@@ -14,10 +14,6 @@ Next reconnect attempt in: @@#ttl;_currentTtl@@
   <<set _currentTtl to _lastTtl>>
   <<run $('#force-btn button').prop('disabled', true)>>
   <<run $('#force-btn button').html('Attempting to reconnect...')>>
-  <<timed 10s>>
-    <<run $('#force-btn button').prop('disabled', false)>>
-    <<run $('#force-btn button').html('Force reconnection attempt')>>
-  <</timed>>
 <</button>>@@
 <<button 'Save & quit'>><<leavemultiplayersession>><</button>>
 <<silently>>
@@ -34,6 +30,12 @@ Next reconnect attempt in: @@#ttl;_currentTtl@@
         State.temporary.currentTtl = State.temporary.lastTtl
       <</script>>
     <</if>>
+    <<script>>
+      if (!setup.Websocket.hasSocket()) {
+        $('#force-btn button').prop('disabled', false)
+        $('#force-btn button').html('Force reconnection attempt')
+      }
+    <</script>>
     <<replace "#ttl">>_currentTtl<</replace>>
   <</repeat>>
 <</silently>>

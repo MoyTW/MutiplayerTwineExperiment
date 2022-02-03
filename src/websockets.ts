@@ -1,46 +1,58 @@
 (function () {
-  var chatSocket: WebSocket | undefined = undefined
-  const handlers: Record<string, (data: object) => void> = {}
-  const sendBuffer: object[] = []
+  var _chatSocket: WebSocket | undefined = undefined
+  const _handlers: Record<string, (data: object) => void> = {}
+  const _sendBuffer: object[] = []
 
   // Deliberately not tying it into Sugarcube's debug because turning that on makes everything hideous
   const DEBUG: boolean = true;
-  const DEV_SERVER_URL: string = 'ws://localhost:8000/ws/'
-  const PROD_SERVER_URL: string = 'wss://multiplayer-twine-server.herokuapp.com/ws/'
+  const DEV_SERVER_URL: string = 'ws://localhost:8000/ws/';
+  const PROD_SERVER_URL: string = 'wss://multiplayer-twine-server.herokuapp.com/ws/';
 
-  const registerHandler = function(messageType: string, handler: (data: object) => void) {
-    handlers[messageType] = handler
+  (setup as any).Websocket = {};
+
+  (setup as any).Websocket.hasSocket = function(): boolean {
+    if (_chatSocket) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  const _registerHandler = function(messageType: string, handler: (data: object) => void) {
+    _handlers[messageType] = handler
   };
 
-  const connect = function(sessionId: string, sendOnOpen?: object) {
+  const _connect = function(sessionId: string, sendOnOpen?: object) {
     // If we already have a connection or are attempting to establish a connection, leave it be!
-    if (chatSocket && chatSocket.readyState == 0) {
+    if (_chatSocket && _chatSocket.readyState == 0) {
       if (sendOnOpen) {
-        sendBuffer.push(sendOnOpen)
+        _sendBuffer.push(sendOnOpen)
       }
-      return;
+      return
+    } else if (_chatSocket && _chatSocket.readyState == 1) {
+      if (sendOnOpen) {
+        _chatSocket.send(JSON.stringify(sendOnOpen))
+      }
+      return
+    } else if (_chatSocket) {
+      console.log('chatSocket already exists, wait for it to close before opening another!')
+      return
     }
-    if (chatSocket && chatSocket.readyState == 1) {
-      if (sendOnOpen) {
-        chatSocket.send(JSON.stringify(sendOnOpen))
-      }
-      return;
-    };
 
     State.setVar('$shouldBeConnected', true)
 
     // @ts-ignore: Unreachable code error
     if (DEBUG === false) {
-      chatSocket = new WebSocket(PROD_SERVER_URL + sessionId + '/');
+      _chatSocket = new WebSocket(PROD_SERVER_URL + sessionId + '/');
     } else {
-      chatSocket = new WebSocket(DEV_SERVER_URL + sessionId + '/');
+      _chatSocket = new WebSocket(DEV_SERVER_URL + sessionId + '/');
     }
 
     if (sendOnOpen) {
-      sendBuffer.push(sendOnOpen);
+      _sendBuffer.push(sendOnOpen);
     }
-    chatSocket.onopen = function(_: any) {
-      chatSocket!.send(JSON.stringify({
+    _chatSocket.onopen = function(_: any) {
+      _chatSocket!.send(JSON.stringify({
         'type': 'CATCH_UP',
         'clientId': State.getVar('$clientId'),
         // We use current because we want every message since our last save
@@ -48,16 +60,16 @@
         // get the entire list, changing the state in unexpected ways!
         'catchupStartMs': (State.current as any).variables.websocketProcessedUpToMs || 0
       }));
-      for (const toSend of sendBuffer) {
+      for (const toSend of _sendBuffer) {
         console.log('Sending buffered message, type:', (toSend as any)['type']);
-        chatSocket!.send(JSON.stringify(toSend));
+        _chatSocket!.send(JSON.stringify(toSend));
       }
-      sendBuffer.splice(0, sendBuffer.length);
+      _sendBuffer.splice(0, _sendBuffer.length);
     }
 
-    chatSocket.onmessage = function(e: MessageEvent<any>) {
+    _chatSocket.onmessage = function(e: MessageEvent<any>) {
       const data = JSON.parse(e.data);
-      const handler = handlers[data['type']];
+      const handler = _handlers[data['type']];
 
       console.log('Processing message: ', data['type']);
 
@@ -65,11 +77,11 @@
       handler(data);
     };
 
-    chatSocket.onerror = function(ev: Event) {
+    _chatSocket.onerror = function(ev: Event) {
       console.error('Websocket error: ', ev)
     }
 
-    chatSocket.onclose = function(ev: CloseEvent) {
+    _chatSocket.onclose = function(ev: CloseEvent) {
       if (State.getVar('$shouldBeConnected') === true) {
         console.error('Websocket connection closed unexpectedly: ', ev);
         if (!Dialog.isOpen('networkerrordialog')) {
@@ -81,24 +93,25 @@
       } else {
         console.log('Websocket connection closed: ', ev);
       }
+      _chatSocket = undefined
     }
   }
 
-  const send = function(sessionId: string, obj: object) {
+  const _send = function(sessionId: string, obj: object) {
     if (typeof sessionId !== 'string') {
       throw `Cannot send to session ${sessionId}`
     }
     if (typeof obj !== 'object') {
       throw `Cannot send object ${obj} to session ${sessionId} as it's not an object!`
     }
-    if (chatSocket && chatSocket.readyState == 1) {
-      chatSocket.send(JSON.stringify(obj));
+    if (_chatSocket && _chatSocket.readyState == 1) {
+      _chatSocket.send(JSON.stringify(obj));
     } else {
-      connect(sessionId, obj);
+      _connect(sessionId, obj);
     }
   }
 
-  registerHandler('CATCH_UP', function(data: any) {
+  _registerHandler('CATCH_UP', function(data: any) {
     const serializedSave = data['serialized_save']
     console.log('Attempting to catch up! Loading:', serializedSave !== undefined);
     if (serializedSave) {
@@ -107,7 +120,7 @@
     for (const message of data['messages']) {
       // TODO: There's surely a more elegant way of dealing with this
       if (message['type'] !== 'clientJoin') {
-        const handler = handlers[message['type']];
+        const handler = _handlers[message['type']];
         console.log('catching up', message['type']);
         State.setVar('$websocketProcessedUpToMs', message['server_timestamp_ms'])
         handler(message);
@@ -125,7 +138,7 @@
       if (typeof this.args[0] !== 'string') {
         return this.error(`bad evaluation: connect macro input ${this.args[0]} was not a string!`);
       }
-      connect(this.args[0]);
+      _connect(this.args[0]);
     }
   })
 
@@ -154,7 +167,7 @@
 
       const msgObj = {type: this.args[0], clientId: State.getVar('$clientId')};
       Object.assign(msgObj, result);
-      send(State.getVar('$sessionId'), msgObj);
+      _send(State.getVar('$sessionId'), msgObj);
 
       if (this.payload[0].contents !== '') {
         this.createShadowWrapper(() => Wikifier.wikifyEval(this.payload[0].contents.trim()))();
@@ -176,14 +189,14 @@
       if (typeof this.args[0] !== 'string') {
         return this.error(`${this.args[0]} is not a string, and is therefore ineligible for a receive target!`);
       }
-      if (handlers[this.args[0]]) {
+      if (_handlers[this.args[0]]) {
         return;
       }
 
       console.log(`Found receive macro for ${this.args[0]}`);
 
       const macroPayload = this.payload;
-      registerHandler(this.args[0], function(data: object) {
+      _registerHandler(this.args[0], function(data: object) {
         if (State.temporary.receiveData !== undefined) {
           console.error('_receiveData is set when it should not be! Overwriting!')
         }
@@ -198,7 +211,7 @@
     }
   })
 
-  const preprocessReceiveTags = function() {
+  const _preprocessReceiveTags = function() {
     console.log(`Preprocessing all receive tags.`)
 
     const opener = /<<receive/g;
@@ -276,7 +289,7 @@
   // We preprocess the receive tags exactly once, when the javascript is evaluated. This relies upon the fact that the
   // passages have been already loaded and Story.passages() will appropriately return them; if this ever changes, well,
   // good luck! Hopefully it won't!
-  preprocessReceiveTags()
+  _preprocessReceiveTags()
 
   // When the passage starts, before the passage is rendered but after the state is changed, reconnect & attempt save
   // management. We want to skip the very first invocation on page refresh/game entry.
@@ -284,7 +297,7 @@
   $(document).on(':passagestart', function (ev) {
     // Ensure or start the connection & catch up.
     if (State.getVar('$shouldBeConnected') === true) {
-      connect(State.getVar('$sessionId'));
+      _connect(State.getVar('$sessionId'));
     }
 
     // We always want to skip the first invocation, because that's right after game start.
@@ -299,7 +312,7 @@
     console.log('Autosaving for scene: ', State.passage, ' session: ', State.getVar('$sessionId'));
     Save.autosave.save();
     if (State.getVar('$shouldBeConnected') === true) {
-      send(State.getVar('$sessionId'), {
+      _send(State.getVar('$sessionId'), {
         'type': 'AUTOSAVE',
         'clientId': State.getVar('$clientId'),
         'serializedSave': Save.serialize()
