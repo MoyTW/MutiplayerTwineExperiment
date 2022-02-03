@@ -3,7 +3,7 @@
 rm -rf src/build
 tsc
 mkdir -p html
-tweego src -f sugarcube-2.36.1 -o ./html/index.html
+tweego src -f sugarcube-2.36.1-tmoy -o ./html/index.html
 rm -rf html/images
 mkdir html/images
 cp -r images ./html

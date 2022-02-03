@@ -5,7 +5,6 @@
 <<set _maxBackoffFactor to 60>>\
 Sorry, there's been some sort of issue contacting the server!
 Please wait while we attempt to reconnect.
-TODO: Figure out why the buttons flash
 
 Next reconnect attempt in: @@#ttl;_currentTtl@@
 
