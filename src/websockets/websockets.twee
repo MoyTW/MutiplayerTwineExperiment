@@ -22,7 +22,6 @@ Next reconnect attempt in: @@#ttl;_currentTtl@@
 <<button 'Save & quit'>><<leavemultiplayersession>><</button>>
 <<silently>>
   <<repeat 1s>>
-    /* Figure out how to tell if you're connected! */
     <<set _currentTtl to _currentTtl - 1>>
     <<if _currentTtl is 0>>
       <<connect $sessionId>>
